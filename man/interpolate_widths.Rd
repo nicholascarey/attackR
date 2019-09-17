@@ -4,7 +4,7 @@
 \alias{interpolate_widths}
 \title{Interpolates a body profile to the units used in body length}
 \usage{
-interpolate_widths(profile, max_width_loc, body_length, body_width)
+interpolate_widths(profile, max_girth_loc, body_length, body_width)
 }
 \description{
 Interpolates a body profile to the units used in body length

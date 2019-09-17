@@ -27,22 +27,22 @@ expect_error(attack_model(500, 180, 60, 1000, 250, 250,
 ## stops if no profile entered
 expect_error(attack_model(500, 180, 60, 1000, 250, 250,
                           profile_v = NULL,
-                          profile_h = NULL,
-             "Provide at least one body profile."))
+                          profile_h = NULL),
+             "Provide at least one body profile.")
 
 ## stops if profiles less than 3
 expect_error(attack_model(500, 180, 60, 1000, 250, 250,
                           profile_v = c(0.2,0.3),
-                          profile_h = NULL,
-             "Provide at least one body profile."))
+                          profile_h = NULL),
+             "Profiles must be at least 3 values long: e.g. nose, midpoint, tail.")
 expect_error(attack_model(500, 180, 60, 1000, 250, 250,
                           profile_v = NULL,
-                          profile_h = c(0.2,0.3),
-             "Provide at least one body profile."))
+                          profile_h = c(0.2,0.3)),
+             "Profiles must be at least 3 values long: e.g. nose, midpoint, tail.")
 expect_error(attack_model(500, 180, 60, 1000, 250, 250,
                           profile_v = c(0.2),
-                          profile_h = c(0.2,0.3),
-             "Provide at least one body profile."))
+                          profile_h = c(0.2,0.3)),
+             "Profiles must be at least 3 values long: e.g. nose, midpoint, tail.")
 
 
 # Max Width Locations -----------------------------------------------------
@@ -50,52 +50,47 @@ expect_error(attack_model(500, 180, 60, 1000, 250, 250,
 expect_error(attack_model(500, 180, 60, 1000, 250, 250,
                           profile_v = c(0.2, 0.3, 0.4, 0.5),
                           profile_h = c(0.2, 0.3, 0.4, 0.5),
-                          max_width_loc_v = -0.5,
+                          max_girth_loc_v = -0.5,
                           "Max width locations must be between 0 and 1"))
 
 expect_error(attack_model(500, 180, 60, 1000, 250, 250,
                           profile_v = c(0.2, 0.3, 0.4, 0.5),
                           profile_h = c(0.2, 0.3, 0.4, 0.5),
-                          max_width_loc_v = 1.5,
+                          max_girth_loc_v = 1.5,
                           "Max width locations must be between 0 and 1"))
 
 expect_error(attack_model(500, 180, 60, 1000, 250, 250,
                           profile_v = c(0.2, 0.3, 0.4, 0.5),
                           profile_h = c(0.2, 0.3, 0.4, 0.5),
-                          max_width_loc_h = -0.5,
+                          max_girth_loc_h = -0.5,
                           "Max width locations must be between 0 and 1"))
 
 expect_error(attack_model(500, 180, 60, 1000, 250, 250,
                           profile_v = c(0.2, 0.3, 0.4, 0.5),
                           profile_h = c(0.2, 0.3, 0.4, 0.5),
-                          max_width_loc_h = 1.5,
+                          max_girth_loc_h = 1.5,
                           "Max width locations must be between 0 and 1"))
 
-#
-#
-#
-#
-# # test --------------------------------------------------------------------
-#
-# ## test list is created
-# expect_output(str(constant_speed_model()), "List of 6")
-#
-# # test --------------------------------------------------------------------
-#
-# ## test class
-# model <- constant_speed_model()
-# expect_is(model, "constant_speed_model")
-#
-# # test --------------------------------------------------------------------
-#
-# ## test works with default values
-# # create model
-# mod <- constant_speed_model()
-#
-# # test specific values for default inputs
-# expect_equal(nrow(mod$model), 120)
-# expect_equal(round(mod$model$distance[120], 2), 0)
-# expect_equal(mod$model$time[120], 2)
-#
-#
-#
+
+# Output ------------------------------------------------------------------
+
+## list is created when simple_output = FALSE
+expect_output(str(attack_model(500, 180, 60, 1000, 250, 250,
+                               profile_v = c(0.2, 0.3, 1, 0.5),
+                               profile_h = c(0.2, 0.3, 1, 0.5),
+                               simple_output = FALSE)),
+                  "List of 5")
+## data frame is created when simple_output = TRUE
+expect_output(str(attack_model(500, 180, 60, 1000, 250, 250,
+                               profile_v = c(0.2, 0.3, 1, 0.5),
+                               profile_h = c(0.2, 0.3, 1, 0.5),
+                               simple_output = TRUE)),
+                  "data.frame")
+
+## test class when simple_output = FALSE
+model <- attack_model(500, 180, 60, 1000, 250, 250,
+                      profile_v = c(0.2, 0.3, 1, 0.5),
+                      profile_h = c(0.2, 0.3, 1, 0.5),
+                      simple_output = FALSE)
+expect_is(model, "attack_model")
+

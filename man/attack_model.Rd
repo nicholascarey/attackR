@@ -5,88 +5,160 @@
 \title{Attack Model}
 \usage{
 attack_model(speed, frequency = 60, body_length = 10.5, model_length =
- NULL, simple_output = TRUE, cALT = c(0.89, 1.66, 2.06), plot = TRUE,
- plot_from = 0, plot_to = NULL)
+  NULL, simple_output = TRUE, plot = TRUE, plot_from = 0, plot_to = NULL)
 }
 \arguments{
-\item{speed}{numeric. A vector of speeds of the modelled approaching attacker.
-Must be at same frequency in Hz as `frequency`. If a data.frame is entered
-the first colummn is used. A single constant speed value can also be used;
-the function will repeat this the required number of times at the correct
-frequency based on `model_length`.}
+\item{speed}{numeric. Either a single constant speed value or vector of
+speeds of the approaching attacker. Must be at same frequency in Hz as
+\code{frequency}. If a data.frame is entered the first colummn is used. For
+a constant speed value the function will repeat this the required number of
+times at the correct frequency based on \code{model_length}.}
 
-\item{model_length}{integer. Total length of the model. Required if `speed` is
-a single value, when along with `frequency` it determines the distance the
-predator starts at. If `speed` is a vector this can be left NULL, in which
-case it is assumed the predator reaches the prey on the last value, and the
-length of the `speed` vector determines total length of model.
-Alternatively, `model_length` can be used to set a different capture point
-along the speed vector, in which case its value must be less than the total
-length of `speed`.}
+\item{model_length}{integer. Total length of the model in rows. Required if
+\code{speed} is a single value, where along with frequency it determines
+the distance the predator starts at. If \code{speed} is a vector
+\code{model_length} can be left NULL, in which case it is assumed the
+predator reaches the prey on the last value, and the length of the speed
+vector determines total length of model. Alternatively, \code{model_length}
+can be used to set a different capture point along the speed vector, in
+which case its value must be less than the total length of \code{speed}.}
 
-\item{frequency}{numeric. Frequency (Hz) of the model (frame rate of any
-resulting animation). Must be same frequency in Hz as \code{speed}}
+\item{frequency}{numeric. Frequency (Hz) of the model, i.e. how many speed
+and other measurements per second. Must be same frequency in Hz as
+\code{speed}.}
 
 \item{simple_output}{logical. Choose structure of output. If TRUE, a simple
-dataframe of the model is returned, otherwise output is a List object
-containing the final model and input parameters.}
+data frame of the model is returned, otherwise output is a \code{list}
+object containing the final model, input parameters, subset regions, and
+more.}
 
 \item{plot}{logical. Choose to plot result.}
 
 \item{plot_from}{numeric. Time on x-axis to plot from.}
 
-\item{plot_to}{numeric.  Time on x-axis to plot to.}
+\item{plot_to}{numeric.  Time on x-axis to plot to.
+
+ @examples
+attack_model(...)}
+
+\item{alpha_range}{numeric. Vector of two values of alpha. These will appear
+on any plot as a blue region, and if \code{simple_output = FALSE}, this
+region of the model is subset out to a separate entry in the saved
+\code{list} object. If any are not reached in the scenario there should be
+a message. If upper range is not reached, it is plotted from lower value to
+end of model, i.e. model_length location.}
+
+\item{dAdt_range}{numeric. Vector of two values of dA/dt. These will appear
+on any plot as a green region, and if \code{simple_output = FALSE}, this
+region of the model is subset out to a separate entry in the saved
+\code{list} object. If any are not reached in the scenario there should be
+a message. If upper range is not reached, it is plotted from lower value to
+end of model, i.e. model_length location.}
 
 \item{attacker_length}{numeric. Length of the attacker. Must be same units as
-maximum width.}
-
-\item{alpha}{numeric. Vector of three values of critical ALT range: lower,}
-
-\item{dadt}{numeric. Vector of three values of critical ALT range: lower,
-mean, upper. Enter as c(1,2,3). Helps put range on plot. Mean is not plotted
-for now. If any are not reached in the scenario there should be a message.
-If upper range is not reached, range is plotted from lower value to end of
-model, i.e. `model_length` location.}
+maximum width, and same as distance unit used in speed. E.g. if speed is in
+cm/s, must be cm.}
 }
 \description{
 \code{attack_model} models the visual aspects of an attack by a
- predator on a prey
+  predator on a prey
 
- Models an attack by a predator on a prey using parameters such as size,
- speed, shape etc. From the prey perspective, it calculates the visual angle
- of the diameter of the attacker (alpha, or \strong{a}) in radians, and the
- rate of change of this angle (\strong{da/dt} in radians/s).
+  Models the visual aspects of an attack by a predator on a prey using
+  parameters such as size, speed, shape etc. From the prey perspective, it
+  calculates the visual angle of the diameter of the attacker (alpha, or
+  \strong{a}) in radians, and the rate of change of this angle
+  (\strong{da/dt} in radians/s).
 
- Input units: `frequency` is in \code{Hz}. If `speed` is a vector it should
- be at the same frequency. Body measurements and `speed` units can be any
- unit, but should be consistent. i.e. all in `cm`, speeds in `cm/s`, etc.
+  Input units: \code{frequency} is in \code{Hz}. If \code{speed} is a vector
+  it should be at the same frequency. Body measurements and speed units can
+  be any unit, but should be consistent. i.e. all in cm, and speeds in cm/s,
+  etc.
 
- `speed` can be either a constant value or vector of speeds (at the
- correct`frequency`). If a single constant value, a `model_length` is
- required in order to calculate the distance the predator starts the attack
- from. For example, at a `frequency` of 60 Hz and `model_length` of 180, the
- model will be three seconds in duration. At a constant `speed` of 600 cm/s,
- the predator will start from approximately 1800 cm away.
+  \code{speed} can be either a constant value or vector of speeds (at the
+  correct frequency). If a single constant value, a \code{model_length} is
+  required in order to calculate the distance the predator starts the attack
+  from. For example, at a frequency of 60 Hz and \code{model_length} of 180,
+  the model will be three seconds in duration. Therefore, at a constant speed
+  of 600 cm/s, the predator will start from approximately 1800 cm away.
 
- The `model_length` operator can also be used to vary where on variable speed
- vectors the predator times reaching the prey, to examine how this affects
- perceived alphas. If left NULL, with speed vectors by default the model ends
- with the predator reaching the prey on the last speed value, however
- `model_length` can be used to set this to be earlier.
+  The \code{model_length} operator can also be used to vary where on variable
+  speed vectors the predator times reaching the prey, to examine how this
+  affects perceived alphas. If left as the default \code{model_length =
+  NULL}, the model ends with the predator reaching the prey on the last speed
+  value, however \code{model_length} can be used to set this to be earlier in
+  the model.
 
- Models end when the nose (most anterior part in the profiles) of the
- predator reaches the prey (last row of the data.frame, where time and
- distance equal zero).
+  Models end when the nose (most anterior part in the profiles) of the
+  predator reaches the prey (last row of the data.frame, where time and
+  distance equal zero).
 }
 \details{
 In order to correctly model the widest apparent part of the predator
- it requires several morphometric inputs.
+  it requires several morphometric inputs:
 }
-\examples{
-attack_model(...)
+\section{Length and Width}{
+ \code{body_length} is simply the total length from
+  nose to tail (or equivalent). \code{body_width_v} and  \code{body_width_h}
+  are the *maximum* body widths in the vertical (i.e. dorsal:ventral) and
+  horizontal (left:right) vectors of the body. These must be in the same
+  units.
+}
 
+\section{Body Profiles}{
+ \code{profile_v} and \code{profile_h} are vectors of
+  widths of the predator's body as a proportion of the maximum width going
+  from the anterior (nose) to the posterior (tail). Therefore, they should
+  generally start and end on zero (though they don't have to), and all values
+  must be between zero and 1. They must be evenly spaced, e.g. every 10%
+  along the body. The longer (i.e. higher resolution) these measurements are,
+  the better their representation of the morphology of the animal. Actual
+  values of width along the body are calculated to the resolution of the
+  entered unit of length by linearly interpolating between each proportional
+  width. For example, if the predator length (body_length) is 1000cm, a width
+  value in cm is calculated at every cm along the body using either the
+  proportional width given in the vector or a linear interpolation between
+  adjoining proportional widths. Therefore, use units which will give an
+  appropriate resolution, at least greater than the profile vector lengths.
+  The higher the numeric value of the length the better, at least three
+  digits is recommended.
+
+  Which width at each body segment (e.g. horizontal or vertical) used to
+  calculate alpha (\strong{a}) is determined via the \code{select_width}
+  operator. This can be the midpoint value between them ("mid", the default),
+  maximum value ("max"), or minimum value ("min"). You can also choose to use
+  only the vertical or horizontal profile widths ("v", "h"). You can also
+  choose to use the maximum width to calculate alpha, in which case the alpha
+  of no other segments of the body is calculated, only that of the maximum
+  girth.
+
+  These final widths and their relative distances from the observing prey are
+  used to calculate the viewing angle alpha (\strong{a}). At some point, the
+  maximum girth of the predator will not make up the widest apparent visual
+  angle of the predator, but more anterior segments will appear to the prey
+  to be wider, and have a higher alpha. The maximum alpha at each iteration
+  of the model (i.e. each step along the speed vector at the chosen
+  frequency) is extracted from these, and used to calculate the rate of
+  change in alpha, dA/dt (\strong{da/dt} in radians/s.
+
+  Because this interpolation is done on both vectors, they do not need to be
+  the same length. If the predator is approximately equal in both dimensions
+  or always wider in one dimension, only one profile and other
+  profile-specific inputs is required, and the others can be left = NULL.
+  Maximum girth locations can occur at an intermediate section of the body,
+  but the proportional widths on either side must be less than 1.000.
+
+  \code{max_girth_loc_v} and \code{max_girth_loc_h} are where the maximum
+  widths occur along the body as a proportion of the total body length going
+  from the nose. They are only necessary if they are not specified as one of
+  the proportional widths in \code{profile_v} and \code{profile_h}, that is
+  none of these have the value of exactly 1.
 }
+
+\section{Plotting}{
+ Several options control plotting....
+}
+
 \author{
-Nicholas Carey - \link{nicholascarey@gmail.com}, Dave Cade
- \link{davecade@stanford.edu},
+Nicholas Carey - \link{nicholascarey @gmail.com}, Dave Cade
+  \link{davecade @stanford.edu},
 }

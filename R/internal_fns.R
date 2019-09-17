@@ -11,7 +11,7 @@
 #' @keywords internal
 #' @export
 
-interpolate_widths <- function(profile, max_width_loc, body_length, body_width){
+interpolate_widths <- function(profile, max_girth_loc, body_length, body_width){
   ## proportional locations along body length of proportional widths
   locs_bl <- seq(0, 1, length.out = length(profile))
   ## make df of index and proportional widths
@@ -20,11 +20,11 @@ interpolate_widths <- function(profile, max_width_loc, body_length, body_width){
   # add max width location and reorder
   # Only do this if max width location not already specified in profile
   # by having one equal 1.00
-  if(!any(profile == 1)) df <- rbind(df, c(max_width_loc, 1.000))
+  if(!any(profile == 1)) df <- rbind(df, c(max_girth_loc, 1.000))
   # reorder
   df <- dplyr::arrange(df, locs_bl)
   ## now interpolate at resolution of body length value
-  profile_interpolated <- approx(df$profile, method = "linear", n = body_length)$y
+  profile_interpolated <- approx(x = df$locs_bl, y = df$profile, method = "linear", n = body_length)$y
   ## convert to actual widths
   widths_interpolated <- profile_interpolated * body_width
   ## return
