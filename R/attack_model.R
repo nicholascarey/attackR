@@ -136,8 +136,8 @@
 #'  @examples
 #' attack_model(...)
 #'
-#' @author Nicholas Carey - \link{nicholascarey @gmail.com}, Dave Cade
-#'   \link{davecade @stanford.edu},
+#' @author Nicholas Carey - \email{nicholascarey@gmail.com}, Dave Cade
+#'   \email{davecade@stanford.edu},
 #'
 #' @export
 
@@ -174,6 +174,8 @@ attack_model <- function(
   if(length(speed) > 1 && !is.null(model_length) && model_length > length(speed)) stop("model_length cannot be longer than the speed vector")
   if(length(speed) > 1 && is.null(model_length)) message("model_length set to final value in speed vector")
 
+  ## body_length
+  if(body_length < 100) message("body_length is numerically quite low. For best results in interpolation of widths etc., use a unit that has higher numeric value, \nideally 100 or greater (ish). E.g. if using metres, use centimentres instead. ")
 
   ## Profiles
   ## Values must be between 0 and 1
@@ -487,6 +489,10 @@ attack_model <- function(
     ## make x limits
     if(is.null(plot_to)){
       plot_to <- max(speed_orig$time)
+    }
+    ## make x limits
+    if(is.null(plot_from)){
+      plot_from <- 0
     }
 
     ## set plot parameters - will apply to all unless changed

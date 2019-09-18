@@ -58,26 +58,6 @@ calc_dadt <- function(speed, diameter, distance){
   return(output)
 }
 
-#' Calculates screen diameter for each model.
-#'
-#' x = model dataframe containing alpha angles data
-#' alpha_col = column identifier for alpha angles data
-#' screen_distance = distance simulation will be viewed at
-#'
-#' A new column 'diam_on_screen' will be added to the dataframe
-#'
-#' @keywords internal
-#' @export
-add_diam_on_screen <- function(x, alpha_col, screen_distance){
-  ## add diam_on_screen column
-  x$diam_on_screen <- 2 * screen_distance * (tan(x[[alpha_col]] / 2))
-  ## Round to 2 decimal places (1/10th of a mm)
-  x$diam_on_screen <- sapply(x$diam_on_screen, function(z) round(z, 2))
-  ## Convert any diameter over 500cm to 500cm, which can't be displayed on screen anyway.
-  ## (deals with values on last frames, where diam can be approaching infinity)
-  x$diam_on_screen <- sapply(x$diam_on_screen, function(z) ifelse(z > 500, z <- 500, z))
-  return(x)
-}
 
 #' Extract attacker distance when a specific da/dt value is exceeded
 #'

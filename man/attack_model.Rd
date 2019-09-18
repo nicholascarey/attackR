@@ -159,6 +159,6 @@ In order to correctly model the widest apparent part of the predator
 }
 
 \author{
-Nicholas Carey - \link{nicholascarey @gmail.com}, Dave Cade
-  \link{davecade @stanford.edu},
+Nicholas Carey - \email{nicholascarey@gmail.com}, Dave Cade
+  \email{davecade@stanford.edu},
 }
