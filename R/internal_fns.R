@@ -59,34 +59,38 @@ calc_dadt <- function(speed, diameter, distance){
 }
 
 
-#' Extract attacker distance when a specific da/dt value is exceeded
-#'
-#' @keywords internal
-#' @export
-get_dist <- function(mod, ALT){
-  index <- which(mod$dadt > ALT)[1]
-  dist <- mod$distance_nose[index]
-  return(dist)
-}
 
-#' extract attacker time to reach prey when a specific da/dt value is exceeded
-#'
-#' @keywords internal
-#' @export
-get_time <- function(mod, ALT){
-  index <- which(mod$dadt > ALT)[1]
-  time <- mod$time_rev[index]
-  return(time)
-}
 
 #' extract attacker alpha when a specific da/dt value is exceeded
 #'
 #' @keywords internal
 #' @export
-get_alpha <- function(mod, ALT){
-  index <- which(mod$dadt > ALT)[1]
+get_alpha <- function(mod, dAdt){
+  index <- which(mod$dAdt > dAdt)[1]
   alpha <- mod$alpha[index]
   return(alpha)
 }
 
 
+#' @title Get first close matching value in a generally increasing vector
+#'
+#' @description \code{first_over} - takes a single value and finds the index of
+#'   first occurrence or first time that value is exceeded in a vector.
+#'
+#' @details Finds the index (i.e. position) of the first occurrence or first
+#'   time a value is exceeded in a vector.
+#' @param this numeric. Single value to find first occurence of.
+#' @param there numeric. The vector in which to find value.
+#' @return Index vector of where the value occurs or is exceeded in the target
+#'   vector.
+#' @keywords internal
+#' @export
+
+first_over <- function(this, there) { # search for *this* in *there*
+  ## if this > any there stop
+  if (!any(na.omit(there) >= this)) {
+    stop("target value never reached in this vector")
+  }
+  result <- which(there >= this)[1]
+  return(result)
+}
