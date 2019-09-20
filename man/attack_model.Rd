@@ -123,7 +123,7 @@ In order to correctly model the widest apparent part of the predator
   digits is recommended.
 
   Which width at each body segment (e.g. horizontal or vertical) used to
-  calculate alpha (\strong{a}) is determined via the \code{select_width}
+  calculate alpha (\strong{a}) is determined via the \code{width_filter}
   operator. This can be the midpoint value between them ("mid", the default),
   maximum value ("max"), or minimum value ("min"). You can also choose to use
   only the vertical or horizontal profile widths ("v", "h"). You can also

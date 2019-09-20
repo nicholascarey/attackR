@@ -59,7 +59,7 @@
 #'   digits is recommended.
 #'
 #'   Which width at each body segment (e.g. horizontal or vertical) used to
-#'   calculate alpha (\strong{a}) is determined via the \code{select_width}
+#'   calculate alpha (\strong{a}) is determined via the \code{width_filter}
 #'   operator. This can be the midpoint value between them ("mid", the default),
 #'   maximum value ("max"), or minimum value ("min"). You can also choose to use
 #'   only the vertical or horizontal profile widths ("v", "h"). You can also
@@ -152,7 +152,7 @@ attack_model <- function(
   profile_h = NULL,
   max_girth_loc_v = NULL,
   max_girth_loc_h = NULL,
-  select_width = "mid",
+  width_filter = "mid",
   simple_output = TRUE,
   plot = TRUE,
   plot_from = 0,
@@ -177,8 +177,8 @@ attack_model <- function(
   ## body_length
   if(body_length < 100) message("body_length is numerically quite low. For best results in interpolation of widths etc., use a unit that has higher numeric value, \nideally 100 or greater (ish). E.g. if using metres, use centimentres instead. ")
 
-  ## Profiles
-  ## Values must be between 0 and 1
+  # Profiles
+  # Values must be between 0 and 1
   if(any(profile_v > 1) || any(profile_h > 1)) stop("Body profiles must only contain values between 0 and 1.")
   if(any(profile_v < 0) || any(profile_h < 0)) stop("Body profiles must only contain values between 0 and 1.")
   ## Can't both be NULL
@@ -189,8 +189,8 @@ attack_model <- function(
   if(is.null(profile_v)) message("No vertical body profile (profile_v) found. Any inputs for max_girth_loc_v and body_width_v ignored.")
   if(is.null(profile_h)) message("No horizontal body profile (profile_h) found. Any inputs for max_girth_loc_h and body_width_h ignored.")
   ## If a profile doesn't contain 1.0, then max_girth_loc should be NULL
-  if(any(profile_v == 1) && !is.null(max_girth_loc_v)) stop("profile_v already contains a max girth location (value of 1.0). max_girth_loc_v cannot also be specified.")
-  if(any(profile_h == 1) && !is.null(max_girth_loc_h)) stop("profile_h already contains a max girth location (value of 1.0). max_girth_loc_h cannot also be specified.")
+  #if(any(profile_v == 1) && !is.null(max_girth_loc_v)) stop("profile_v already contains a max girth location (value of 1.0). max_girth_loc_v cannot also be specified.")
+  #if(any(profile_h == 1) && !is.null(max_girth_loc_h)) stop("profile_h already contains a max girth location (value of 1.0). max_girth_loc_h cannot also be specified.")
   ## And vice versa - if no 1.0 in profile, then mac_girth_loc required
   if(!any(profile_v == 1) && is.null(max_girth_loc_v)) stop("No max girth location (value of 1.0) found in profile_v. Please specify one with max_girth_loc_v.")
   if(!any(profile_h == 1) && is.null(max_girth_loc_h)) stop("No max girth location (value of 1.0) found in profile_h. Please specify one with max_girth_loc_h.")
@@ -200,8 +200,8 @@ attack_model <- function(
   if(!is.null(max_girth_loc_v) && (max_girth_loc_v >= 1 || max_girth_loc_v <= 0)) stop("Max width locations must be between 0 and 1. They represent a proportional distance along the length from the nose.")
   if(!is.null(max_girth_loc_h) && (max_girth_loc_h >= 1 || max_girth_loc_h <= 0)) stop("Max width locations must be between 0 and 1. They represent a proportional distance along the length from the nose.")
 
-  ## select_width
-  if(!(select_width %in% (c("mid", "max", "min", "v", "h", "max_girth_v", "max_girth_h")))) stop("select_width input not recognised.")
+  ## width_filter
+  if(!(width_filter %in% (c("mid", "max", "min", "v", "h", "max_girth_v", "max_girth_h")))) stop("width_filter input not recognised.")
 
 
   ## body_length
@@ -226,7 +226,7 @@ attack_model <- function(
     max_girth_loc_v = max_girth_loc_v,
     profile_h = profile_h,
     max_girth_loc_h = max_girth_loc_h,
-    select_width = select_width,
+    width_filter = width_filter,
     simple_output = simple_output,
     plot = plot,
     plot_from = plot_from,
@@ -318,41 +318,41 @@ attack_model <- function(
   widths_df <- data.frame(widths_v = widths_v,
                           widths_h = widths_h)
 
-  ## Filter widths based on select_width input
+  ## Filter widths based on width_filter input
   ## And add distance from nose
-  if(select_width == "mid") {
+  if(width_filter == "mid") {
     widths <- apply(widths_df, 1, function(x) mean(x))
     widths <- data.frame(dist_from_nose = (1:length(widths))-1,
                          width = widths)}
 
-  if(select_width == "max") {
+  if(width_filter == "max") {
     widths <- apply(widths_df, 1, function(x) max(x))
     widths <- data.frame(dist_from_nose = (1:length(widths))-1,
                          width = widths)}
 
-  if(select_width == "min") {
+  if(width_filter == "min") {
     widths <- apply(widths_df, 1, function(x) min(x))
     widths <- data.frame(dist_from_nose = (1:length(widths))-1,
                          width = widths)}
 
-  if(select_width == "v") {
+  if(width_filter == "v") {
     widths <- widths_df[[1]]
     widths <- data.frame(dist_from_nose = (1:length(widths))-1,
                          width = widths)}
 
-  if(select_width == "h") {
+  if(width_filter == "h") {
     widths <- widths_df[[2]]
     widths <- data.frame(dist_from_nose = (1:length(widths))-1,
                          width = widths)}
 
-  if(select_width == "max_girth_v") {
+  if(width_filter == "max_girth_v") {
     ## location of max_girth
     max_girth_index_v <- which.max(widths_df[[1]])
     widths <- max(widths_df[[1]])
     widths <- data.frame(dist_from_nose = max_girth_index_v-1,
                          width = widths)}
 
-  if(select_width == "max_girth_h") {
+  if(width_filter == "max_girth_h") {
     ## location of max_girth
     max_girth_index_h <- which.max(widths_df[[2]])
     widths <- max(widths_df$widths_h)
@@ -390,32 +390,27 @@ attack_model <- function(
   } else {
     ## find location of closest match to LOWER dAdt_range
     ## which dadt are higher than lower value?
-    dAdt_range_low_index <- which(model_data$dAdt >= dAdt_range[1])[1]
+    dAdt_range_low_index <- first_over(dAdt_range[1], model_data$dAdt)
     ## if it's never reached, set it to NA
     if(length(dAdt_range_low_index)==0){
       dAdt_range_low_index <- NA
-      message("Lower range of dAdt_range never reached in this scenario. No dAdt_range range plotted.")
-      ## otherwise, we only want first occurence
-    } else {
-      dAdt_range_low_index <- dAdt_range_low_index[1]}
+      message("Lower range of dAdt_range never reached in this scenario. No dAdt_range range plotted.")}
 
     ## same for UPPER dAdt_range range
     ## NOTE - it's third in the vector (mean is second)
-    dAdt_range_high_index <- which(model_data$dAdt <= dAdt_range[2])
+    dAdt_range_high_index <- first_over(dAdt_range[2], model_data$dAdt)
     if(length(dAdt_range_high_index)==0){
       dAdt_range_high_index <- NA
-      message("Upper range of dAdt_range never reached in this scenario.")
-    } else {
-      dAdt_range_high_index <- tail(dAdt_range_high_index, 1)}
+      message("Upper range of dAdt_range never reached in this scenario.")}
 
 
     ## Use these to subset model to dAdt_range range
     if(is.na(dAdt_range_low_index)){
       dAdt_range_region <- "No matching dAdt_range region in this model"
     } else if (is.na(dAdt_range_high_index)) {
-      dAdt_range_region <- model_data[dAdt_range_low_index:model_length,]
+      dAdt_range_region <- model_data[(dAdt_range_low_index-1):model_length,]
     } else {
-      dAdt_range_region <- model_data[dAdt_range_low_index:dAdt_range_high_index,]
+      dAdt_range_region <- model_data[(dAdt_range_low_index-1):(dAdt_range_high_index+1),]
     }
 
   }
@@ -426,32 +421,26 @@ attack_model <- function(
   } else {
     ## find location of closest match to LOWER alpha_range
     ## which dadt are higher than lower value?
-    alpha_range_low_index <- which(model_data$alpha >= alpha_range[1])[1]
+    alpha_range_low_index <- first_over(alpha_range[1], model_data$alpha)
     ## if it's never reached, set it to NA
     if(length(alpha_range_low_index)==0){
       alpha_range_low_index <- NA
-      message("Lower range of alpha_range never reached in this scenario. No alpha_range range plotted.")
-      ## otherwise, we only want first occurence
-    } else {
-      alpha_range_low_index <- alpha_range_low_index[1]}
+      message("Lower range of alpha_range never reached in this scenario. No alpha_range range plotted.")}
 
     ## same for UPPER alpha_range range
     ## NOTE - it's third in the vector (mean is second)
-    alpha_range_high_index <- which(model_data$alpha <= alpha_range[2])
+    alpha_range_high_index <- first_over(alpha_range[2], model_data$alpha)
     if(length(alpha_range_high_index)==0){
       alpha_range_high_index <- NA
-      message("Upper range of alpha_range never reached in this scenario.")
-    } else {
-      alpha_range_high_index <- tail(alpha_range_high_index, 1)}
-
+      message("Upper range of alpha_range never reached in this scenario.")}
 
     ## Use these to subset model to alpha_range range
     if(is.na(alpha_range_low_index)){
       alpha_range_region <- "No matching alpha_range region in this model"
     } else if (is.na(alpha_range_high_index)) {
-      alpha_range_region <- model_data[alpha_range_low_index:model_length,]
+      alpha_range_region <- model_data[(alpha_range_low_index-1):model_length,]
     } else {
-      alpha_range_region <- model_data[alpha_range_low_index:alpha_range_high_index,]
+      alpha_range_region <- model_data[(alpha_range_low_index-1):(alpha_range_high_index+1),]
     }
 
   }
