@@ -129,25 +129,26 @@ segment_diam <- pmax(horiz_diam, vert_diam)
   alpha_range = c(0.5, 1)
 
 
-attack_model(speed = 600,
-             model_length = 180,
+tmp <- attack_model(speed = af_speeds_mont.rd,
+             model_length = NULL,
              frequency = 60,
              body_length = 1050,
              body_width_v = 250.669,
              body_width_h = 250.669,
-             max_width_loc_v = 0.42,
-             max_width_loc_h = 0.42,
-             profile_v = c(0.000, 0.344, 0.558, 0.676, 0.721, 0.777, 0.880, 0.931, 0.950, 0.900, 0.800,
+             max_girth_loc_v = 0.42,
+             max_girth_loc_h = 0.42,
+             profile_v <- c(0.000, 0.344, 0.558, 0.676, 0.721, 0.777, 0.880, 0.931, 0.980, 0.900, 0.800,
                             0.700, 0.600, 0.500, 0.400, 0.300, 0.250, 0.200, 0.150, 0.100, 0.000),
-             profile_h = c(0.000, 0.329, 0.443, 0.595, 0.708, 0.803, 0.847, 0.904, 0.950, 0.900, 0.800,
+             profile_h <- c(0.000, 0.329, 0.443, 0.595, 0.708, 0.803, 0.847, 0.904, 0.973, 0.900, 0.800,
                             0.700, 0.600, 0.500, 0.400, 0.300, 0.250, 0.200, 0.150, 0.100, 0.000),
-             select_widths = "mean",
+             select_width = "mid",
              simple_output = TRUE,
              plot = TRUE,
-             plot_from = 0,
-             plot_to = NULL,
+             plot_from = 8,
+             plot_to = 12,
              dAdt_range = c(0.5, 1.5),
-             alpha_range = NULL)
+             alpha_range = c(0.2, 0.3))
+
 
 #rm(list=ls())
 
@@ -157,14 +158,28 @@ frequency = 60
 body_length = 1050
 body_width_v = 250.669
 body_width_h = 250.669
-max_width_loc_v = 0.42
-max_width_loc_h = 0.42
+max_girth_loc_v = 0.42
+max_girth_loc_h = 0.42
 profile_v = c(0.000, 0.344, 0.558, 0.676, 0.721, 0.777, 0.880, 0.931, 0.950, 0.900, 0.800, 0.700, 0.600, 0.500, 0.400, 0.300, 0.250, 0.200, 0.150, 0.100, 0.000)
 profile_h = c(0.000, 0.329, 0.443, 0.595, 0.708, 0.803, 0.847, 0.904, 0.950, 0.900, 0.800, 0.700, 0.600, 0.500, 0.400, 0.300, 0.250, 0.200, 0.150, 0.100, 0.000)
-select_widths = "mean"
+select_width = "mean"
 simple_output = TRUE
 plot = TRUE
 plot_from = 0
 plot_to = NULL
 dAdt_range = c(0.5, 1.5)
 alpha_range = NULL
+
+
+profile = profile_v
+max_girth_loc = max_girth_loc_v
+body_length = body_length
+body_width = body_width_v
+
+tmp2 <- diam_on_screen(tmp$final_model$alpha, 20)
+
+head(tmp2)
+tail(tmp2)
+
+
+

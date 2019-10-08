@@ -65,8 +65,8 @@ calc_dadt <- function(speed, diameter, distance){
 #'
 #' @keywords internal
 #' @export
-get_alpha <- function(mod, dAdt){
-  index <- which(mod$dAdt > dAdt)[1]
+get_alpha <- function(mod, dadt){
+  index <- which(mod$dadt > dadt)[1]
   alpha <- mod$alpha[index]
   return(alpha)
 }
@@ -93,4 +93,37 @@ first_over <- function(this, there) { # search for *this* in *there*
   }
   result <- which(there >= this)[1]
   return(result)
+}
+
+
+
+
+#' @title Get closest matching value
+#'
+#' @description \code{closest} - takes a numeric vector or single value and
+#'   finds the index of closest matching value(s) in a different vector.
+#'
+#' @details Finds the index (i.e. position(s)) of the closest
+#' matching value(s) of the input(s) in a vector
+#'
+#' @seealso \code{\link{closest}}
+#'
+#' @usage closest(this, there)
+#'
+#' @param this numeric. Vector or value. The value(s) to match.
+#' @param there numeric. The vector in which to find closest matching value(s).
+#'
+#' @return Index of where closest matching value(s) occur in the target vector.
+#'
+#' @keywords internal
+#' @export
+
+closest <- function(this, there) { # search for *this* in *there*
+  if (length(this) == 1) {
+    output <- which.min(abs(there - this))
+    return(output)
+  } else {
+    output <- sapply(this, function(this) which.min(abs(there - this)))
+    return(output)
+  }
 }

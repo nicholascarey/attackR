@@ -3,3 +3,9 @@
 .RData
 .Ruserdata
 tests/testthat/Rplots.pdf
+attack_model_old.R
+figS4_script.R
+orig_models_script.R
+scratch.R
+sl_script.R
+testing.R

@@ -13,14 +13,14 @@ first_over(this, there)
 }
 \value{
 Index vector of where the value occurs or is exceeded in the target
-  vector.
+vector.
 }
 \description{
 \code{first_over} - takes a single value and finds the index of
-  first occurrence or first time that value is exceeded in a vector.
+first occurrence or first time that value is exceeded in a vector.
 }
 \details{
 Finds the index (i.e. position) of the first occurrence or first
-  time a value is exceeded in a vector.
+time a value is exceeded in a vector.
 }
 \keyword{internal}

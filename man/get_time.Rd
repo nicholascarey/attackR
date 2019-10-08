@@ -2,32 +2,34 @@
 % Please edit documentation in R/get_time.R
 \name{get_time}
 \alias{get_time}
-\title{Extract attacker time when a specific alpha or dA/dt value is exceeded}
+\title{Extract attacker time to reach prey when a specific \strong{{α}} or
+\strong{{dα/dt}} value is exceeded}
 \usage{
-diam_on_screen(x, dAdt, alpha)
+get_time(mod, dadt, alpha)
 }
 \arguments{
 \item{mod}{list or data.frame. Object of class \code{attack_model},
 \code{attack_model_whale}, or \code{data.frame} exported from either of
 those functions}
 
-\item{dAdt}{numeric. dAdt value to find time exceeded at.}
+\item{dadt}{numeric. dadt value to find time exceeded at.}
 
 \item{alpha}{numeric. alpha value to find time exceeded at.}
 }
 \value{
 numeric value of time in whatever units were used to create the
-  model.
+model.
 }
 \description{
-\code{get_time} returns the time to reach prey of the predator
-  when a specific dA/dt or alpha value is reached or exceeded.
+\code{get_time} returns the time to reach the prey by the
+predator when a specific \strong{{α}} or \strong{{dα/dt}} value is reached.
 }
 \details{
 Input can be an object of class \code{attack_model},
-  \code{attack_model_whale}, or \code{data.frame} exported from either of
-  those functions. Alpha and dA/dt columns are identified automatically. Only
-  one of dA/dt or alpha should be entered.
+\code{attack_model_whale}, or \code{data.frame} exported from either of
+those functions. \strong{{α}} and \strong{{dα/dt}} columns are identified
+automatically. Only one of the \emph{\code{dadt}} or \emph{\code{alpha}} inputs
+should be entered.
 }
 \author{
 Nicholas Carey - \email{nicholascarey@gmail.com}

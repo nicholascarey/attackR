@@ -16,21 +16,21 @@ observing specimen.}
 }
 \value{
 A new column 'diam_on_screen' will be added to the data frame inputs,
-  otherwise a numeric vector is returned. Diameters are in same units as
-  \code{screen_distance}.
+otherwise a numeric vector is returned. Diameters are in same units as
+\code{screen_distance}.
 }
 \description{
 \code{diam_on_screen} calculates the correct diameter on screen
-  for an alpha viewing angle and screen distance.
+for an alpha viewing angle and screen distance.
 }
 \details{
 If input is an object of class \code{attack_model} or
-  \code{data.frame} exported from \code{attack_model}, the alpha angle column
-  is identified automatically, and an identical object is exported with a new
-  \code{diam_on_screen} column added.
+\code{data.frame} exported from \code{attack_model}, the alpha angle column
+is identified automatically, and an identical object is exported with a new
+\code{diam_on_screen} column added.
 
-  Otherwise, a vector of alpha angles can be entered, in which case the
-  output is a vector of screen diameters.
+Otherwise, a vector of alpha angles can be entered, in which case the
+output is a vector of screen diameters.
 }
 \author{
 Nicholas Carey - \email{nicholascarey@gmail.com}

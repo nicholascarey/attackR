@@ -4,7 +4,7 @@
 \alias{get_alpha}
 \title{extract attacker alpha when a specific da/dt value is exceeded}
 \usage{
-get_alpha(mod, dAdt)
+get_alpha(mod, dadt)
 }
 \description{
 extract attacker alpha when a specific da/dt value is exceeded

@@ -63,51 +63,51 @@ whale_mod_full <- attack_model_whale(
 
 
 
-## stops with both alpha an dAdt inputs
-expect_error(get_time(sl_mod_simp, dAdt = 1, alpha = 2),
-             "Enter only one of dAdt or alpha, not both.")
-## stops with no alpha or dAdt inputs
-expect_error(get_time(sl_mod_simp, dAdt = NULL, alpha = NULL),
-             "Enter a dAdt or alpha value.")
-## stops with too high alpha or dAdt inputs
-expect_error(get_time(sl_mod_simp, dAdt = 20, alpha = NULL),
+## stops with both alpha an dadt inputs
+expect_error(get_time(sl_mod_simp, dadt = 1, alpha = 2),
+             "Enter only one of dadt or alpha, not both.")
+## stops with no alpha or dadt inputs
+expect_error(get_time(sl_mod_simp, dadt = NULL, alpha = NULL),
+             "Enter a dadt or alpha value.")
+## stops with too high alpha or dadt inputs
+expect_error(get_time(sl_mod_simp, dadt = 20, alpha = NULL),
              "target value never reached in this vector")
-## stops with too high alpha or dAdt inputs
-expect_error(get_time(sl_mod_simp, dAdt = NULL, alpha = 20),
+## stops with too high alpha or dadt inputs
+expect_error(get_time(sl_mod_simp, dadt = NULL, alpha = 20),
              "target value never reached in this vector")
 
 ## Accepts both simple and full attack_model and attack_model_whale
-expect_error(suppressMessages(get_time(sl_mod_simp, dAdt = 0.5, alpha = NULL),
+expect_error(suppressMessages(get_time(sl_mod_simp, dadt = 0.5, alpha = NULL),
              NA))
-expect_error(suppressMessages(get_time(sl_mod_full, dAdt = 0.5, alpha = NULL),
+expect_error(suppressMessages(get_time(sl_mod_full, dadt = 0.5, alpha = NULL),
              NA))
-expect_error(suppressMessages(get_time(whale_mod_simp, dAdt = 0.5, alpha = NULL),
+expect_error(suppressMessages(get_time(whale_mod_simp, dadt = 0.5, alpha = NULL),
              NA))
-expect_error(suppressMessages(get_time(whale_mod_full, dAdt = 0.5, alpha = NULL),
+expect_error(suppressMessages(get_time(whale_mod_full, dadt = 0.5, alpha = NULL),
              NA))
 
 
 ## Correct values returned
-expect_equal(suppressMessages(get_time(sl_mod_simp, dAdt = 0.5, alpha = NULL)),
-             0.35)
-expect_equal(suppressMessages(get_time(sl_mod_full, dAdt = 0.5, alpha = NULL)),
-             0.35)
-expect_equal(suppressMessages(get_time(whale_mod_simp, dAdt = 0.5, alpha = NULL)),
+expect_equal(suppressMessages(get_time(sl_mod_simp, dadt = 0.5, alpha = NULL)),
+             tolerance = 0.0001, 0.3666667)
+expect_equal(suppressMessages(get_time(sl_mod_full, dadt = 0.5, alpha = NULL)),
+             tolerance = 0.0001, 0.3666667)
+expect_equal(suppressMessages(get_time(whale_mod_simp, dadt = 0.5, alpha = NULL)),
              0.51666667)
-expect_equal(suppressMessages(get_time(whale_mod_full, dAdt = 0.5, alpha = NULL)),
+expect_equal(suppressMessages(get_time(whale_mod_full, dadt = 0.5, alpha = NULL)),
              0.51666667)
-expect_equal(suppressMessages(get_time(sl_mod_simp, dAdt = NULL, alpha = 0.5)),
+expect_equal(suppressMessages(get_time(sl_mod_simp, dadt = NULL, alpha = 0.5)),
              0.11666667)
-expect_equal(suppressMessages(get_time(sl_mod_full, dAdt = NULL, alpha = 0.5)),
+expect_equal(suppressMessages(get_time(sl_mod_full, dadt = NULL, alpha = 0.5)),
              0.11666667)
-expect_equal(suppressMessages(get_time(whale_mod_simp, dAdt = NULL, alpha = 0.5)),
-             1.63333333)
-expect_equal(suppressMessages(get_time(whale_mod_full, dAdt = NULL, alpha = 0.5)),
-             1.63333333)
+expect_equal(suppressMessages(get_time(whale_mod_simp, dadt = NULL, alpha = 0.5)),
+             1.65)
+expect_equal(suppressMessages(get_time(whale_mod_full, dadt = NULL, alpha = 0.5)),
+             1.65)
 
 ## Correct messages
-expect_message(get_time(sl_mod_simp, dAdt = NULL, alpha = 0.5),
+expect_message(get_time(sl_mod_simp, dadt = NULL, alpha = 0.5),
                "attack_model input - time is from nose")
-expect_message(get_time(whale_mod_simp, dAdt = NULL, alpha = 0.5),
+expect_message(get_time(whale_mod_simp, dadt = NULL, alpha = 0.5),
                "attack_model_whale input - time is from low jaw tip")
 

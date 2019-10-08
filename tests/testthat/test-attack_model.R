@@ -50,25 +50,25 @@ expect_error(attack_model(500, 180, 60, 1000, 250, 250,
 expect_error(attack_model(500, 180, 60, 1000, 250, 250,
                           profile_v = c(0.2, 0.3, 0.4, 0.5),
                           profile_h = c(0.2, 0.3, 0.4, 0.5),
-                          max_girth_loc_v = -0.5,
+                          max_width_loc_v = -0.5,
                           "Max width locations must be between 0 and 1"))
 
 expect_error(attack_model(500, 180, 60, 1000, 250, 250,
                           profile_v = c(0.2, 0.3, 0.4, 0.5),
                           profile_h = c(0.2, 0.3, 0.4, 0.5),
-                          max_girth_loc_v = 1.5,
+                          max_width_loc_v = 1.5,
                           "Max width locations must be between 0 and 1"))
 
 expect_error(attack_model(500, 180, 60, 1000, 250, 250,
                           profile_v = c(0.2, 0.3, 0.4, 0.5),
                           profile_h = c(0.2, 0.3, 0.4, 0.5),
-                          max_girth_loc_h = -0.5,
+                          max_width_loc_h = -0.5,
                           "Max width locations must be between 0 and 1"))
 
 expect_error(attack_model(500, 180, 60, 1000, 250, 250,
                           profile_v = c(0.2, 0.3, 0.4, 0.5),
                           profile_h = c(0.2, 0.3, 0.4, 0.5),
-                          max_girth_loc_h = 1.5,
+                          max_width_loc_h = 1.5,
                           "Max width locations must be between 0 and 1"))
 
 

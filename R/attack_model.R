@@ -1,145 +1,215 @@
-#' @title Attack Model
+#'@title Attack Model
 #'
-#' @description \code{attack_model} models the visual aspects of an attack by a
-#'   predator on a prey
+#'@description *\code{attack_model}* models the visual aspects of an attack by a
+#'  predator on a prey
 #'
-#'   Models the visual aspects of an attack by a predator on a prey using
-#'   parameters such as size, speed, shape etc. From the prey perspective, it
-#'   calculates the visual angle of the diameter of the attacker (alpha, or
-#'   \strong{a}) in radians, and the rate of change of this angle
-#'   (\strong{da/dt} in radians/s).
+#'  Using parameters such as predator size, speed, shape etc. this function
+#'  models the visual aspects of an attack by the predator on a prey. From the
+#'  prey's perspective it calculates the visual angle of the attacker
+#'  (**alpha**, or **{α}**) in radians, and the rate of change of this angle
+#'  (**{dα/dt}** in radians/s), as well as distance and time to capture.
 #'
-#'   Input units: \code{frequency} is in \code{Hz}. If \code{speed} is a vector
-#'   it should be at the same frequency. Body measurements and speed units can
-#'   be any unit, but should be consistent. i.e. all in cm, and speeds in cm/s,
-#'   etc.
+#'@details Information on inputs:
 #'
-#'   \code{speed} can be either a constant value or vector of speeds (at the
-#'   correct frequency). If a single constant value, a \code{model_length} is
-#'   required in order to calculate the distance the predator starts the attack
-#'   from. For example, at a frequency of 60 Hz and \code{model_length} of 180,
-#'   the model will be three seconds in duration. Therefore, at a constant speed
-#'   of 600 cm/s, the predator will start from approximately 1800 cm away.
+#'@section Input units: *\code{speed}* should be in the same units as body
+#'  measurements (length, width etc.) *per second*, e.g. cm/s. It can be either
+#'  a single, constant speed value or a vector of speeds (at the correct
+#'  *\code{frequency}*). If a single value, *\code{model_length}* is required in
+#'  order to calculate the distance the predator starts the attack from. For
+#'  example, at a frequency of 60 Hz and *\code{model_length}* of 180, the model
+#'  will be three seconds in duration. Therefore, at a constant speed of 600
+#'  cm/s, the predator will start from approximately 1800 cm away.
 #'
-#'   The \code{model_length} operator can also be used to vary where on variable
-#'   speed vectors the predator times reaching the prey, to examine how this
-#'   affects perceived alphas. If left as the default \code{model_length =
-#'   NULL}, the model ends with the predator reaching the prey on the last speed
-#'   value, however \code{model_length} can be used to set this to be earlier in
-#'   the model.
+#'  *\code{frequency}* is in *\code{Hz}*. If *\code{speed}* is a vector it
+#'  should be at the same frequency.
 #'
-#'   Models end when the nose (most anterior part in the profiles) of the
-#'   predator reaches the prey (last row of the data.frame, where time and
-#'   distance equal zero).
+#'  *\code{model_length}* is required when *\code{speed}* is a single value,
+#'  where it determines the total length of the model. It is also used to vary
+#'  where on variable speed vectors the predator times reaching the prey, for
+#'  example cooincident with its maximum speed, to examine how this affects
+#'  factors such as **{dα/dt}**. If left as the default *\code{model_length =
+#'  NULL}*, the model ends with the predator reaching the prey on the last speed
+#'  value.
 #'
-#' @details In order to correctly model the widest apparent part of the predator
-#'   it requires several morphometric inputs:
+#'@section Morphology: In order to correctly model the widest apparent part of
+#'  the predator, and thus **{α}**, the function requires several morphometric
+#'  inputs:
 #'
-#' @section Length and Width: \code{body_length} is simply the total length from
-#'   nose to tail (or equivalent). \code{body_width_v} and  \code{body_width_h}
-#'   are the *maximum* body widths in the vertical (i.e. dorsal:ventral) and
-#'   horizontal (left:right) vectors of the body. These must be in the same
-#'   units.
+#'@section *Length and Width*: *\code{body_length}* is simply the total length
+#'  from nose to tail (or equivalent). *\code{body_width_v}* and
+#'  *\code{body_width_h}* are the **maximum** body widths in the vertical (i.e.
+#'  dorsal:ventral) and horizontal (left:right) planes of the body. These must
+#'  all be in the same units.
 #'
-#' @section Body Profiles: \code{profile_v} and \code{profile_h} are vectors of
-#'   widths of the predator's body as a proportion of the maximum width going
-#'   from the anterior (nose) to the posterior (tail). Therefore, they should
-#'   generally start and end on zero (though they don't have to), and all values
-#'   must be between zero and 1. They must be evenly spaced, e.g. every 10%
-#'   along the body. The longer (i.e. higher resolution) these measurements are,
-#'   the better their representation of the morphology of the animal. Actual
-#'   values of width along the body are calculated to the resolution of the
-#'   entered unit of length by linearly interpolating between each proportional
-#'   width. For example, if the predator length (body_length) is 1000cm, a width
-#'   value in cm is calculated at every cm along the body using either the
-#'   proportional width given in the vector or a linear interpolation between
-#'   adjoining proportional widths. Therefore, use units which will give an
-#'   appropriate resolution, at least greater than the profile vector lengths.
-#'   The higher the numeric value of the length the better, at least three
-#'   digits is recommended.
+#'@section Body Profiles: *\code{profile_v}* and *\code{profile_h}* are vectors
+#'  of widths of the predator's body as a proportion of the maximum width going
+#'  from the anterior (nose) to the posterior (tail). Therefore, they should
+#'  generally start and end on zero (though they don't have to), and all values
+#'  must be between zero and 1. They must be regularly spaced, e.g. every 10\%
+#'  along the body. They do not have to be the same length (i.e. resolution),
+#'  though it is recommended they are. The longer (i.e. higher resolution) these
+#'  measurements are, the better their representation of the morphology of the
+#'  animal. Actual values of width along the body are calculated to the
+#'  resolution of the entered unit of *\code{body_length}* by linearly
+#'  interpolating between each proportional width. For example, if the predator
+#'  *\code{body_length}* is 1000cm, a width value in cm is calculated at every
+#'  cm along the body by interpolating between the proportional widths.
+#'  Therefore, use units which will give an appropriate resolution, at least
+#'  greater than the profile vector lengths. The higher the numeric value of the
+#'  *\code{body_length}* the better, at least three digits is recommended.
 #'
-#'   Which width at each body segment (e.g. horizontal or vertical) used to
-#'   calculate alpha (\strong{a}) is determined via the \code{width_filter}
-#'   operator. This can be the midpoint value between them ("mid", the default),
-#'   maximum value ("max"), or minimum value ("min"). You can also choose to use
-#'   only the vertical or horizontal profile widths ("v", "h"). You can also
-#'   choose to use the maximum width to calculate alpha, in which case the alpha
-#'   of no other segments of the body is calculated, only that of the maximum
-#'   girth.
+#'  You do not need to enter both *\code{profile_v}* and *\code{profile_h}*,
+#'  only one is required; if one is left NULL the model will use the other to
+#'  calculate **{α}**. This can be useful if your predator is always wider in
+#'  one plane than the other.
 #'
-#'   These final widths and their relative distances from the observing prey are
-#'   used to calculate the viewing angle alpha (\strong{a}). At some point, the
-#'   maximum girth of the predator will not make up the widest apparent visual
-#'   angle of the predator, but more anterior segments will appear to the prey
-#'   to be wider, and have a higher alpha. The maximum alpha at each iteration
-#'   of the model (i.e. each step along the speed vector at the chosen
-#'   frequency) is extracted from these, and used to calculate the rate of
-#'   change in alpha, dA/dt (\strong{da/dt} in radians/s.
+#'  The function calculates the widest apparent width of any part of the
+#'  predator's body from the prey's perspective at each iteration of the model,
+#'  in both planes. This is *usually* the maximum width of the predator, but it
+#'  also depends on the predator's shape. At close distances, more anterior
+#'  parts of the predator will appear to be wider, and so result in a higher
+#'  **{α}** value.
 #'
-#'   Because this interpolation is done on both vectors, they do not need to be
-#'   the same length. If the predator is approximately equal in both dimensions
-#'   or always wider in one dimension, only one profile and other
-#'   profile-specific inputs is required, and the others can be left = NULL.
-#'   Maximum girth locations can occur at an intermediate section of the body,
-#'   but the proportional widths on either side must be less than 1.000.
+#'  Note: no section of the body posterior of the maximum width can ever show a
+#'  larger apparent visual **{α}** than the maximum width. Therefore, the
+#'  function only really needs profile data from the maximum width forward.
+#'  However, it is important for the function to work correctly that a full,
+#'  evenly spaced profile is provided. Having said that, the proportional width
+#'  values posterior of the max width can be placeholder values and it will not
+#'  affect calculated **{α}**, as long as they are less than 1 and spaced
+#'  correctly.
 #'
-#'   \code{max_girth_loc_v} and \code{max_girth_loc_h} are where the maximum
-#'   widths occur along the body as a proportion of the total body length going
-#'   from the nose. They are only necessary if they are not specified as one of
-#'   the proportional widths in \code{profile_v} and \code{profile_h}, that is
-#'   none of these have the value of exactly 1.
+#'@section Filtering of maximum apparent width between body planes: Apparent
+#'  widths are calculated for both body planes, if two are entered. Which width
+#'  at each body segment (e.g. horizontal or vertical) used to calculate **{α}**
+#'  is determined via the *\code{width_filter}* operator. This can be the
+#'  midpoint value between them (*\code{"mid"}*, the default), maximum value
+#'  (*\code{"max"}*), or minimum value (*\code{"min"}*). You can also choose to
+#'  use only the vertical or horizontal profile widths exclusively
+#'  (*\code{"v"}*, *\code{"h"}*). You can also choose to use the predator's
+#'  maximum width in either plane (*\code{max_width_v}*, *\code{max_width_h}*)
+#'  to calculate **{α}**, in which case all other segments of the body are
+#'  ignored, and only **{α}** of the maximum width is determined.
 #'
-#' @section Plotting: Several options control plotting....
+#'  *\code{max_width_loc_v}* and *\code{max_width_loc_h}* are the locations of
+#'  the maximum widths of the predator occur along the body as a proportion of
+#'  the total body length going from the anterior. They are only necessary if
+#'  they are not specified as one of the proportional widths in
+#'  *\code{profile_v}* and *\code{profile_h}*, that is none of these have the
+#'  value of exactly 1. They can also occur at an intermediate section of the
+#'  body, not included as part of the body profiles.
 #'
-#' @usage attack_model(speed, frequency = 60, body_length = 10.5, model_length =
-#'   NULL, simple_output = TRUE, plot = TRUE, plot_from = 0, plot_to = NULL)
+#'@section Output: By default *\code{simple_output = TRUE}* the output is a data
+#'  frame with every row representing a single instance (*\code{frame}*) of the
+#'  model at the set *\code{frequency}*. The data frame contains columns for
+#'  frame, speed, time, time reversed, distance of the nose of the predator,
+#'  **{α}**, and **{dα/dt}**. If *\code{simple_output = FALSE}* the output is a
+#'  *\code{list()}* object given class *\code{attack_model}* containing the
+#'  above data frame, plus inputs, subset regions (see next section), and data
+#'  detailing how each alpha was calculated (interpolated profiles, locations of
+#'  maximum apparent width at each frame, etc.). This option greatly increases
+#'  the time the function takes to run.
 #'
-#' @param speed numeric. Either a single constant speed value or vector of
-#'   speeds of the approaching attacker. Must be at same frequency in Hz as
-#'   \code{frequency}. If a data.frame is entered the first colummn is used. For
-#'   a constant speed value the function will repeat this the required number of
-#'   times at the correct frequency based on \code{model_length}.
-#' @param model_length integer. Total length of the model in rows. Required if
-#'   \code{speed} is a single value, where along with frequency it determines
-#'   the distance the predator starts at. If \code{speed} is a vector
-#'   \code{model_length} can be left NULL, in which case it is assumed the
-#'   predator reaches the prey on the last value, and the length of the speed
-#'   vector determines total length of model. Alternatively, \code{model_length}
-#'   can be used to set a different capture point along the speed vector, in
-#'   which case its value must be less than the total length of \code{speed}.
-#' @param frequency numeric. Frequency (Hz) of the model, i.e. how many speed
-#'   and other measurements per second. Must be same frequency in Hz as
-#'   \code{speed}.
-#' @param attacker_length numeric. Length of the attacker. Must be same units as
-#'   maximum width, and same as distance unit used in speed. E.g. if speed is in
-#'   cm/s, must be cm.
-#' @param alpha_range numeric. Vector of two values of alpha. These will appear
-#'   on any plot as a blue region, and if \code{simple_output = FALSE}, this
-#'   region of the model is subset out to a separate entry in the saved
-#'   \code{list} object. If any are not reached in the scenario there should be
-#'   a message. If upper range is not reached, it is plotted from lower value to
-#'   end of model, i.e. model_length location.
-#' @param dAdt_range numeric. Vector of two values of dA/dt. These will appear
-#'   on any plot as a green region, and if \code{simple_output = FALSE}, this
-#'   region of the model is subset out to a separate entry in the saved
-#'   \code{list} object. If any are not reached in the scenario there should be
-#'   a message. If upper range is not reached, it is plotted from lower value to
-#'   end of model, i.e. model_length location.
-#' @param simple_output logical. Choose structure of output. If TRUE, a simple
-#'   data frame of the model is returned, otherwise output is a \code{list}
-#'   object containing the final model, input parameters, subset regions, and
-#'   more.
-#' @param plot logical. Choose to plot result.
-#' @param plot_from numeric. Time on x-axis to plot from.
-#' @param plot_to numeric.  Time on x-axis to plot to.
+#'@section Subset regions: *\code{alpha_range}* and *\code{dadt_range}* allow
+#'  regions bounded by values of **{α}** and **{dα/dt}** to be subset. Both
+#'  inputs are a vector of two numeric values indicating the lower and upper
+#'  range of the desired **{α}** and **{dα/dt}** region. The function identifies
+#'  the closest matching, first instance of these values in the *\code{$alpha}*
+#'  and *\code{dadt}* columns of the model data frame. If *\code{simple_output =
+#'  FALSE}*, these can be found as their own elements in the output
+#'  *\code{list()}* object. If *\code{plot = TRUE}* these are also plotted as
+#'  blue and green shaded regions, respectively.
 #'
-#'  @examples
-#' attack_model(...)
+#'@section Plotting: If *\code{plot = TRUE}* a plot is produced showing *speed*,
+#'  **{α}** and **{dα/dt}**. The X range of the plot can set with
+#'  *\code{plot_from}* and *\code{plot_to}*. Optional *\code{alpha_range}* and
+#'  *\code{dadt_range}* can also be plotted (see above).
 #'
-#' @author Nicholas Carey - \email{nicholascarey@gmail.com}, Dave Cade
-#'   \email{davecade@stanford.edu},
+#'@section General: Models end when the nose (most anterior part in the
+#'  profiles) of the predator reaches the prey (last row of the data.frame,
+#'  where time and distance equal zero).
 #'
-#' @export
+#'  At some point, the maximum girth of the predator will not make up the widest
+#'  apparent visual angle of the predator, but more anterior segments will
+#'  appear to the prey to be wider, and have a higher **{α}**. After
+#'  interpolation of body profiles, filtering of apparent widths (see above),
+#'  and identification of maximum apparent width at each iteration of the model,
+#'  these final widths and their relative distances from the observing prey are
+#'  used to calculate the viewing angle, **{α}**, and used to calculate the rate
+#'  of change in **{α}**, **{dα/dt}** in radians/s.
+#'
+#'
+#'@usage attack_model(speed, model_length = NULL, frequency = 60, body_length =
+#'  NULL, body_width_v = NULL, body_width_h = NULL, profile_v = NULL, profile_h
+#'  = NULL, max_width_loc_v = NULL, max_width_loc_h = NULL, width_filter =
+#'  "mid", simple_output = TRUE, plot = TRUE, plot_from = 0, plot_to = NULL,
+#'  alpha_range = NULL, dadt_range = NULL)
+#'
+#'@param speed numeric. Either a single constant speed value or vector of speeds
+#'  at the same frequency in Hz as *\code{frequency}*. Must be same unit as
+#'  *\code{body_length}* per second. If a data.frame is entered the first
+#'  colummn is used. For a constant speed value the function will repeat this
+#'  the required number of times at the correct frequency based on
+#'  *\code{model_length}*.
+#'@param model_length integer. Total length of the model in rows. Required if
+#'  *\code{speed}* is a single value, in which case along with frequency it
+#'  determines the distance the predator starts at. If *\code{speed}* is a
+#'  vector *\code{model_length}* can be left NULL, in which case it is assumed
+#'  the predator reaches the prey on the last value, and the length of the speed
+#'  vector determines total length of model. Alternatively,
+#'  *\code{model_length}* can be used to set a different capture point along the
+#'  speed vector, in which case its value must be less than the total length of
+#'  *\code{speed}*.
+#'@param frequency numeric. Frequency (Hz) of the model, i.e. how many speed and
+#'  other measurements per second. Must be same frequency in Hz as
+#'  *\code{speed}*.
+#'@param body_length numeric. Length of the attacker. Must be same units as
+#'  *\code{body_width_v}* and *\code{body_width_h}*, and that used in
+#'  *\code{speed}*.
+#'@param body_width_v numeric. Maximum width of the attacker in the vertical
+#'  plane.
+#'@param body_width_h numeric. Maximum width of the attacker in the horizontal
+#'  plane.
+#'@param profile_v numeric. A vector describing the shape of the attacker in the
+#'  vertical plane. See details.
+#'@param profile_h numeric. A vector describing the shape of the attacker in the
+#'  horizontal plane. See details.
+#'@param max_width_loc_v numeric. Location of the maximum girth in the vertical
+#'  plane of the predator along the body, if not provided as part of the body
+#'  profile inputs. See details.
+#'@param max_width_loc_h numeric. Location of the maximum girth in the
+#'  horizontal plane of the predator along the body, if not provided as part of
+#'  the body profile inputs. See details.
+#'@param width_filter string. Filters apparent widths between vertical and
+#'  horizontal planes for each row of the model in various ways. See details.
+#'@param simple_output logical. Choose structure of output. If TRUE, a simple
+#'  data frame of the model is returned, otherwise output is a *\code{list}*
+#'  object given an *\code{attack_model}* class, and containing the final model,
+#'  input parameters, subset regions, and more.
+#'@param plot logical. Choose to plot result.
+#'@param plot_from numeric. Time on x-axis to plot from.
+#'@param plot_to numeric.  Time on x-axis to plot to.
+#'@param alpha_range numeric. Vector of two values of alpha. Optional. These
+#'  will appear on any plot as a blue region, and if *\code{simple_output =
+#'  FALSE}*, this region of the model is subset out to a separate entry in the
+#'  saved *\code{list}* object. If any are not reached in the scenario there
+#'  should be a message. If upper range is not reached, it is plotted from lower
+#'  value to end of model, i.e. *\code{model_length}* location.
+#'@param dadt_range numeric. Vector of two values of alpha. Optional. These will
+#'  appear on any plot as a green region, and if *\code{simple_output = FALSE}*,
+#'  this region of the model is subset out to a separate entry in the saved
+#'  *\code{list}* object. If any are not reached in the scenario there should be
+#'  a message. If upper range is not reached, it is plotted from lower value to
+#'  end of model, i.e. *\code{model_length}* location.
+#'
+#'@author Nicholas Carey - \email{nicholascarey@gmail.com}, Dave Cade
+#'  \email{davecade@stanford.edu},
+#'
+#'@importFrom grDevices rgb
+#'@importFrom graphics abline axis legend mtext par rect
+#'@importFrom stats approx na.omit
+#'
+#'@export
 
 attack_model <- function(
   speed,
@@ -150,15 +220,15 @@ attack_model <- function(
   body_width_h = NULL,
   profile_v = NULL,
   profile_h = NULL,
-  max_girth_loc_v = NULL,
-  max_girth_loc_h = NULL,
+  max_width_loc_v = NULL,
+  max_width_loc_h = NULL,
   width_filter = "mid",
   simple_output = TRUE,
   plot = TRUE,
   plot_from = 0,
   plot_to = NULL,
   alpha_range = NULL,
-  dAdt_range = NULL){
+  dadt_range = NULL){
 
 
   # Error Checks and Messages -----------------------------------------------
@@ -186,22 +256,22 @@ attack_model <- function(
   ## Must be over 2 long (nose, mid, tail)
   if((!is.null(profile_v) && length(profile_v) < 3) || (!is.null(profile_h) && length(profile_h) < 3)) stop("Profiles must be at least 3 values long: e.g. nose, midpoint, tail.")
   ## If a profile is empty, message that associated inputs ignored
-  if(is.null(profile_v)) message("No vertical body profile (profile_v) found. Any inputs for max_girth_loc_v and body_width_v ignored.")
-  if(is.null(profile_h)) message("No horizontal body profile (profile_h) found. Any inputs for max_girth_loc_h and body_width_h ignored.")
-  ## If a profile doesn't contain 1.0, then max_girth_loc should be NULL
-  #if(any(profile_v == 1) && !is.null(max_girth_loc_v)) stop("profile_v already contains a max girth location (value of 1.0). max_girth_loc_v cannot also be specified.")
-  #if(any(profile_h == 1) && !is.null(max_girth_loc_h)) stop("profile_h already contains a max girth location (value of 1.0). max_girth_loc_h cannot also be specified.")
+  if(is.null(profile_v)) message("No vertical body profile (profile_v) found. Any inputs for max_width_loc_v and body_width_v ignored.")
+  if(is.null(profile_h)) message("No horizontal body profile (profile_h) found. Any inputs for max_width_loc_h and body_width_h ignored.")
+  ## If a profile doesn't contain 1.0, then max_width_loc should be NULL
+  #if(any(profile_v == 1) && !is.null(max_width_loc_v)) stop("profile_v already contains a max girth location (value of 1.0). max_width_loc_v cannot also be specified.")
+  #if(any(profile_h == 1) && !is.null(max_width_loc_h)) stop("profile_h already contains a max girth location (value of 1.0). max_width_loc_h cannot also be specified.")
   ## And vice versa - if no 1.0 in profile, then mac_girth_loc required
-  if(!any(profile_v == 1) && is.null(max_girth_loc_v)) stop("No max girth location (value of 1.0) found in profile_v. Please specify one with max_girth_loc_v.")
-  if(!any(profile_h == 1) && is.null(max_girth_loc_h)) stop("No max girth location (value of 1.0) found in profile_h. Please specify one with max_girth_loc_h.")
+  if(!any(profile_v == 1) && is.null(max_width_loc_v)) stop("No max girth location (value of 1.0) found in profile_v. Please specify one with max_width_loc_v.")
+  if(!any(profile_h == 1) && is.null(max_width_loc_h)) stop("No max girth location (value of 1.0) found in profile_h. Please specify one with max_width_loc_h.")
 
-  ## max_girth_loc
+  ## max_width_loc
   ## Must be between 0 and 1 (if entered)
-  if(!is.null(max_girth_loc_v) && (max_girth_loc_v >= 1 || max_girth_loc_v <= 0)) stop("Max width locations must be between 0 and 1. They represent a proportional distance along the length from the nose.")
-  if(!is.null(max_girth_loc_h) && (max_girth_loc_h >= 1 || max_girth_loc_h <= 0)) stop("Max width locations must be between 0 and 1. They represent a proportional distance along the length from the nose.")
+  if(!is.null(max_width_loc_v) && (max_width_loc_v >= 1 || max_width_loc_v <= 0)) stop("Max width locations must be between 0 and 1. They represent a proportional distance along the length from the nose.")
+  if(!is.null(max_width_loc_h) && (max_width_loc_h >= 1 || max_width_loc_h <= 0)) stop("Max width locations must be between 0 and 1. They represent a proportional distance along the length from the nose.")
 
   ## width_filter
-  if(!(width_filter %in% (c("mid", "max", "min", "v", "h", "max_girth_v", "max_girth_h")))) stop("width_filter input not recognised.")
+  if(!(width_filter %in% (c("mid", "max", "min", "v", "h", "max_width_v", "max_width_h")))) stop("width_filter input not recognised.")
 
 
   ## body_length
@@ -223,16 +293,16 @@ attack_model <- function(
     body_width_v = body_width_v,
     body_width_h = body_width_h,
     profile_v = profile_v,
-    max_girth_loc_v = max_girth_loc_v,
+    max_width_loc_v = max_width_loc_v,
     profile_h = profile_h,
-    max_girth_loc_h = max_girth_loc_h,
+    max_width_loc_h = max_width_loc_h,
     width_filter = width_filter,
     simple_output = simple_output,
     plot = plot,
     plot_from = plot_from,
     plot_to = plot_to,
     alpha_range = alpha_range,
-    dAdt_range = dAdt_range)
+    dadt_range = dadt_range)
 
 
   # Fix speed if dataframe ------------------------------------------------------
@@ -251,12 +321,12 @@ attack_model <- function(
   if(is.null(profile_h)){
     profile_h <- profile_v
     body_width_h <- body_width_v
-    max_girth_loc_h <- max_girth_loc_v}
+    max_width_loc_h <- max_width_loc_v}
 
   if(is.null(profile_v)){
     profile_v <- profile_h
     body_width_v <- body_width_h
-    max_girth_loc_v <- max_girth_loc_h}
+    max_width_loc_v <- max_width_loc_h}
 
 
   # Set prey location along speed profile -----------------------------------
@@ -312,8 +382,8 @@ attack_model <- function(
   ## Then it works out a final width - either mean/max/min
 
   ## Widths at resolution of body_length unit
-  widths_v <- interpolate_widths(profile_v, max_girth_loc_v, body_length, body_width_v)
-  widths_h <- interpolate_widths(profile_h, max_girth_loc_h, body_length, body_width_h)
+  widths_v <- interpolate_widths(profile_v, max_width_loc_v, body_length, body_width_v)
+  widths_h <- interpolate_widths(profile_h, max_width_loc_h, body_length, body_width_h)
 
   widths_df <- data.frame(widths_v = widths_v,
                           widths_h = widths_h)
@@ -345,18 +415,18 @@ attack_model <- function(
     widths <- data.frame(dist_from_nose = (1:length(widths))-1,
                          width = widths)}
 
-  if(width_filter == "max_girth_v") {
-    ## location of max_girth
-    max_girth_index_v <- which.max(widths_df[[1]])
+  if(width_filter == "max_width_v") {
+    ## location of max_width
+    max_width_index_v <- which.max(widths_df[[1]])
     widths <- max(widths_df[[1]])
-    widths <- data.frame(dist_from_nose = max_girth_index_v-1,
+    widths <- data.frame(dist_from_nose = max_width_index_v-1,
                          width = widths)}
 
-  if(width_filter == "max_girth_h") {
-    ## location of max_girth
-    max_girth_index_h <- which.max(widths_df[[2]])
+  if(width_filter == "max_width_h") {
+    ## location of max_width
+    max_width_index_h <- which.max(widths_df[[2]])
     widths <- max(widths_df$widths_h)
-    widths <- data.frame(dist_from_nose = max_girth_index_h-1,
+    widths <- data.frame(dist_from_nose = max_width_index_h-1,
                          width = widths)}
 
   ## For every row of model add distance_nose to segment distances
@@ -377,40 +447,40 @@ attack_model <- function(
   ## Add to model
   model_data$alpha <- alpha_max
 
-  ## Calc dAdt
-  model_data$dAdt <- c(
+  ## Calc dadt
+  model_data$dadt <- c(
     NA,
     diff(model_data$alpha) * frequency)
 
-  # Find alpha and dAdt ranges ----------------------------------------------
+  # Find alpha and dadt ranges ----------------------------------------------
 
-  ## dAdt region
-  if(is.null(dAdt_range)){
-    dAdt_range_region <- NULL
+  ## dadt region
+  if(is.null(dadt_range)){
+    dadt_range_region <- NULL
   } else {
-    ## find location of closest match to LOWER dAdt_range
+    ## find location of closest match to LOWER dadt_range
     ## which dadt are higher than lower value?
-    dAdt_range_low_index <- first_over(dAdt_range[1], model_data$dAdt)
+    dadt_range_low_index <- first_over(dadt_range[1], model_data$dadt)
     ## if it's never reached, set it to NA
-    if(length(dAdt_range_low_index)==0){
-      dAdt_range_low_index <- NA
-      message("Lower range of dAdt_range never reached in this scenario. No dAdt_range range plotted.")}
+    if(length(dadt_range_low_index)==0){
+      dadt_range_low_index <- NA
+      message("Lower range of dadt_range never reached in this scenario. No dadt_range range plotted.")}
 
-    ## same for UPPER dAdt_range range
+    ## same for UPPER dadt_range range
     ## NOTE - it's third in the vector (mean is second)
-    dAdt_range_high_index <- first_over(dAdt_range[2], model_data$dAdt)
-    if(length(dAdt_range_high_index)==0){
-      dAdt_range_high_index <- NA
-      message("Upper range of dAdt_range never reached in this scenario.")}
+    dadt_range_high_index <- first_over(dadt_range[2], model_data$dadt)
+    if(length(dadt_range_high_index)==0){
+      dadt_range_high_index <- NA
+      message("Upper range of dadt_range never reached in this scenario.")}
 
 
-    ## Use these to subset model to dAdt_range range
-    if(is.na(dAdt_range_low_index)){
-      dAdt_range_region <- "No matching dAdt_range region in this model"
-    } else if (is.na(dAdt_range_high_index)) {
-      dAdt_range_region <- model_data[(dAdt_range_low_index-1):model_length,]
+    ## Use these to subset model to dadt_range range
+    if(is.na(dadt_range_low_index)){
+      dadt_range_region <- "No matching dadt_range region in this model"
+    } else if (is.na(dadt_range_high_index)) {
+      dadt_range_region <- model_data[(dadt_range_low_index-1):model_length,]
     } else {
-      dAdt_range_region <- model_data[(dAdt_range_low_index-1):(dAdt_range_high_index+1),]
+      dadt_range_region <- model_data[(dadt_range_low_index-1):(dadt_range_high_index+1),]
     }
 
   }
@@ -456,7 +526,7 @@ attack_model <- function(
     output <- list(
       final_model = model_data,
       inputs = inputs,
-      dAdt_range_region = dAdt_range_region,
+      dadt_range_region = dadt_range_region,
       alpha_range_region = alpha_range_region,
       all_data = list(
         widths_interpolated = widths_df,
@@ -530,50 +600,50 @@ attack_model <- function(
     axis(side = 2, col = alpha_col, lwd = 3, col.axis = alpha_col,
          pos = plot_from+(0.05*(plot_to-plot_from)), cex.axis = 0.8)
 
-    ## plot dAdt
+    ## plot dadt
     par(new=T)
     # colour for all alpha plotting
-    dAdt_col <- "green"
-    plot(dAdt~time, data = model_data,
-         ylim = c(0, max(model_data$dAdt, na.rm = T)),
+    dadt_col <- "green"
+    plot(dadt~time, data = model_data,
+         ylim = c(0, max(model_data$dadt, na.rm = T)),
          xlim = c(plot_from, plot_to),
          pch = ".",
          col = "white",
          axes=FALSE,
          ylab = "",
          xlab = "")
-    with(model_data, lines(x = time, y = dAdt, col = dAdt_col, lwd = 3))
-    axis(side = 2, col = dAdt_col, lwd = 3, col.axis = dAdt_col,
+    with(model_data, lines(x = time, y = dadt, col = dadt_col, lwd = 3))
+    axis(side = 2, col = dadt_col, lwd = 3, col.axis = dadt_col,
          pos = plot_from+(0.1*(plot_to-plot_from)), cex.axis = 0.8)
 
-    ## add dAdt_range range
+    ## add dadt_range range
 
-    ## if upper and lower of dAdt_range range locations are equal, just draw dashed line
+    ## if upper and lower of dadt_range range locations are equal, just draw dashed line
     ## but don't draw it if both equal length of x
     ## this means neither actually occurs
     ## see above (this is hacky - must be a better way)
 
-    if(!is.null(dAdt_range)){
-      abline(v = model_data$time[dAdt_range_low_index],
+    if(!is.null(dadt_range)){
+      abline(v = model_data$time[dadt_range_low_index],
              col = rgb(15/255,245/255,53/255,  alpha = 0.4),
              lty = 1,
              lwd = 3)
 
-      abline(v = model_data$time[dAdt_range_high_index],
+      abline(v = model_data$time[dadt_range_high_index],
              col = rgb(15/255,245/255,53/255,  alpha = 0.4),
              lty = 1,
              lwd = 3)
 
-      rect(xleft = model_data$time[dAdt_range_low_index],
+      rect(xleft = model_data$time[dadt_range_low_index],
            ybottom = -5,
-           xright = model_data$time[dAdt_range_high_index],
-           ytop = max(model_data$dAdt, na.rm = T)+5,
+           xright = model_data$time[dadt_range_high_index],
+           ytop = max(model_data$dadt, na.rm = T)+5,
            col = rgb(15/255,245/255,53/255,  alpha = 0.2),
            lty = 0)
 
-      ## if dAdt_range_high_index is NA, then fill to end
-      if(is.na(dAdt_range_high_index)){
-        rect(xleft = model_data$time[dAdt_range_low_index],
+      ## if dadt_range_high_index is NA, then fill to end
+      if(is.na(dadt_range_high_index)){
+        rect(xleft = model_data$time[dadt_range_low_index],
              ybottom = -5,
              xright = model_data$time[nrow(model_data)],
              ytop = 100,
@@ -621,9 +691,9 @@ attack_model <- function(
 
     ## add legend
     legend("topleft", inset=.15,
-           c("Speed", "Alpha", "dAdt", "prey"),
-           text.col = c(speed_col, alpha_col, dAdt_col, "black"),
-           col = c(speed_col, alpha_col, dAdt_col, "black"),
+           c("Speed", "Alpha", "dadt", "prey"),
+           text.col = c(speed_col, alpha_col, dadt_col, "black"),
+           col = c(speed_col, alpha_col, dadt_col, "black"),
            lty=c(1,1,1,3), lwd = 3, cex=0.8)
   }
 

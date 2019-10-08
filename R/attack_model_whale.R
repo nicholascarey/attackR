@@ -1,168 +1,161 @@
-#' @title Attack Model Whale
+#'@title Attack Model
 #'
-#' @description \code{attack_model_whale} models the visual aspects of an attack
-#'   by a whale on a prey
+#'@description *\code{attack_model_whale}* models the visual aspects of an
+#'  attack by a whale on a prey
 #'
-#'   Models the visual aspects of an attack by a whale (humpback or blue whale
-#'   at present) on a prey using parameters such as size, speed, shape etc. From
-#'   the prey perspective, it calculates the visual angle of the diameter of the
-#'   attacker (alpha, or \strong{a}) in radians, and the rate of change of this
-#'   angle (\strong{da/dt} in radians/s).
+#'  This function is a customised version of *\code{\link{attack_model}}* which
+#'  incorporates the unique changes to a rorqual whale's visual profile caused
+#'  by it opening its huge mouth when attacking a school of prey.
 #'
-#'   Input units: \code{frequency} is in \code{Hz}. If \code{speed} is a vector
-#'   it should be at the same frequency. Body measurements and speed units can
-#'   be any unit, but should be consistent. i.e. all in cm, and speeds in cm/s,
-#'   etc.
+#'  It contains several additional inputs relating to the morphology of the
+#'  mouth and the timings of its opening, which greatly change the whale's
+#'  visual profile.
 #'
-#'   \code{speed} can be either a constant value or vector of speeds (at the
-#'   correct frequency). If a single constant value, a \code{model_length} is
-#'   required in order to calculate the distance the predator starts the attack
-#'   from. For example, at a frequency of 60 Hz and \code{model_length} of 180,
-#'   the model will be three seconds in duration. Therefore, at a constant speed
-#'   of 600 cm/s, the predator will start from approximately 1800 cm away.
+#'  This help document only contains help on use of the inputs specific to this
+#'  function. See *\code{\link{attack_model}}* for description of the others.
 #'
-#'   The \code{model_length} operator can also be used to vary where on variable
-#'   speed vectors the predator times reaching the prey, to examine how this
-#'   affects perceived alphas. If left as the default \code{model_length =
-#'   NULL}, the model ends with the predator reaching the prey on the last speed
-#'   value, however \code{model_length} can be used to set this to be earlier in
-#'   the model.
+#'@details These inputs are used to calculate the apparent width to the prey of
+#'  a whale's opening jaws, and this is subsequently used to calculate the
+#'  maximum **{α}**.
 #'
-#'   Models end when the nose (most anterior part in the profiles) of the
-#'   predator reaches the prey (last row of the data.frame, where time and
-#'   distance equal zero).
+#'@section *\code{jaw_length}*: The distance of the whale's jaw 'hinge' (i.e.
+#'  where upper and lower jaws meet) from the rostrum, in the same units as the
+#'  *\code{body_length}*. Can be an exact value or an allometric formula based
+#'  on length. For example:\cr
 #'
-#' @details In order to correctly model the widest apparent part of the predator
-#'   it requires several morphometric inputs:
+#'  \code{## Humpback Whale jaw location in cm (source:)}\cr \code{jaw_length =
+#'  (10^(1.205*log10(hw_bl/100) - 0.880))*100}
 #'
-#' @section Length and Width: \code{body_length} is simply the total length from
-#'   nose to tail (or equivalent). \code{body_width_v} and  \code{body_width_h}
-#'   are the *maximum* body widths in the vertical (i.e. dorsal:ventral) and
-#'   horizontal (left:right) vectors of the body. These must be in the same
-#'   units.
+#'  \code{## Blue Whale jaw location in cm (source:)}\cr \code{jaw_length =
+#'  10^(1.36624*log10(bw_bl/100) - 1.21286)*100}
 #'
-#' @section Body Profiles: \code{profile_v} and \code{profile_h} are vectors of
-#'   widths of the predator's body as a proportion of the maximum width going
-#'   from the anterior (nose) to the posterior (tail). Therefore, they should
-#'   generally start and end on zero (though they don't have to), and all values
-#'   must be between zero and 1. They must be evenly spaced, e.g. every 10%
-#'   along the body. The longer (i.e. higher resolution) these measurements are,
-#'   the better their representation of the morphology of the animal. Actual
-#'   values of width along the body are calculated to the resolution of the
-#'   entered unit of length by linearly interpolating between each proportional
-#'   width. For example, if the predator length (body_length) is 1000cm, a width
-#'   value in cm is calculated at every cm along the body using either the
-#'   proportional width given in the vector or a linear interpolation between
-#'   adjoining proportional widths. Therefore, use units which will give an
-#'   appropriate resolution, at least greater than the profile vector lengths.
-#'   The higher the numeric value of the length the better, at least three
-#'   digits is recommended.
+#'  Note the body length values (*\code{hw_bl}*, *\code{bw_bl}*) must exist
+#'  externally; they cannot reference the entered *\code{body_length}* value
+#'  internal to the function, unless this also references the same existing
+#'  value.
 #'
-#'   Which width at each body segment (e.g. horizontal or vertical) used to
-#'   calculate alpha (\strong{a}) is determined via the \code{width_filter}
-#'   operator. This can be the midpoint value between them ("mid", the default),
-#'   maximum value ("max"), or minimum value ("min"). You can also choose to use
-#'   only the vertical or horizontal profile widths ("v", "h"). You can also
-#'   choose to use the maximum width to calculate alpha, in which case the alpha
-#'   of no other segments of the body is calculated, only that of the maximum
-#'   girth.
+#'@section *\code{jaw_angle_upper}*: This is the angle in radians off the
+#'  longitudnal axis of the whale of the upper jaw at maximum gape. In both
+#'  humpbacks and blue whales this is 0.5235988 (30°).
 #'
-#'   These final widths and their relative distances from the observing prey are
-#'   used to calculate the viewing angle alpha (\strong{a}). At some point, the
-#'   maximum girth of the predator will not make up the widest apparent visual
-#'   angle of the predator, but more anterior segments will appear to the prey
-#'   to be wider, and have a higher alpha. The maximum alpha at each iteration
-#'   of the model (i.e. each step along the speed vector at the chosen
-#'   frequency) is extracted from these, and used to calculate the rate of
-#'   change in alpha, dA/dt (\strong{da/dt} in radians/s.
+#'@section *\code{jaw_angle_lower}*: This is the angle in radians off the
+#'  longitudnal axis of the whale of the lower jaw at maximum gape. In both
+#'  humpbacks and blue whales this is 0.8726646 (50°).
 #'
-#'   Because this interpolation is done on both vectors, they do not need to be
-#'   the same length. If the predator is approximately equal in both dimensions
-#'   or always wider in one dimension, only one profile and other
-#'   profile-specific inputs is required, and the others can be left = NULL.
-#'   Maximum girth locations can occur at an intermediate section of the body,
-#'   but the proportional widths on either side must be less than 1.000.
+#'@section *\code{a_, b_ c_, d_} inputs*: *\code{a_mouth_open}* - when the mouth
+#'  starts to open \cr *\code{b_max_gape_start}* - when maximum gape is reached
+#'  \cr *\code{c_max_gape_end}* - when mouth starts to close, or how long it is
+#'  held at max gape \cr *\code{d_mouth_closed}* - when mouth is completely
+#'  closed \cr \cr
 #'
-#'   \code{max_width_loc_v} and \code{max_width_loc_h} are where the maximum
-#'   widths occur along the body as a proportion of the total body length going
-#'   from the nose. They are only necessary if they are not specified as one of
-#'   the proportional widths in \code{profile_v} and \code{profile_h}, that is
-#'   none of these have the value of exactly 1.
+#'  These inputs set the timings (i.e. iteration, row or frame) of these events
+#'  within the model. If *\code{speed}* is a vector, they set the locations
+#'  along the speed vector these events occur. Similarly if *\code{speed}* is a
+#'  single value, they set similarly the timings within the model, but obviously
+#'  this is related to *\code{model_length}*.
 #'
-#' @section Plotting: Several options control plotting....
+#'  The complete mouth opening action does not have to occur during the model.
+#'  The inputs can be used to set, for example timing of max gape to be at the
+#'  last value in the speed vector. Also, if these are left *\code{NULL}*, the
+#'  mouth will not open, and the model is equivalent to one created using
+#'  *\code{\link{attack_model}}*.
 #'
-#' @usage attack_model_whale(speed, frequency = 60, body_length = 10.5,
-#'   model_length = NULL, simple_output = TRUE, plot = TRUE, plot_from = 0,
-#'   plot_to = NULL)
+#'@section Application of the mouth opening and morphology inputs: The function
+#'  programatically determines the location of the jaw tips at each iteration of
+#'  the model during the mouth opening event, and their distance from the prey,
+#'  calculates their visual angle **{α}**, and combines these to give a total
+#'  jaw **{α}**. This is then compared to the **{α}** of the rest of the body to
+#'  determine the maximum **{α}**. These calculations are done in the vertical
+#'  plane only, and occur separately from any **{α}** calculations done using
+#'  the body profiles; if the total jaw **{α}** is greater than the **{α}**
+#'  determined from the body widths, it will always be selected as the maximum
+#'  **{α}** regardless of any filtering between vertical and horizontal planes
+#'  using *\code{width_filter}*.
 #'
-#' @param speed numeric. Either a single constant speed value or vector of
-#'   speeds of the approaching attacker. Must be at same frequency in Hz as
-#'   \code{frequency}. If a data.frame is entered the first colummn is used. For
-#'   a constant speed value the function will repeat this the required number of
-#'   times at the correct frequency based on \code{model_length}.
-#' @param model_length integer. Total length of the model in rows. Required if
-#'   \code{speed} is a single value, where along with frequency it determines
-#'   the distance the predator starts at. If \code{speed} is a vector
-#'   \code{model_length} can be left NULL, in which case it is assumed the
-#'   predator reaches the prey on the last value, and the length of the speed
-#'   vector determines total length of model. Alternatively, \code{model_length}
-#'   can be used to set a different capture point along the speed vector, in
-#'   which case its value must be less than the total length of \code{speed}.
-#' @param frequency numeric. Frequency (Hz) of the model, i.e. how many speed
-#'   and other measurements per second. Must be same frequency in Hz as
-#'   \code{speed}.
-#' @param body_length numeric. Length of the attacker. Must be same units as
-#'   maximum width, and same as distance unit used in speed. E.g. if speed is in
-#'   cm/s, must be cm.
-#' @param body_width_v numeric. Max width in vertical dimension
-#' @param body_width_h numeric. Max width in vertical dimension
-#' @param profile_v numeric vector. Vertical body shape profile, proportional
-#'   widths from nose to tail, evenly spaced.
-#' @param profile_h numeric vector. Horizontal body shape profile, proportional
-#'   widths from nose to tail, evenly spaced.
-#' @param max_width_loc_v numeric. Max vertical width location as proportion of
-#'   entire body length from nose. Not required if part of body shape profile
-#'   profile.
-#' @param max_width_loc_h numeric. Max horizontal width location as proportion
-#'   of entire body length from nose. Not required if part of body shape profile
-#'   profile.
-#' @param width_filter string. Method of filtering widths between h and v
-#'   dimensions after interpolation of body. "mid", "min", "max", "v", "h",
-#'   max_width_v", "max_width_h".
-#' @param jaw_length numeric. Length of jaw.
-#' @param jaw_angle_upper numeric. Final angle of upper jaw after opening (degrees).
-#' @param jaw_angle_lower numeric. Final angle of lower jaw after opening (degrees).
-#' @param a_mouth_open numeric. Row of model to start mouth opening.
-#' @param b_max_gape_start numeric. Row of model to end mouth opening/reach max gape.
-#' @param c_max_gape_end numeric. Row of model to end max gape.
-#' @param d_mouth_closed numeric. Row of model to close mouth.
-#' @param alpha_range numeric. Vector of two values of alpha. These will appear
-#'   on any plot as a blue region, and if \code{simple_output = FALSE}, this
-#'   region of the model is subset out to a separate entry in the saved
-#'   \code{list} object. If any are not reached in the scenario there should be
-#'   a message. If upper range is not reached, it is plotted from lower value to
-#'   end of model, i.e. model_length location.
-#' @param dAdt_range numeric. Vector of two values of dA/dt. These will appear
-#'   on any plot as a green region, and if \code{simple_output = FALSE}, this
-#'   region of the model is subset out to a separate entry in the saved
-#'   \code{list} object. If any are not reached in the scenario there should be
-#'   a message. If upper range is not reached, it is plotted from lower value to
-#'   end of model, i.e. model_length location.
-#' @param simple_output logical. Choose structure of output. If TRUE, a simple
-#'   data frame of the model is returned, otherwise output is a \code{list}
-#'   object containing the final model, input parameters, subset regions, and
-#'   more.
-#' @param plot logical. Choose to plot result.
-#' @param plot_from numeric. Time on x-axis to plot from.
-#' @param plot_to numeric.  Time on x-axis to plot to.
+#'@usage attack_model_whale(speed, model_length = NULL, frequency = 60,
+#'  body_length = NULL, body_width_v = NULL, body_width_h = NULL, profile_v =
+#'  NULL, profile_h = NULL, max_width_loc_v = NULL, max_width_loc_h = NULL,
+#'  width_filter = "mid", jaw_length = NULL, jaw_angle_upper = 0.5235988,
+#'  jaw_angle_lower = 0.8726646, a_mouth_open = NULL, b_max_gape_start = NULL,
+#'  c_max_gape_end = NULL, d_mouth_closed = NULL, simple_output = FALSE, plot =
+#'  TRUE, plot_from = 0, plot_to = NULL, alpha_range = NULL, dadt_range = NULL)
 #'
-#'  @examples
-#' attack_model_whale(...)
+#'@param speed numeric. Either a single constant speed value or vector of speeds
+#'  at the same frequency in Hz as *\code{frequency}*. Must be same unit as
+#'  *\code{body_length}* per second. If a data.frame is entered the first
+#'  colummn is used. For a constant speed value the function will repeat this
+#'  the required number of times at the correct frequency based on
+#'  *\code{model_length}*.
+#'@param model_length integer. Total length of the model in rows. Required if
+#'  *\code{speed}* is a single value, in which case along with frequency it
+#'  determines the distance the predator starts at. If *\code{speed}* is a
+#'  vector *\code{model_length}* can be left NULL, in which case it is assumed
+#'  the predator reaches the prey on the last value, and the length of the speed
+#'  vector determines total length of model. Alternatively,
+#'  *\code{model_length}* can be used to set a different capture point along the
+#'  speed vector, in which case its value must be less than the total length of
+#'  *\code{speed}*.
+#'@param frequency numeric. Frequency (Hz) of the model, i.e. how many speed and
+#'  other measurements per second. Must be same frequency in Hz as
+#'  *\code{speed}*.
+#'@param body_length numeric. Length of the attacker. Must be same units as
+#'  *\code{body_width_v}* and *\code{body_width_h}*, and that used in
+#'  *\code{speed}*.
+#'@param body_width_v numeric. Maximum width of the attacker in the vertical
+#'  plane.
+#'@param body_width_h numeric. Maximum width of the attacker in the horizontal
+#'  plane.
+#'@param profile_v numeric. A vector describing the shape of the attacker in the
+#'  vertical plane. See details.
+#'@param profile_h numeric. A vector describing the shape of the attacker in the
+#'  horizontal plane. See details.
+#'@param max_width_loc_v numeric. Location of the maximum girth in the vertical
+#'  plane of the predator along the body, if not provided as part of the body
+#'  profile inputs. See details.
+#'@param max_width_loc_h numeric. Location of the maximum girth in the
+#'  horizontal plane of the predator along the body, if not provided as part of
+#'  the body profile inputs. See details.
+#'@param width_filter string. Filters apparent widths between vertical and
+#'  horizontal planes for each row of the model in various ways. See details.
+#'@param   jaw_length numeric. distance of the whale's jaw 'hinge' (i.e. where
+#'  upper and lower jaws meet) from the rostrum, in the same units as the
+#'  body_length. See details.
+#'@param   jaw_angle_upper numeric. Angle in radians off the whale's longitudnal
+#'  axis of the upper jaw at maximum gape. See details.
+#'@param   jaw_angle_lower numeric. Angle in radians off the whale's longitudnal
+#'  axis of the lower jaw at maximum gape. See details.
+#'@param   a_mouth_open integer. Iteration of the model (i.e. row, or placement
+#'  along the speed profile) where the mouth starts to open. See details.
+#'@param   b_max_gape_start integer. Iteration of the model (i.e. row, or placement
+#'  along the speed profile) where the mouth has reached max gape. See details.
+#'@param   c_max_gape_end integer. Iteration of the model (i.e. row, or placement
+#'  along the speed profile) where the mouth starts to close See details.
+#'@param   d_mouth_closed integer. Iteration of the model (i.e. row, or placement
+#'  along the speed profile) where the mouth has fully closed. See details.
+#'@param simple_output logical. Choose structure of output. If TRUE, a simple
+#'  data frame of the model is returned, otherwise output is a *\code{list}*
+#'  object given an *\code{attack_model_whale}* class, and containing the final
+#'  model, input parameters, subset regions, and more.
+#'@param plot logical. Choose to plot result.
+#'@param plot_from numeric. Time on x-axis to plot from.
+#'@param plot_to numeric.  Time on x-axis to plot to.
+#'@param alpha_range numeric. Vector of two values of alpha. Optional. These
+#'  will appear on any plot as a blue region, and if *\code{simple_output =
+#'  FALSE}*, this region of the model is subset out to a separate entry in the
+#'  saved *\code{list}* object. If any are not reached in the scenario there
+#'  should be a message. If upper range is not reached, it is plotted from lower
+#'  value to end of model, i.e. *\code{model_length}* location.
+#'@param dadt_range numeric. Vector of two values of alpha. Optional. These will
+#'  appear on any plot as a green region, and if *\code{simple_output = FALSE}*,
+#'  this region of the model is subset out to a separate entry in the saved
+#'  *\code{list}* object. If any are not reached in the scenario there should be
+#'  a message. If upper range is not reached, it is plotted from lower value to
+#'  end of model, i.e. *\code{model_length}* location.
 #'
-#' @author Nicholas Carey - \email{nicholascarey@gmail.com}, Dave Cade
-#'   \email{davecade@stanford.edu},
+#'@author Nicholas Carey - \email{nicholascarey@gmail.com}, Dave Cade
+#'  \email{davecade@stanford.edu},
 #'
-#' @export
+#'@export
 
 attack_model_whale <- function(
   speed,
@@ -177,8 +170,8 @@ attack_model_whale <- function(
   max_width_loc_h = NULL,
   width_filter = "mid",
   jaw_length = NULL,
-  jaw_angle_upper = 30,
-  jaw_angle_lower = 50,
+  jaw_angle_upper = 0.5235988,
+  jaw_angle_lower = 0.8726646,
   a_mouth_open = NULL,
   b_max_gape_start = NULL,
   c_max_gape_end = NULL,
@@ -188,7 +181,7 @@ attack_model_whale <- function(
   plot_from = 0,
   plot_to = NULL,
   alpha_range = NULL,
-  dAdt_range = NULL){
+  dadt_range = NULL){
 
 
   # Error Checks and Messages -----------------------------------------------
@@ -269,7 +262,7 @@ attack_model_whale <- function(
     plot_from = plot_from,
     plot_to = plot_to,
     alpha_range = alpha_range,
-    dAdt_range = dAdt_range)
+    dadt_range = dadt_range)
 
 
   # Fix speed if dataframe ------------------------------------------------------
@@ -355,11 +348,11 @@ attack_model_whale <- function(
     # mouth closed - fill zeros to a
     up_X[1:a] <- 0
     # mouth opens - fill a to b
-    up_X[a:b] <- (jaw_length - cos(((a:b)-a)/(b-a)*jaw_angle_upper*pi/180)*jaw_length) # % in cm
+    up_X[a:b] <- (jaw_length - cos(((a:b)-a)/(b-a)*jaw_angle_upper)*jaw_length) # % in cm
     # mouth held at max gape - repeat last value to c
     up_X[b:c] <- up_X[b]
     # mouth closes - fill c to d
-    up_X[c:d] <- (jaw_length - cos(((d:c)-c)/(d-c)*jaw_angle_upper*pi/180)*jaw_length) # % in cm
+    up_X[c:d] <- (jaw_length - cos(((d:c)-c)/(d-c)*jaw_angle_upper)*jaw_length) # % in cm
     # if mouth closes before end of vector, fill in zeros
     if(e > d){up_X[d:e] <- 0}
     # truncate to same length as speed/model_length
@@ -368,27 +361,27 @@ attack_model_whale <- function(
     ## same for upper jaw Z
     up_Z <- c()
     up_Z[1:a] <- 0
-    up_Z[a:b] <- sin(((a:b)-a)/(b-a)*jaw_angle_upper*pi/180)*jaw_length
+    up_Z[a:b] <- sin(((a:b)-a)/(b-a)*jaw_angle_upper)*jaw_length
     up_Z[b:c] <- up_Z[b]
-    up_Z[c:d] <- sin(((d:c)-c)/(d-c)*jaw_angle_upper*pi/180)*jaw_length
+    up_Z[c:d] <- sin(((d:c)-c)/(d-c)*jaw_angle_upper)*jaw_length
     if(e > d){up_Z[d:e] <- 0}
     up_Z <- up_Z[1:model_length]
 
     ## same for lower jaw X
     low_X <- c()
     low_X[1:a] <- 0
-    low_X[a:b] <- (jaw_length - cos(((a:b)-a)/(b-a)*jaw_angle_lower*pi/180)*jaw_length)
+    low_X[a:b] <- (jaw_length - cos(((a:b)-a)/(b-a)*jaw_angle_lower)*jaw_length)
     low_X[b:c] <- low_X[b]
-    low_X[c:d] <- (jaw_length - cos(((d:c)-c)/(d-c)*jaw_angle_lower*pi/180)*jaw_length)
+    low_X[c:d] <- (jaw_length - cos(((d:c)-c)/(d-c)*jaw_angle_lower)*jaw_length)
     if(e > d){low_X[d:e] <- 0}
     low_X <- low_X[1:model_length]
 
     ## same for lower jaw Z
     low_Z <- c()
     low_Z[1:a] <- 0
-    low_Z[a:b] <- sin(((a:b)-a)/(b-a)*jaw_angle_lower*pi/180)*jaw_length
+    low_Z[a:b] <- sin(((a:b)-a)/(b-a)*jaw_angle_lower)*jaw_length
     low_Z[b:c] <- low_Z[b]
-    low_Z[c:d] <- sin(((d:c)-c)/(d-c)*jaw_angle_lower*pi/180)*jaw_length
+    low_Z[c:d] <- sin(((d:c)-c)/(d-c)*jaw_angle_lower)*jaw_length
     if(e > d){low_Z[d:e] <- 0}
     low_Z <- low_Z[1:model_length]
   }
@@ -529,41 +522,41 @@ attack_model_whale <- function(
   ## Add to model
   model_data$alpha <- alpha_max
 
-  ## Calc dAdt
-  model_data$dAdt <- c(
+  ## Calc dadt
+  model_data$dadt <- c(
     NA,
     diff(model_data$alpha) * frequency)
 
 
-  # Find alpha and dAdt ranges ----------------------------------------------
+  # Find alpha and dadt ranges ----------------------------------------------
 
-  ## dAdt region
-  if(is.null(dAdt_range)){
-    dAdt_range_region <- NULL
+  ## dadt region
+  if(is.null(dadt_range)){
+    dadt_range_region <- NULL
   } else {
-    ## find location of closest match to LOWER dAdt_range
+    ## find location of closest match to LOWER dadt_range
     ## which dadt are higher than lower value?
-    dAdt_range_low_index <- first_over(dAdt_range[1], model_data$dAdt)
+    dadt_range_low_index <- first_over(dadt_range[1], model_data$dadt)
     ## if it's never reached, set it to NA
-    if(length(dAdt_range_low_index)==0){
-      dAdt_range_low_index <- NA
-      message("Lower range of dAdt_range never reached in this scenario. No dAdt_range range plotted.")}
+    if(length(dadt_range_low_index)==0){
+      dadt_range_low_index <- NA
+      message("Lower range of dadt_range never reached in this scenario. No dadt_range range plotted.")}
 
-    ## same for UPPER dAdt_range range
+    ## same for UPPER dadt_range range
     ## NOTE - it's third in the vector (mean is second)
-    dAdt_range_high_index <- first_over(dAdt_range[2], model_data$dAdt)
-    if(length(dAdt_range_high_index)==0){
-      dAdt_range_high_index <- NA
-      message("Upper range of dAdt_range never reached in this scenario.")}
+    dadt_range_high_index <- first_over(dadt_range[2], model_data$dadt)
+    if(length(dadt_range_high_index)==0){
+      dadt_range_high_index <- NA
+      message("Upper range of dadt_range never reached in this scenario.")}
 
 
-    ## Use these to subset model to dAdt_range range
-    if(is.na(dAdt_range_low_index)){
-      dAdt_range_region <- "No matching dAdt_range region in this model"
-    } else if (is.na(dAdt_range_high_index)) {
-      dAdt_range_region <- model_data[dAdt_range_low_index:model_length,]
+    ## Use these to subset model to dadt_range range
+    if(is.na(dadt_range_low_index)){
+      dadt_range_region <- "No matching dadt_range region in this model"
+    } else if (is.na(dadt_range_high_index)) {
+      dadt_range_region <- model_data[dadt_range_low_index:model_length,]
     } else {
-      dAdt_range_region <- model_data[dAdt_range_low_index:dAdt_range_high_index,]
+      dadt_range_region <- model_data[dadt_range_low_index:dadt_range_high_index,]
     }
 
   }
@@ -609,7 +602,7 @@ attack_model_whale <- function(
     output <- list(
       final_model = model_data,
       inputs = inputs,
-      dAdt_range_region = dAdt_range_region,
+      dadt_range_region = dadt_range_region,
       alpha_range_region = alpha_range_region,
       all_data = list(
         widths_interpolated = widths_df,
@@ -701,50 +694,50 @@ attack_model_whale <- function(
     axis(side = 2, col = alpha_col, lwd = 3, col.axis = alpha_col,
          pos = plot_from+(0.05*(plot_to-plot_from)), cex.axis = 0.8)
 
-    ## plot dAdt
+    ## plot dadt
     par(new=T)
     # colour for all alpha plotting
-    dAdt_col <- "green"
-    plot(dAdt~time, data = model_data,
-         ylim = c(0, max(model_data$dAdt, na.rm = T)),
+    dadt_col <- "green"
+    plot(dadt~time, data = model_data,
+         ylim = c(0, max(model_data$dadt, na.rm = T)),
          xlim = c(plot_from, plot_to),
          pch = ".",
          col = "white",
          axes=FALSE,
          ylab = "",
          xlab = "")
-    with(model_data, lines(x = time, y = dAdt, col = dAdt_col, lwd = 3))
-    axis(side = 2, col = dAdt_col, lwd = 3, col.axis = dAdt_col,
+    with(model_data, lines(x = time, y = dadt, col = dadt_col, lwd = 3))
+    axis(side = 2, col = dadt_col, lwd = 3, col.axis = dadt_col,
          pos = plot_from+(0.1*(plot_to-plot_from)), cex.axis = 0.8)
 
-    ## add dAdt_range range
+    ## add dadt_range range
 
-    ## if upper and lower of dAdt_range range locations are equal, just draw dashed line
+    ## if upper and lower of dadt_range range locations are equal, just draw dashed line
     ## but don't draw it if both equal length of x
     ## this means neither actually occurs
     ## see above (this is hacky - must be a better way)
 
-    if(!is.null(dAdt_range)){
-      abline(v = model_data$time[dAdt_range_low_index],
+    if(!is.null(dadt_range)){
+      abline(v = model_data$time[dadt_range_low_index],
              col = rgb(15/255,245/255,53/255,  alpha = 0.4),
              lty = 1,
              lwd = 3)
 
-      abline(v = model_data$time[dAdt_range_high_index],
+      abline(v = model_data$time[dadt_range_high_index],
              col = rgb(15/255,245/255,53/255,  alpha = 0.4),
              lty = 1,
              lwd = 3)
 
-      rect(xleft = model_data$time[dAdt_range_low_index],
+      rect(xleft = model_data$time[dadt_range_low_index],
            ybottom = -5,
-           xright = model_data$time[dAdt_range_high_index],
-           ytop = max(model_data$dAdt, na.rm = T)+5,
+           xright = model_data$time[dadt_range_high_index],
+           ytop = max(model_data$dadt, na.rm = T)+5,
            col = rgb(15/255,245/255,53/255,  alpha = 0.2),
            lty = 0)
 
-      ## if dAdt_range_high_index is NA, then fill to end
-      if(is.na(dAdt_range_high_index)){
-        rect(xleft = model_data$time[dAdt_range_low_index],
+      ## if dadt_range_high_index is NA, then fill to end
+      if(is.na(dadt_range_high_index)){
+        rect(xleft = model_data$time[dadt_range_low_index],
              ybottom = -5,
              xright = model_data$time[nrow(model_data)],
              ytop = 100,
@@ -792,9 +785,9 @@ attack_model_whale <- function(
 
     ## add legend
     legend("topleft", inset=.15,
-           c("Speed", "Alpha", "dAdt", "prey", "mouth opening", "max gape", "mouth closing"),
-           text.col = c(speed_col, alpha_col, dAdt_col, "black", "red", "gold2", "darkgreen"),
-           col = c(speed_col, alpha_col, dAdt_col, "black", "red", "gold2", "darkgreen"),
+           c("Speed", "Alpha", "dadt", "prey", "mouth opening", "max gape", "mouth closing"),
+           text.col = c(speed_col, alpha_col, dadt_col, "black", "red", "gold2", "darkgreen"),
+           col = c(speed_col, alpha_col, dadt_col, "black", "red", "gold2", "darkgreen"),
            lty=c(1,1,1,3, NA, NA, NA),
            pch = c("*", "*", "*"),
            lwd = 3, cex=0.8)
