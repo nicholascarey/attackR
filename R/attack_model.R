@@ -262,8 +262,8 @@ attack_model <- function(
   #if(any(profile_v == 1) && !is.null(max_width_loc_v)) stop("profile_v already contains a max girth location (value of 1.0). max_width_loc_v cannot also be specified.")
   #if(any(profile_h == 1) && !is.null(max_width_loc_h)) stop("profile_h already contains a max girth location (value of 1.0). max_width_loc_h cannot also be specified.")
   ## And vice versa - if no 1.0 in profile, then mac_girth_loc required
-  if(!any(profile_v == 1) && is.null(max_width_loc_v)) stop("No max girth location (value of 1.0) found in profile_v. Please specify one with max_width_loc_v.")
-  if(!any(profile_h == 1) && is.null(max_width_loc_h)) stop("No max girth location (value of 1.0) found in profile_h. Please specify one with max_width_loc_h.")
+  if(!is.null(profile_v) && !any(profile_v == 1) && is.null(max_width_loc_v)) stop("No max girth location (value of 1.0) found in profile_v. Please specify one with max_width_loc_v.")
+  if(!is.null(profile_h) && !any(profile_h == 1) && is.null(max_width_loc_h)) stop("No max girth location (value of 1.0) found in profile_h. Please specify one with max_width_loc_h.")
 
   ## max_width_loc
   ## Must be between 0 and 1 (if entered)
@@ -460,7 +460,7 @@ attack_model <- function(
   } else {
     ## find location of closest match to LOWER dadt_range
     ## which dadt are higher than lower value?
-    dadt_range_low_index <- first_over(dadt_range[1], model_data$dadt)
+    dadt_range_low_index <- first_closest(dadt_range[1], model_data$dadt)
     ## if it's never reached, set it to NA
     if(length(dadt_range_low_index)==0){
       dadt_range_low_index <- NA
@@ -468,7 +468,7 @@ attack_model <- function(
 
     ## same for UPPER dadt_range range
     ## NOTE - it's third in the vector (mean is second)
-    dadt_range_high_index <- first_over(dadt_range[2], model_data$dadt)
+    dadt_range_high_index <- first_closest(dadt_range[2], model_data$dadt)
     if(length(dadt_range_high_index)==0){
       dadt_range_high_index <- NA
       message("Upper range of dadt_range never reached in this scenario.")}
@@ -491,7 +491,7 @@ attack_model <- function(
   } else {
     ## find location of closest match to LOWER alpha_range
     ## which dadt are higher than lower value?
-    alpha_range_low_index <- first_over(alpha_range[1], model_data$alpha)
+    alpha_range_low_index <- first_closest(alpha_range[1], model_data$alpha)
     ## if it's never reached, set it to NA
     if(length(alpha_range_low_index)==0){
       alpha_range_low_index <- NA
@@ -499,7 +499,7 @@ attack_model <- function(
 
     ## same for UPPER alpha_range range
     ## NOTE - it's third in the vector (mean is second)
-    alpha_range_high_index <- first_over(alpha_range[2], model_data$alpha)
+    alpha_range_high_index <- first_closest(alpha_range[2], model_data$alpha)
     if(length(alpha_range_high_index)==0){
       alpha_range_high_index <- NA
       message("Upper range of alpha_range never reached in this scenario.")}

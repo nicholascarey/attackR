@@ -41,14 +41,11 @@ get_time <- function(mod, dadt = NULL, alpha = NULL){
   ## find dadt or alpha
   ## find dadt or alpha
   if(!is.null(dadt)) {
-    index <- first_over(dadt, df$dadt) # find first time exceeded
-    # Make index whichever is closest - 1st or 2nd of these two values
-    index <- index + (closest(dadt, df$dadt[(index-1):index])-2)
+    index <- first_closest(dadt, df$dadt) # find first time exceeded
     }
 
   if(!is.null(alpha)) {
-    index <- first_over(alpha, df$alpha)
-    index <- index + (closest(alpha, df$alpha[(index-1):index])-2)
+    index <- first_closest(alpha, df$alpha)
     }
 
   if(class(mod) == "attack_model") time <- df$time_rev[index]

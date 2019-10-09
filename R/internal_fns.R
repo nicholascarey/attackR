@@ -85,7 +85,6 @@ get_alpha <- function(mod, dadt){
 #'   vector.
 #' @keywords internal
 #' @export
-
 first_over <- function(this, there) { # search for *this* in *there*
   ## if this > any there stop
   if (!any(na.omit(there) >= this)) {
@@ -94,8 +93,6 @@ first_over <- function(this, there) { # search for *this* in *there*
   result <- which(there >= this)[1]
   return(result)
 }
-
-
 
 
 #' @title Get closest matching value
@@ -117,7 +114,6 @@ first_over <- function(this, there) { # search for *this* in *there*
 #'
 #' @keywords internal
 #' @export
-
 closest <- function(this, there) { # search for *this* in *there*
   if (length(this) == 1) {
     output <- which.min(abs(there - this))
@@ -126,4 +122,96 @@ closest <- function(this, there) { # search for *this* in *there*
     output <- sapply(this, function(this) which.min(abs(there - this)))
     return(output)
   }
+}
+
+
+#' @title Get first AND closest matching value
+#'
+#' @description \code{first_closest} - takes a single value and finds the index
+#'   of first time that value is exceeded in a vector, then if that value or the
+#'   one preceding it is actually closer.
+#'
+#' @seealso \code{\link{first_closest}}
+#'
+#' @usage first_closest(this, there)
+#'
+#' @param this numeric. Vector or value. The value(s) to match.
+#' @param there numeric. The vector in which to find first closest matching value(s).
+#'
+#' @return Index of where first_closest matching value(s) occur in the target vector.
+#'
+#' @keywords internal
+#' @export
+first_closest <- function(this, there) { # search for *this* in *there*
+  ## if this > any there stop
+  if (!any(na.omit(there) >= this)) {
+    stop("target value never reached in this vector")
+  }
+  result <- which(there >= this)[1]
+
+  ## is 'this' closer to 'result' or previous entry in vector?
+  ## if so, make this the result
+  ## This will either result in 0 if original first entry over is closest,
+  ## or -1 if the entry before that is closer.
+  ## Result is added to index
+  result <- result + (which.min(c(abs(there[result-1]-this),
+                                  abs(there[result]-this)))-2)
+
+  return(result)
+}
+
+
+#' @title Calculates screen diameter for a model based on alpha and a viewing
+#'   distance
+#'
+#' @description Calculates screen diameter for a model based on alpha and a
+#'   viewing distance
+#' @param x numeric. Single value to find first occurence of.
+#' @param alpha_col numeric. The column of alpha values. Automatically detected
+#'   in most models, but can be specified here.
+#' @param screen_distance numeric. distance from screen in same units as those
+#'   used in model
+#' @return Original object or data frame with 'screen_diam' column added, in
+#'   same units as used in model and screen_distance. Rounded to 2 decimals
+#'   places. Because of values approaching infinty at very close distances, any
+#'   value over 1000 is replaced with 1000, so use appropriate units (cm is
+#'   best).
+#' @keywords internal
+#' @export
+add_screen_diam <- function(x, alpha = NULL, screen_distance){
+
+  if(class(x) == 'attack_model' || class(x) == 'attack_model_whale') {
+    df <- x$final_model
+    alpha <- which(names(df) == "alpha")
+  } else if(class(x) == 'constant_speed_model' || class(x) == 'variable_speed_model' || class(x) == 'diameter_model') {
+    df <- x$model
+    alpha <- which(names(df) == "alpha")
+  } else if(class(x) == 'data.frame') {
+    df <- x
+    if(is.null(alpha)) alpha <- alpha <- which(names(df) == "alpha")
+  } else {
+    stop("Input not recognised")
+  }
+
+  if(is.null(alpha)) stop("alpha column required")
+
+  ## add screen_diam column
+  df$screen_diam <- 2 * screen_distance * (tan(df[[alpha]] / 2))
+  ## Round to 2 decimal places (1/10th of a mm)
+  df$screen_diam <- sapply(df$screen_diam, function(z) round(z, 2))
+  ## Convert any diameter over 1000 to 1000, which can't be displayed on screen anyway.
+  ## (deals with values on last frames, where diam can be approaching infinity)
+  df$screen_diam <- sapply(df$screen_diam, function(z) ifelse(z > 1000, z <- 1000, z))
+
+  if(class(x) == 'attack_model' || class(x) == 'attack_model_whale') {
+    x$final_model <- df
+  } else if(class(x) == 'constant_speed_model' || class(x) == 'variable_speed_model' || class(x) == 'diameter_model') {
+    x$model <- df
+  } else if(class(x) == 'data.frame') {
+    x <- df
+  } else {
+    stop("Input not recognised")
+  }
+
+  return(x)
 }

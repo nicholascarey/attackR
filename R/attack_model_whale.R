@@ -536,7 +536,7 @@ attack_model_whale <- function(
   } else {
     ## find location of closest match to LOWER dadt_range
     ## which dadt are higher than lower value?
-    dadt_range_low_index <- first_over(dadt_range[1], model_data$dadt)
+    dadt_range_low_index <- first_closest(dadt_range[1], model_data$dadt)
     ## if it's never reached, set it to NA
     if(length(dadt_range_low_index)==0){
       dadt_range_low_index <- NA
@@ -544,7 +544,7 @@ attack_model_whale <- function(
 
     ## same for UPPER dadt_range range
     ## NOTE - it's third in the vector (mean is second)
-    dadt_range_high_index <- first_over(dadt_range[2], model_data$dadt)
+    dadt_range_high_index <- first_closest(dadt_range[2], model_data$dadt)
     if(length(dadt_range_high_index)==0){
       dadt_range_high_index <- NA
       message("Upper range of dadt_range never reached in this scenario.")}
@@ -567,7 +567,7 @@ attack_model_whale <- function(
   } else {
     ## find location of closest match to LOWER alpha_range
     ## which dadt are higher than lower value?
-    alpha_range_low_index <- first_over(alpha_range[1], model_data$alpha)
+    alpha_range_low_index <- first_closest(alpha_range[1], model_data$alpha)
     ## if it's never reached, set it to NA
     if(length(alpha_range_low_index)==0){
       alpha_range_low_index <- NA
@@ -575,7 +575,7 @@ attack_model_whale <- function(
 
     ## same for UPPER alpha_range range
     ## NOTE - it's third in the vector (mean is second)
-    alpha_range_high_index <- first_over(alpha_range[2], model_data$alpha)
+    alpha_range_high_index <- first_closest(alpha_range[2], model_data$alpha)
     if(length(alpha_range_high_index)==0){
       alpha_range_high_index <- NA
       message("Upper range of alpha_range never reached in this scenario.")}
