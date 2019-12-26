@@ -6,8 +6,8 @@ This code was used in the following publication in PNAS to determine how much of
 
 **David E. Cade, Nicholas Carey, Paolo Domenici, Jean Potvin, Jeremy A. Goldbogen, 2019**. Predator-informed looming stimulus experiments reveal how large filter feeding whales capture highly maneuverable forage fish. *Proceedings of the National Academy of Sciences*. https://doi.org/10.1073/pnas.1911099116
 
+![My image](nicholascarey.github.com/attackR/images/fig1.png)
 
-![text](images/fig1)
 
 ### Main functions
 
