@@ -6,3 +6,6 @@
 ^orig_models_script\.R$
 ^scratch\.R$
 ^sl_script\.R$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

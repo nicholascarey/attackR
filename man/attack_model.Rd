@@ -138,7 +138,7 @@ all be in the same units.
 of widths of the predator's body as a proportion of the maximum width going
 from the anterior (nose) to the posterior (tail). Therefore, they should
 generally start and end on zero (though they don't have to), and all values
-must be between zero and 1. They must be regularly spaced, e.g. every 10\%
+must be between zero and 1. They must be regularly spaced, e.g. every 10\\%
 along the body. They do not have to be the same length (i.e. resolution),
 though it is recommended they are. The longer (i.e. higher resolution) these
 measurements are, the better their representation of the morphology of the
