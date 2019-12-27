@@ -6,7 +6,7 @@ This package can be used to model how an attacking predator appears to a prey, g
 
 **David E. Cade, Nicholas Carey, Paolo Domenici, Jean Potvin, Jeremy A. Goldbogen, 2019**. Predator-informed looming stimulus experiments reveal how large filter feeding whales capture highly maneuverable forage fish. *Proceedings of the National Academy of Sciences*. https://doi.org/10.1073/pnas.1911099116
 
-![](images/fig1.png?raw=true "Fig1")
+![](docs/images/fig1.png?raw=true "Fig1")
 
 While the code was applied specifically to humpback whales for this study, given some simple morphological parameters it can be used to model how *any* attacking predator appears to a prey. It can also be applied to other filter-feeding whales which engulf large volumes of water, such as blue whales, given some inputs regarding mouth opening timings. The package takes full account of the predator's three-dimensional shape when determining its perceived size in the prey's visual field. This is because at close distances, the maximum girth of the predator will not necessarily make up the widest apparent visual angle. Instead  more anterior segments will appear to the prey to be wider, and have a higher apparent size. 
 
