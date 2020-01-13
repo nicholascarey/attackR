@@ -8,13 +8,14 @@ predator on a prey.
 
 ### Summary
 
-This package can be used to model how an attacking predator appears to a
-prey, given its size, speed, and shape. It was used in the following
-publication in PNAS to determine how much of a prey’s visual field is
-taken up by an attacking humpback whale. It allows for varying speed and
-sizes of the whale, and there is specific functionality to determine how
-apparent size is affected by the timing of the mouth opening during a
-lunge, though this can be ignored for other predators.
+This package can be used to model how much of a prey’s visual field is
+taken up by an attacking predator, given its size, speed, and shape. It
+was used in the following publication in PNAS to determine how much of a
+prey’s visual field is taken up by an attacking humpback whale. While it
+can be used for any predator-prey combination, there is specific
+functionality to determine how apparent size is affected by the timing
+of a whale’s mouth opening during a lunge, though this can be ignored
+for other predators.
 
 **David E. Cade, Nicholas Carey, Paolo Domenici, Jean Potvin, and Jeremy
 A. Goldbogen. 2020.** Predator-informed looming stimulus experiments
@@ -28,8 +29,8 @@ While the code was applied specifically to humpback whales for this
 study, given some simple morphological parameters it can be used to
 model how *any* attacking predator appears to a prey. It can also be
 applied to other filter-feeding whales which engulf large volumes of
-water, such as blue whales, given some inputs regarding mouth opening
-timings. The package takes full account of the predator’s
+water, such as blue whales, given some inputs regarding mouth morphology
+and lunge timings. The package takes full account of the predator’s
 three-dimensional shape when determining its perceived size in the
 prey’s visual field. This is because at close distances, the maximum
 girth of the predator will not necessarily make up the widest apparent

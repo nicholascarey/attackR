@@ -98,7 +98,7 @@
 <p>Its intended use is in biological studies of prey escape behaviours, where they are known or hypothesised to respond to particular thresholds of angular size of the predator (e.g. Temizer et al. 2015), or rate of change of this angular size (e.g. Paglianti &amp; Domenici 2006) (note, there are other models which incorporate other variables to determine escape response likelihoods such as presence of other prey; see Hatsopoulos 1995, Preuss 2006, Hein et al. 2019).</p>
 <p>The code was developed for a study published in PNAS <a href="https://doi.org/10.1073/pnas.1911099116">(Cade et al. 2020)</a> on humpback whale foraging on anchovies. In the case of whales it has special functionality for determining how the timing of the whale’s mouth opening during a lunge feeding event affects how much of the prey’s visual field is occupied. However, it can be used with virtually any predator-prey combination.</p>
 <div class="figure" style="text-align: center">
-<img src="../../../../../../../Macintosh%20HD/Users/sa05nc/Documents/Github%20repositories/attackR/vignettes/images/pnascover.jpg" alt="Cade et al. 2020" width="40%"><p class="caption">
+<img src="../../../../../../../../images/pnascover.jpg" alt="Cade et al. 2020" width="40%"><p class="caption">
 Cade et al. 2020
 </p>
 </div>
@@ -109,15 +109,15 @@ Cade et al. 2020
 <h2 class="hasAnchor">
 <a href="#background" class="anchor"></a>Background</h2>
 <p>When a predator approaches a prey, it occupies space in the prey’s visual field. That is, its profile subtends an angle (<strong>⍺</strong>) on the prey’s retina, usually determined by its maximum width (Dill 1974):</p>
-<p><br><img src="../../../../../../../Macintosh%20HD/Users/sa05nc/Documents/Github%20repositories/attackR/vignettes/images/schem1.png" width="100%" style="display: block; margin: auto;"><br></p>
+<p><br><img src="../../../../../../../../images/schem1.png" width="100%" style="display: block; margin: auto;"><br></p>
 <p>If the predator comes closer, the angle increases. The rate of change in <strong>⍺</strong>, that is <strong>d⍺/dt</strong>, is simply the change in <strong>⍺</strong> divided by the time this took.</p>
-<p><br><img src="../../../../../../../Macintosh%20HD/Users/sa05nc/Documents/Github%20repositories/attackR/vignettes/images/schem2.png" width="100%" style="display: block; margin: auto;"><br></p>
+<p><br><img src="../../../../../../../../images/schem2.png" width="100%" style="display: block; margin: auto;"><br></p>
 <p>Note as the predator gets closer, depending on its shape the widest <em>apparent</em> part of it from the prey’s perspective may shift forward along the body. Given a predator shape profile, <code>attackR</code> takes account of this shift when calculating <strong>⍺</strong> and <strong>d⍺/dt</strong>.</p>
 <p>As the predator gets closer, it takes up a relatively greater proportion of the visual field, so at constant speeds both <strong>⍺</strong> and <strong>d⍺/dt</strong> show an exponential relationship with distance/time:</p>
-<p><br><img src="../../../../../../../Macintosh%20HD/Users/sa05nc/Documents/Github%20repositories/attackR/vignettes/images/Rplot.png" width="100%" style="display: block; margin: auto;"><br></p>
+<p><br><img src="../../../../../../../../images/Rplot.png" width="100%" style="display: block; margin: auto;"><br></p>
 <p>The <strong>d⍺/dt</strong> allows the prey to judge how fast the predator is approaching, decide if it is a threat and thus whether to initiate an escape response. Studies have shown many prey species react to consistent values of <strong>d⍺/dt</strong> which, when applied to their common predators, represent evolutionarily determined predator speed:distance combinations which minimise redundant or unnecessary escape attempts but maximise the chances of escape when the predator is a real threat.</p>
 <p>From the prey perspective, the attacker can be approximated by a circular shape projected on a screen that reproduces the same <strong>⍺</strong> and <strong>d⍺/dt</strong> at a particular viewing distance. These ‘looming animations’ are commonly used to study escape responses and determine thresholds of <strong>d⍺/dt</strong> at which escape responses are initiated (e.g. the Apparent Looming Threshold or <em>ALT</em>, Dill 1974). See the <a href="https://nicholascarey.github.io/loomeR/"><code>loomeR</code></a> package for creating looming animations, including from <code>attackR</code> models.</p>
-<p><br><img src="../../../../../../../Macintosh%20HD/Users/sa05nc/Documents/Github%20repositories/attackR/vignettes/images/response.png" width="50%" style="display: block; margin: auto;"><br></p>
+<p><br><img src="../../../../../../../../images/response.png" width="50%" style="display: block; margin: auto;"><br></p>
 <p><strong>⍺</strong> and <strong>d⍺/dt</strong> are determined by several aspects of the predator; its size, speed and shape. The <code>attackR</code> package uses these to calculate <strong>⍺</strong> and <strong>d⍺/dt</strong> for every stage of a hypothetical attack, and given threshold values of <strong>d⍺/dt</strong> for the prey, the distance of the predator at that moment and the time remaining until it is captured, assuming it does not move.</p>
 </div>
 <div id="overview" class="section level2">
@@ -155,7 +155,7 @@ Cade et al. 2020
 <a href="#simple-shape-profile" class="anchor"></a>Simple shape profile</h5>
 <p>To determine the <strong>⍺</strong> of a predator, especially how it may change as it gets closer to the prey, <code>attack_model</code> require a shape profile. The shape profile is simply a vector of proportional widths evenly-spaced along the body from nose to tail (or their equivalents). The predator’s length and maximum width values are entered separately. There are various ways to construct these profiles, from simple to complex: e.g. measured from photos or other morphometric measurements, or determined digitally. Here, as an example we will use an outline of a sea-lion (Fig. 5, Feldkamp 1987) extracted from underwater photos. This study also tells us a sea-lion’s maximum width is situated 40% along the body from the snout (<strong>d</strong> in the Figure). Table 1 also gives us some measurements of a sea-lion (146 cm length, 45 cm maximum diameter).</p>
 <p>We are going to apply these morphometric measurements and our derived profile to calculate the <strong>⍺</strong> of this sea-lion.</p>
-<p><br><img src="../../../../../../../Macintosh%20HD/Users/sa05nc/Documents/Github%20repositories/attackR/vignettes/images/feldkamp.png" height="140" style="display: block; margin: auto;"><br></p>
+<p><br><img src="../../../../../../../../images/feldkamp.png" height="140" style="display: block; margin: auto;"><br></p>
 <p>The simplest shape profile consists of only three points: proportional widths at the nose, tail and midpoint of the body (there can be any number of widths in a profile, but they must be <em>evenly spaced along the body</em>, which in this case measn the midpoint). The location of the maximum width along the body is also required, if it doesn’t happen to occur at the midpoint. This is expressed as a location along the length as a proportion of the total length from the nose. It can be anterior or posterior of the midpoint. In this case it is <em>40%</em> along the body, so entered as <em>0.40</em>. The nose and tail will typically be zero, but don’t have to be.</p>
 <p>Only three measurements are required here. We will use <a href="https://imagej.net/Welcome">ImageJ</a> (more specifically <a href="https://imagej.net/Fiji">Fiji</a>), but they could be done with a print out and a ruler since only proportional relationships are required.</p>
 <ul>
@@ -164,9 +164,9 @@ Cade et al. 2020
 <li>midpoint width (blue line)</li>
 </ul>
 <p>These are used to calculate the midpoint width expressed as a <em>proportion of the maximum width</em>. For example, here the midpoint and maximum widths were measured in ImageJ as 360 and 377 pixels respectively, so the <em>proportional</em> midpoint width is: 360/377 = 0.95.</p>
-<p><br><img src="../../../../../../../Macintosh%20HD/Users/sa05nc/Documents/Github%20repositories/attackR/vignettes/images/feldkamp_simple.png" height="140" style="display: block; margin: auto;"><br> The function interpolates between these measurements to approximate the shape of the predator at the resolution of the units used, which in this case would be every cm. For every stage of the attack, it will calculate <strong>⍺</strong> at every cm along the body and determine which is greatest at any particular viewing distance.</p>
+<p><br><img src="../../../../../../../../images/feldkamp_simple.png" height="140" style="display: block; margin: auto;"><br> The function interpolates between these measurements to approximate the shape of the predator at the resolution of the units used, which in this case would be every cm. For every stage of the attack, it will calculate <strong>⍺</strong> at every cm along the body and determine which is greatest at any particular viewing distance.</p>
 <p>This interpolated profile is obviously a very simplistic representation of the animal. In this representation, because the body anterior of the maximum width is perfectly triangular, at all viewing distances the maximum width will project the maximum <strong>⍺</strong>. However in reality, more anterior parts of the body may project a larger <strong>⍺</strong>:</p>
-<p><br><img src="../../../../../../../Macintosh%20HD/Users/sa05nc/Documents/Github%20repositories/attackR/vignettes/images/alpha_simple.png" height="140" style="display: block; margin: auto;"><br></p>
+<p><br><img src="../../../../../../../../images/alpha_simple.png" height="140" style="display: block; margin: auto;"><br></p>
 <p>In this example with the sleek sea-lion, the difference this makes to <strong>⍺</strong> are probably minor, but in predators with different shapes this could cause considerable differences. (See Whale vignette for example).</p>
 </div>
 <div id="more-accurate-shape-profile" class="section level5">
@@ -174,7 +174,7 @@ Cade et al. 2020
 <a href="#more-accurate-shape-profile" class="anchor"></a>More accurate shape profile</h5>
 <p>The higher the resolution of the profile, the better its representation of the predator shape, and better estimate of how <strong>⍺</strong> changes. Therefore, you may want to input a more representative shape profile.</p>
 <p>The shape profiles used by <code>attackR</code> can be at any resolution as long as they are evenly spaced. Here is an example where we determine proportional widths at every 5% along the body. Again, this could be done very quickly with a printout and ruler. Here, the profile image was opened in a simple graphics application, and scaled to a grid so that its length occupied 20 units.</p>
-<p><br><img src="../../../../../../../Macintosh%20HD/Users/sa05nc/Documents/Github%20repositories/attackR/vignettes/images/feldkamp_grid.png" height="140" style="display: block; margin: auto;"><br></p>
+<p><br><img src="../../../../../../../../images/feldkamp_grid.png" height="140" style="display: block; margin: auto;"><br></p>
 <p>Here, all that is required is measurements of the blue lines, again using <a href="https://imagej.net/Welcome">ImageJ</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co">## Measurements from ImageJ</span></a>
 <a class="sourceLine" id="cb2-2" title="2">pixel_widths_v &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>, <span class="dv">121</span>, <span class="dv">166</span>, <span class="dv">182</span>, <span class="dv">204</span>, <span class="dv">246</span>, </a>
@@ -190,7 +190,7 @@ Cade et al. 2020
 <a class="sourceLine" id="cb2-12" title="12"><span class="co">#&gt;  [1] 0.00 0.32 0.44 0.48 0.54 0.65 0.80 0.91 1.00 0.99 0.95 0.95 0.91 0.82 0.68</span></a>
 <a class="sourceLine" id="cb2-13" title="13"><span class="co">#&gt; [16] 0.51 0.39 0.36 0.35 0.34 0.00</span></a></code></pre></div>
 <p>Note, that because this profile contains a measurement for the maximum width (i.e. it lies at 0.40 along the body in this case), to get the proportional profile we can simply divide the pixel widths by its maximum value, and we can see the final profile contains a value of 1.0. Therefore, it does not need to be entered separately via the <code>max_width_loc_v</code> input. If it happened to lie intermediate to one of the measurements at the chosen resolution, the pixel widths would have to be divided by the pixel width at the maximum width location, and its position would be entered via <code>max_width_loc_v</code> (see above example). Therefore, it’s always easier to use profiles at a resolution that captures the maximum width.</p>
-<p><br><img src="../../../../../../../Macintosh%20HD/Users/sa05nc/Documents/Github%20repositories/attackR/vignettes/images/feldkamp_complex.png" height="140" style="display: block; margin: auto;"><br></p>
+<p><br><img src="../../../../../../../../images/feldkamp_complex.png" height="140" style="display: block; margin: auto;"><br></p>
 <p>It’s immediately clear that this interpolated profile is much more representative of the true predator body shape, and so estimates of <strong>⍺</strong> will be more realistic at close distances.</p>
 </div>
 <div id="horizontal-and-vertical-shape-profiles" class="section level5">
@@ -199,7 +199,7 @@ Cade et al. 2020
 <p>What if the predator has a different shape in the horizontal and vertical profiles of its body? A sea-lion is fairly consistently shaped along its body in both dimensions, so the above example would probably be sufficient to represent the <strong>⍺</strong> of the body as a whole. However, the <code>attack_model</code> function allows both horizontal and vertical profiles to be entered, and selection of which <strong>⍺</strong> between them to use.</p>
 <p>Note how in the above examples inputs are appended by <code>_v</code>. This relates to the vertical profile, and there are similar inputs for the horizontal profile appended with <code>_h</code>.</p>
 <p>Here we construct a horizontal shape profile (image from Fig. 3a, English 1976). We ignore the flippers and approximate the shape of the body in the fin regions because they are thin relative to the body in the frontal view, and so don’t contribute significantly to the <strong>⍺</strong> of the predator as a whole (the overall aim is to approximate the size of the looming predator in the prey’s visual field, not capture every detail).</p>
-<p><br><img src="../../../../../../../Macintosh%20HD/Users/sa05nc/Documents/Github%20repositories/attackR/vignettes/images/english_grid.png" height="140" style="display: block; margin: auto;"><br></p>
+<p><br><img src="../../../../../../../../images/english_grid.png" height="140" style="display: block; margin: auto;"><br></p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co">## Measurements from ImageJ</span></a>
 <a class="sourceLine" id="cb3-2" title="2">pixel_widths_h &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>, <span class="dv">110</span>, <span class="dv">186</span>, <span class="dv">250</span>, <span class="dv">278</span>, <span class="dv">320</span>, </a>
 <a class="sourceLine" id="cb3-3" title="3">                  <span class="dv">346</span>, <span class="dv">392</span>, <span class="dv">416</span>, <span class="dv">426</span>, <span class="dv">420</span>, </a>
@@ -281,7 +281,7 @@ Cade et al. 2020
 <li>
 <code>speed</code> need not be a single value, but can be a vector of variable speeds at the input <code>frequency</code>. In this case, <code>model_length</code> is not required, and it is assumed the predator meets the prey at the last value in the <code>speed</code> vector. However, if you want the predator to meet the prey earlier a <code>model_length</code> value less than the length of the speed vector can be entered.</li>
 </ul>
-<p><br><img src="../../../../../../../Macintosh%20HD/Users/sa05nc/Documents/Github%20repositories/attackR/vignettes/images/english_grid.png" height="140"><img src="../../../../../../../Macintosh%20HD/Users/sa05nc/Documents/Github%20repositories/attackR/vignettes/images/feldkamp_grid.png" height="140"><br></p>
+<p><br><img src="../../../../../../../../images/english_grid.png" height="140"><img src="../../../../../../../../images/feldkamp_grid.png" height="140"><br></p>
 </div>
 </div>
 <div id="references" class="section level2">
