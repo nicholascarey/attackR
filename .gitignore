@@ -9,3 +9,5 @@ orig_models_script.R
 scratch.R
 sl_script.R
 testing.R
+inst/doc
+misc_files

@@ -2,7 +2,7 @@ Package: attackR
 Type: Package
 Title: Models an Attack by a Predator on a Prey
 Version: 0.1.0
-Author: Nicholas Carey
+Author: Nicholas Carey, Dave Cade, Paolo Domenici
 Maintainer: Nicholas Carey <nicholascarey@gmail.com>
 Description: This package models a predator attack on a prey, giving visual information from the prey perspective.
     Parameters that can be adjusted include speed, size, timing of mouth opening, and more.
@@ -10,9 +10,12 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Suggests: 
-    testthat (>= 2.1.0)
+    testthat (>= 2.1.0),
+    knitr,
+    rmarkdown
 Imports:
     dplyr
-RoxygenNote: 7.0.1
+RoxygenNote: 7.0.2
 Roxygen: list(markdown = TRUE)
 Depends: R (>= 2.10)
+VignetteBuilder: knitr
