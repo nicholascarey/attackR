@@ -41,6 +41,8 @@ The code was developed for a study published in PNAS [(Cade et al. 2020)](https:
 knitr::include_graphics("pnascover.jpg")
 ```
 
+<center><img src="images/pnascover.jpg" width="300"/></center>
+
 ## Background
 
 When a predator approaches a prey, it occupies space in the prey's visual field. That is, its profile subtends an angle (**⍺**) on the prey's retina, usually determined by its maximum width (Dill 1974):
