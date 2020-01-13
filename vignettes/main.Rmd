@@ -6,18 +6,6 @@ output:
   number_sections: true
   toc_float: true
   toc_depth: 2
-resource_files:
-  - images/figure.png
-  - images/alpha_simple
-  - images/english_grid.png
-  - images/feldkamp_complex
-  - images/feldkamp_grid.png
-  - images/feldkamp_simple
-  - images/feldkamp.png
-  - images/response.png
-  - images/Rplot.png
-  - images/schem1.png
-  - images/schem2.png
 vignette: >
   %\VignetteIndexEntry{How attackR works}
   %\VignetteEngine{knitr::rmarkdown}
@@ -50,7 +38,7 @@ Its intended use is in biological studies of prey escape behaviours, where they 
 The code was developed for a study published in PNAS [(Cade et al. 2020)](https://doi.org/10.1073/pnas.1911099116) on humpback whale foraging on anchovies. In the case of whales it has special functionality for determining how the timing of the whale's mouth opening during a lunge feeding event affects how much of the prey's visual field is occupied. However, it can be used with virtually any predator-prey combination. 
 
 ```{r, echo=FALSE, fig.cap="Cade et al. 2020", out.width = '40%', fig.align='center'}
-knitr::include_graphics("images/pnascover.jpg")
+knitr::include_graphics("pnascover.jpg")
 ```
 
 ## Background
@@ -59,7 +47,7 @@ When a predator approaches a prey, it occupies space in the prey's visual field.
 
 <br>
 ```{r, echo=FALSE, out.width = '100%', fig.align='center'}
-knitr::include_graphics("images/schem1.png")
+knitr::include_graphics("schem1.png")
 ```
 <br>
 
@@ -67,7 +55,7 @@ If the predator comes closer, the angle increases. The rate of change in **⍺**
 
 <br>
 ```{r, echo=FALSE, out.width = '100%', fig.align='center'}
-knitr::include_graphics("images/schem2.png")
+knitr::include_graphics("schem2.png")
 ```
 <br>
 
@@ -77,7 +65,7 @@ As the predator gets closer, it takes up a relatively greater proportion of the 
 
 <br>
 ```{r, echo=FALSE, out.width = '100%', fig.align='center'}
-knitr::include_graphics("images/Rplot.png")
+knitr::include_graphics("Rplot.png")
 ```
 <br>
 
@@ -87,7 +75,7 @@ From the prey perspective, the attacker can be approximated by a circular shape 
 
 <br>
 ```{r, echo=FALSE, out.width = '50%', fig.align='center'}
-knitr::include_graphics("images/response.png")
+knitr::include_graphics("response.png")
 ```
 <br>
 
@@ -132,7 +120,7 @@ We are going to apply these morphometric measurements and our derived profile to
 
 <br>
 ```{r echo = FALSE, out.height = 140, out.width = NULL, fig.align = "center"}
-knitr::include_graphics("images/feldkamp.png")
+knitr::include_graphics("feldkamp.png")
 ```
 <br>
 
@@ -148,7 +136,7 @@ These are used to calculate the midpoint width expressed as a *proportion of the
 
 <br>
 ```{r echo = FALSE, out.height = 140, out.width = NULL, fig.align = "center"}
-knitr::include_graphics("images/feldkamp_simple.png")
+knitr::include_graphics("feldkamp_simple.png")
 ```
 <br>
 The function interpolates between these measurements to approximate the shape of the predator at the resolution of the units used, which in this case would be every cm. For every stage of the attack, it will calculate **⍺** at every cm along the body and determine which is greatest at any particular viewing distance. 
@@ -157,7 +145,7 @@ This interpolated profile is obviously a very simplistic representation of the a
 
 <br>
 ```{r echo = FALSE, out.height = 140, out.width = NULL, fig.align = "center"}
-knitr::include_graphics("images/alpha_simple.png")
+knitr::include_graphics("alpha_simple.png")
 ```
 <br>
 
@@ -171,7 +159,7 @@ The shape profiles used by `attackR` can be at any resolution as long as they ar
 
 <br>
 ```{r echo = FALSE, out.height = 140, out.width = NULL, fig.align = "center"}
-knitr::include_graphics("images/feldkamp_grid.png")
+knitr::include_graphics("feldkamp_grid.png")
 ```
 <br>
 
@@ -196,7 +184,7 @@ Note, that because this profile contains a measurement for the maximum width (i.
 
 <br>
 ```{r echo = FALSE, out.height = 140, out.width = NULL, fig.align = "center"}
-knitr::include_graphics("images/feldkamp_complex.png")
+knitr::include_graphics("feldkamp_complex.png")
 ```
 <br>
 
@@ -212,7 +200,7 @@ Here we construct a horizontal shape profile (image from Fig. 3a, English 1976).
 
 <br>
 ```{r echo = FALSE, out.height = 140, out.width = NULL, fig.align = "center"}
-knitr::include_graphics("images/english_grid.png")
+knitr::include_graphics("english_grid.png")
 ```
 <br>
 
@@ -310,8 +298,8 @@ See the [`loomeR`](https://nicholascarey.github.io/loomeR/) package for creating
 
 <br>
 ```{r echo = FALSE, fig.show = "hold", out.height = 140, out.width = NULL, fig.align = "default"}
-knitr::include_graphics("images/english_grid.png")
-knitr::include_graphics("images/feldkamp_grid.png")
+knitr::include_graphics("english_grid.png")
+knitr::include_graphics("feldkamp_grid.png")
 ```
 <br>
 
