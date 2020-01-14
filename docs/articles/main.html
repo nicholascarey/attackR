@@ -56,6 +56,9 @@
 <li>
       <a href="../articles/main.html">How `attackR` works</a>
     </li>
+    <li>
+      <a href="../articles/whales.html">How `attackR` works with whale attacks</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -90,6 +93,7 @@
 Cade et al. 2020
 </p>
 </div>
+<p>While the following explanation is fairly straightforward and may seem overly precise, the extreme and unique characteristics of the biomechanics of whale lunge feeding necessitated this level of detail. See [HERE] for an explanation of this approach applied to whales.</p>
 <div id="background" class="section level1">
 <h1 class="hasAnchor">
 <a href="#background" class="anchor"></a>Background</h1>
@@ -113,8 +117,8 @@ Cade et al. 2020
 <a class="sourceLine" id="cb1-2" title="2">             <span class="dt">model_length =</span> <span class="dv">500</span>,         <span class="co"># determines how far away predator starts attack from</span></a>
 <a class="sourceLine" id="cb1-3" title="3">             <span class="dt">frequency =</span> <span class="dv">60</span>,             <span class="co"># resolution/frame rate in Hz</span></a>
 <a class="sourceLine" id="cb1-4" title="4">             <span class="dt">body_length =</span> <span class="dv">146</span>,          <span class="co"># cm - from nose to tail</span></a>
-<a class="sourceLine" id="cb1-5" title="5">             <span class="dt">body_width_v =</span> <span class="dv">45</span>,          <span class="co"># cm - width at maximum width in vertical dimension</span></a>
-<a class="sourceLine" id="cb1-6" title="6">             <span class="dt">profile_v =</span> sl_profile_v)   <span class="co"># shape profile in vertical dimension</span></a></code></pre></div>
+<a class="sourceLine" id="cb1-5" title="5">             <span class="dt">body_width_v =</span> <span class="dv">45</span>,          <span class="co"># cm - width at maximum width in vertical plane</span></a>
+<a class="sourceLine" id="cb1-6" title="6">             <span class="dt">profile_v =</span> sl_profile_v)   <span class="co"># shape profile in vertical plane</span></a></code></pre></div>
 <p>These are the minumum required inputs, but there are others (<a href="https://nicholascarey.github.io/attackR/reference/attack_model.html">see here</a> for full list).</p>
 <p>As a general overview of what the function does:</p>
 <ul>
@@ -123,8 +127,8 @@ Cade et al. 2020
 <li>Using the shape profile, it calculates the <strong>⍺</strong> of every part of the predator’s body at the resolution of the units used in the morphometric inputs (in this case every <code>cm</code> along the body)</li>
 <li>It determines which of these <strong>⍺</strong> is largest. Usually this is at the maximum width, but at close distances more anterior parts of the body may project a larger <strong>⍺</strong>
 </li>
-<li>If both vertical and horizontal morphometric inputs are entered (see example below) it filters between the vertical and horizontal <strong>⍺</strong> in various ways</li>
-<li>This is the final <strong>⍺</strong>, and is used to calculate <strong>d⍺/dt</strong>
+<li>If both vertical and horizontal morphometric inputs are entered (see example below) it filters between the vertical and horizontal maximum <strong>⍺</strong> in various ways</li>
+<li>It determines this final <strong>⍺</strong>, and this is used to calculate <strong>d⍺/dt</strong>
 </li>
 </ul>
 </div>
@@ -185,7 +189,7 @@ Cade et al. 2020
 <div id="horizontal-and-vertical-shape-profiles" class="section level4">
 <h4 class="hasAnchor">
 <a href="#horizontal-and-vertical-shape-profiles" class="anchor"></a>Horizontal and vertical shape profiles</h4>
-<p>What if the predator has a different shape in the horizontal and vertical profiles of its body? A sea-lion is fairly consistently shaped along its body in both dimensions, so the above example would probably be sufficient to represent the <strong>⍺</strong> of the body as a whole. However, the <code>attack_model</code> function allows both horizontal and vertical profiles to be entered, and selection of which <strong>⍺</strong> between them to use.</p>
+<p>What if the predator has a different shape in the horizontal and vertical profiles of its body? A sea-lion is fairly consistently shaped along its body in both planes, so the above example would probably be sufficient to represent the <strong>⍺</strong> of the body as a whole. However, the <code>attack_model</code> function allows both horizontal and vertical profiles to be entered, and selection of which <strong>⍺</strong> between them to use.</p>
 <p>Note how in the above examples inputs are appended by <code>_v</code>. This relates to the vertical profile, and there are similar inputs for the horizontal profile appended with <code>_h</code>.</p>
 <p>Here we construct a horizontal shape profile (image from Fig. 3a, English 1976). We ignore the flippers and approximate the shape of the body in the fin regions because they are thin relative to the body in the frontal view, and so don’t contribute significantly to the <strong>⍺</strong> of the predator as a whole (the overall aim is to approximate the size of the looming predator in the prey’s visual field, not capture every detail).</p>
 <p><br><img src="english_grid.png" height="140" style="display: block; margin: auto;"><br></p>
@@ -207,10 +211,10 @@ Cade et al. 2020
 <a class="sourceLine" id="cb4-2" title="2">             <span class="dt">model_length =</span> <span class="dv">500</span>,        <span class="co"># determines how far away predator starts attack from</span></a>
 <a class="sourceLine" id="cb4-3" title="3">             <span class="dt">frequency =</span> <span class="dv">60</span>,            <span class="co"># resolution/frame rate in Hz</span></a>
 <a class="sourceLine" id="cb4-4" title="4">             <span class="dt">body_length =</span> <span class="dv">146</span>,         <span class="co"># cm - from nose to tail</span></a>
-<a class="sourceLine" id="cb4-5" title="5">             <span class="dt">body_width_v =</span> <span class="dv">45</span>,         <span class="co"># cm - width at maximum width in vertical dimension</span></a>
-<a class="sourceLine" id="cb4-6" title="6">             <span class="dt">profile_v =</span> sl_profile_v,  <span class="co"># shape profile in vertical dimension</span></a>
-<a class="sourceLine" id="cb4-7" title="7">             <span class="dt">body_width_h =</span> <span class="dv">50</span>,         <span class="co"># cm - width at maximum width in horizontal dimension</span></a>
-<a class="sourceLine" id="cb4-8" title="8">             <span class="dt">profile_h =</span> sl_profile_h,  <span class="co"># shape profile in horizontal dimension</span></a>
+<a class="sourceLine" id="cb4-5" title="5">             <span class="dt">body_width_v =</span> <span class="dv">45</span>,         <span class="co"># cm - width at maximum width in vertical plane</span></a>
+<a class="sourceLine" id="cb4-6" title="6">             <span class="dt">profile_v =</span> sl_profile_v,  <span class="co"># shape profile in vertical plane</span></a>
+<a class="sourceLine" id="cb4-7" title="7">             <span class="dt">body_width_h =</span> <span class="dv">50</span>,         <span class="co"># cm - width at maximum width in horizontal plane</span></a>
+<a class="sourceLine" id="cb4-8" title="8">             <span class="dt">profile_h =</span> sl_profile_h,  <span class="co"># shape profile in horizontal plane</span></a>
 <a class="sourceLine" id="cb4-9" title="9">             <span class="dt">width_filter =</span> <span class="st">"mid"</span>)      <span class="co"># how to select ⍺ between v and h </span></a></code></pre></div>
 <p>The <code>width_filter</code> has the following options to select between vertical and horizontal maximum <strong>⍺</strong> if they differ:</p>
 <ul>
@@ -229,7 +233,7 @@ Cade et al. 2020
 <li>
 <code>"max_width_h"</code> - use the <strong>⍺</strong> of the horizontal max width, ignore all other parts of body</li>
 </ul>
-<p>It depends on the predator shape which of these you may want to use to represent its true <strong>⍺</strong> when using the model in experiments.</p>
+<p>It depends on the predator shape which of these you may want to use to best represent its ‘true’ <strong>⍺</strong> when using the model in experiments.</p>
 </div>
 </div>
 <div id="other-inputs" class="section level2">
@@ -240,7 +244,7 @@ Cade et al. 2020
 <h4 class="hasAnchor">
 <a href="#speed" class="anchor"></a><code>speed</code>
 </h4>
-<p>The speed need not be a single value, but can be a vector of variable speeds at the input <code>frequency</code>. In this case, <code>model_length</code> is not required, and it is assumed the predator meets the prey at the last value in the <code>speed</code> vector. However, if you want the predator to meet the prey earlier, a <code>model_length</code> value less than the length of the <code>speed</code> vector can be entered.</p>
+<p>The speed need not be a single value, but can be a vector of variable speeds at the input <code>frequency</code>. In this case, <code>model_length</code> is not required, and it is assumed the predator meets the prey at the last value in the <code>speed</code> vector. However, if you want the predator to meet the prey earlier, a <code>model_length</code> value less than the length of the <code>speed</code> vector can be entered. Units must be same length unit as morphometric inputs <em>per second</em>.</p>
 </div>
 <div id="body_length-body_width_vbody_width_h" class="section level4">
 <h4 class="hasAnchor">
@@ -294,11 +298,12 @@ Cade et al. 2020
 <a class="sourceLine" id="cb5-2" title="2">                    <span class="dt">model_length =</span> <span class="dv">500</span>,         <span class="co"># determines how far away predator starts attack from</span></a>
 <a class="sourceLine" id="cb5-3" title="3">                    <span class="dt">frequency =</span> <span class="dv">60</span>,             <span class="co"># resolution/frame rate in Hz</span></a>
 <a class="sourceLine" id="cb5-4" title="4">                    <span class="dt">body_length =</span> <span class="dv">146</span>,          <span class="co"># cm - from nose to tail</span></a>
-<a class="sourceLine" id="cb5-5" title="5">                    <span class="dt">body_width_v =</span> <span class="dv">45</span>,          <span class="co"># cm - width at maximum width in vertical dimension</span></a>
-<a class="sourceLine" id="cb5-6" title="6">                    <span class="dt">profile_v =</span> sl_profile_v)   <span class="co"># shape profile in vertical dimension</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-5" title="5">                    <span class="dt">body_width_v =</span> <span class="dv">45</span>,          <span class="co"># cm - width at maximum width in vertical plane</span></a>
+<a class="sourceLine" id="cb5-6" title="6">                    <span class="dt">profile_v =</span> sl_profile_v)   <span class="co"># shape profile in vertical plane</span></a></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="../reference/get_dist.html">get_dist</a></span>(mod, <span class="dt">dadt =</span> <span class="fl">0.90</span>)</a>
 <a class="sourceLine" id="cb6-2" title="2"><span class="co">#&gt; attack_model input - distance is from nose</span></a>
 <a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt; [1] 70</span></a></code></pre></div>
+<p>At this speed, this predator is 70cm from the prey when the <strong>d⍺/dt</strong> value of 0.90 is first exceeded.</p>
 </div>
 <div id="creating-a-looming-animation-from-the-results" class="section level2">
 <h2 class="hasAnchor">
@@ -313,19 +318,18 @@ Cade et al. 2020
 <li>All angle measurements are in <strong><em>radians</em></strong> and <strong>d⍺/dt</strong> is in <strong><em>rad/s</em></strong>.</li>
 <li>No part of the predator body anterior to the maximum width can ever project a higher <strong>⍺</strong> than the maximum width, so shape profiles are only really important from the nose to the maximum width. Values more posterior than that can be placeholders and they will not affect the results. However it is important they have values to maintain the evenly-spaced resolution of the profiles.</li>
 </ul>
-<p><br><img src="english_grid.png" height="140"><img src="feldkamp_grid.png" height="140"><br></p>
 </div>
 </div>
 <div id="references" class="section level1">
 <h1 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h1>
-<p>Dill, L.M., 1974. The escape response of the zebra danio (Brachydanio rerio) I. The stimulus for escape. Animal Behaviour 22, 711–722. <a href="https://doi.org/10.1016/S0003-3472(74)80022-9" class="uri">https://doi.org/10.1016/S0003-3472(74)80022-9</a></p>
-<p>Domenici, P., Hale, M.E., 2019. Escape responses of fish: a review of the diversity in motor control, kinematics and behaviour. The Journal of Experimental Biology 222, jeb166009. <a href="https://doi.org/10.1242/jeb.166009" class="uri">https://doi.org/10.1242/jeb.166009</a></p>
-<p>Temizer I, Donovan JC, Baier H, &amp; Semmelhack JL (2015) A visual pathway for looming-evoked escape in larval zebrafish. Current Biology 25(14):1823-1834.</p>
-<p>Paglianti, A., Domenici, P., 2006. The effect of size on the timing of visually mediated escape behaviour in staghorn sculpin Leptocottus armatus. Journal of Fish Biology 68, 1177–1191. <a href="https://doi.org/10.1111/j.0022-1112.2006.00991.x" class="uri">https://doi.org/10.1111/j.0022-1112.2006.00991.x</a></p>
-<p>Hatsopoulos N, Gabbiani F, &amp; Laurent G (1995) Elementary computation of object approach by a wide-field visual neuron. Science 270(5238):1000-1003.</p>
-<p>Preuss T, Osei-Bonsu PE, Weiss SA, Wang C, &amp; Faber DS (2006) Neural representation of object approach in a decision-making motor circuit. Journal of Neuroscience 26(13):3454-3464.</p>
-<p>David E. Cade, Nicholas Carey, Paolo Domenici, Jean Potvin, and Jeremy A. Goldbogen. 2020. Predator-informed looming stimulus experiments reveal how large filter feeding whales capture highly maneuverable forage fish. Proceedings of the National Academy of Sciences, 117 (1) 472-478. <a href="https://doi.org/10.1073/pnas.1911099116" class="uri">https://doi.org/10.1073/pnas.1911099116</a></p>
+<p>Dill L.M., 1974. The escape response of the zebra danio (<em>Brachydanio rerio</em>) I. The stimulus for escape. <em>Animal Behaviour</em> 22, 711–722. <a href="https://doi.org/10.1016/S0003-3472(74)80022-9" class="uri">https://doi.org/10.1016/S0003-3472(74)80022-9</a></p>
+<p>Domenici, P., Hale, M.E., 2019. Escape responses of fish: a review of the diversity in motor control, kinematics and behaviour. <em>Journal of Experimental Biology</em> 222, jeb166009. <a href="https://doi.org/10.1242/jeb.166009" class="uri">https://doi.org/10.1242/jeb.166009</a></p>
+<p>Hatsopoulos N., Gabbiani F., &amp; Laurent G., 1995. Elementary computation of object approach by a wide-field visual neuron. <em>Science</em> 270(5238):1000-1003.</p>
+<p>Paglianti, A., Domenici, P., 2006. The effect of size on the timing of visually mediated escape behaviour in staghorn sculpin <em>Leptocottus armatus</em>. <em>Journal of Fish Biology</em> 68, 1177–1191. <a href="https://doi.org/10.1111/j.0022-1112.2006.00991.x" class="uri">https://doi.org/10.1111/j.0022-1112.2006.00991.x</a></p>
+<p>Preuss T., Osei-Bonsu P.E., Weiss S.A., Wang C., &amp; Faber D.S., 2006. Neural representation of object approach in a decision-making motor circuit. <em>Journal of Neuroscience</em> 26(13):3454-3464.</p>
+<p>Temizer I., Donovan J.C., Baier H., &amp; Semmelhack J.L., 2015. A visual pathway for looming-evoked escape in larval zebrafish. <em>Current Biology</em> 25(14):1823-1834.</p>
+<p>Cade D.E., Carey N., Domenici P., Potvin J., &amp; Goldbogen J.A., 2020. Predator-informed looming stimulus experiments reveal how large filter feeding whales capture highly maneuverable forage fish. <em>Proceedings of the National Academy of Sciences</em>, 117 (1) 472-478. <a href="https://doi.org/10.1073/pnas.1911099116" class="uri">https://doi.org/10.1073/pnas.1911099116</a></p>
 <p>English, A.Wm., 1976. Limb movements and locomotor function in the California sea lion (Zalophus californianus). Journal of Zoology 178, 341–364. <a href="https://doi.org/10.1111/j.1469-7998.1976.tb02274.x" class="uri">https://doi.org/10.1111/j.1469-7998.1976.tb02274.x</a></p>
 <p>Feldkamp, S.D., 1987. Swimming in the California sea lion: morphometrics, drag and energetics. Journal of Experimental Biology 131, 117–135.</p>
 </div>

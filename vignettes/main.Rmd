@@ -33,6 +33,8 @@ The code was developed for a study published in PNAS [(Cade et al. 2020)](https:
 knitr::include_graphics("pnascover.jpg")
 ```
 
+While the following explanation is fairly straightforward and may seem overly precise, the extreme and unique characteristics of the biomechanics of whale lunge feeding necessitated this level of detail. See [HERE] for an explanation of this approach applied to whales.
+
 # Background
 
 When a predator approaches a prey, it occupies space in the prey's visual field. That is, its profile subtends an angle (**⍺**) on the prey's retina, usually determined by its maximum width (Dill 1974):
@@ -83,8 +85,8 @@ attack_model(speed = 350,                # speed in cm/s
              model_length = 500,         # determines how far away predator starts attack from
              frequency = 60,             # resolution/frame rate in Hz
              body_length = 146,          # cm - from nose to tail
-             body_width_v = 45,          # cm - width at maximum width in vertical dimension
-             profile_v = sl_profile_v)   # shape profile in vertical dimension
+             body_width_v = 45,          # cm - width at maximum width in vertical plane
+             profile_v = sl_profile_v)   # shape profile in vertical plane
 ```
 
 These are the minumum required inputs, but there are others ([see here](https://nicholascarey.github.io/attackR/reference/attack_model.html) for full list). 
@@ -94,8 +96,8 @@ As a general overview of what the function does:
 - For every instance of the model (i.e. `1:model_length`), it calculates how far away the predator is at the given `speed`
 - Using the shape profile, it calculates the **⍺** of every part of the predator's body at the resolution of the units used in the morphometric inputs (in this case every `cm` along the body)
 - It determines which of these **⍺** is largest. Usually this is at the maximum width, but at close distances more anterior parts of the body may project a larger **⍺**
-- If both vertical and horizontal morphometric inputs are entered (see example below) it filters between the vertical and horizontal **⍺** in various ways
-- This is the final **⍺**, and is used to calculate **d⍺/dt** 
+- If both vertical and horizontal morphometric inputs are entered (see example below) it filters between the vertical and horizontal maximum **⍺** in various ways
+- It determines this final **⍺**, and this is used to calculate **d⍺/dt** 
 
 
 # Example analysis
@@ -186,7 +188,7 @@ It's immediately clear that this interpolated profile is much more representativ
 
 #### Horizontal and vertical shape profiles
 
-What if the predator has a different shape in the horizontal and vertical profiles of its body? A sea-lion is fairly consistently shaped along its body in both dimensions, so the above example would probably be sufficient to represent the **⍺** of the body as a whole. However, the `attack_model` function allows both horizontal and vertical profiles to be entered, and selection of which **⍺** between them to use. 
+What if the predator has a different shape in the horizontal and vertical profiles of its body? A sea-lion is fairly consistently shaped along its body in both planes, so the above example would probably be sufficient to represent the **⍺** of the body as a whole. However, the `attack_model` function allows both horizontal and vertical profiles to be entered, and selection of which **⍺** between them to use. 
 
 Note how in the above examples inputs are appended by `_v`. This relates to the vertical profile, and there are similar inputs for the horizontal profile appended with `_h`. 
 
@@ -220,10 +222,10 @@ attack_model(speed = 350,               # speed in cm/s
              model_length = 500,        # determines how far away predator starts attack from
              frequency = 60,            # resolution/frame rate in Hz
              body_length = 146,         # cm - from nose to tail
-             body_width_v = 45,         # cm - width at maximum width in vertical dimension
-             profile_v = sl_profile_v,  # shape profile in vertical dimension
-             body_width_h = 50,         # cm - width at maximum width in horizontal dimension
-             profile_h = sl_profile_h,  # shape profile in horizontal dimension
+             body_width_v = 45,         # cm - width at maximum width in vertical plane
+             profile_v = sl_profile_v,  # shape profile in vertical plane
+             body_width_h = 50,         # cm - width at maximum width in horizontal plane
+             profile_h = sl_profile_h,  # shape profile in horizontal plane
              width_filter = "mid")      # how to select ⍺ between v and h 
 ```
 
@@ -237,14 +239,14 @@ The `width_filter` has the following options to select between vertical and hori
 - `"max_width_v"`   - use the **⍺** of the vertical max width, ignore all other parts of body
 - `"max_width_h"`   - use the **⍺** of the horizontal max width, ignore all other parts of body
 
-It depends on the predator shape which of these you may want to use to represent its true **⍺** when using the model in experiments. 
+It depends on the predator shape which of these you may want to use to best represent its 'true' **⍺** when using the model in experiments. 
 
 ## 2. Other inputs
 
 The other inputs to the `attack_model` function are fairly self explanatory:
 
 #### `speed`
-The speed need not be a single value, but can be a vector of variable speeds at the input `frequency`. In this case, `model_length` is not required, and it is assumed the predator meets the prey at the last value in the `speed` vector. However, if you want the predator to meet the prey earlier, a `model_length` value less than the length of the `speed` vector can be entered.
+The speed need not be a single value, but can be a vector of variable speeds at the input `frequency`. In this case, `model_length` is not required, and it is assumed the predator meets the prey at the last value in the `speed` vector. However, if you want the predator to meet the prey earlier, a `model_length` value less than the length of the `speed` vector can be entered. Units must be same length unit as morphometric inputs *per second*.
 
 #### `body_length`, `body_width_v`,`body_width_h`,  
 It is important that all morphometric inputs are in the same length units, and that `speed` also uses the *same length unit per second*. 
@@ -284,8 +286,8 @@ mod <- attack_model(speed = 350,                # speed in cm/s
                     model_length = 500,         # determines how far away predator starts attack from
                     frequency = 60,             # resolution/frame rate in Hz
                     body_length = 146,          # cm - from nose to tail
-                    body_width_v = 45,          # cm - width at maximum width in vertical dimension
-                    profile_v = sl_profile_v)   # shape profile in vertical dimension
+                    body_width_v = 45,          # cm - width at maximum width in vertical plane
+                    profile_v = sl_profile_v)   # shape profile in vertical plane
 ```
 
 ``` {r echo = FALSE, eval = TRUE} 
@@ -293,14 +295,16 @@ mod <- suppressMessages(attack_model(speed = 350,                # speed in cm/s
                     model_length = 500,         # determines how far away predator starts attack from
                     frequency = 60,             # resolution/frame rate in Hz
                     body_length = 146,          # cm - from nose to tail
-                    body_width_v = 45,          # cm - width at maximum width in vertical dimension
-                    profile_v = sl_profile_v, plot = FALSE))   # shape profile in vertical dimension
+                    body_width_v = 45,          # cm - width at maximum width in vertical plane
+                    profile_v = sl_profile_v, plot = FALSE))   # shape profile in vertical plane
 ```
 
 ``` {r} 
 get_dist(mod, dadt = 0.90)
 
 ````
+
+At this speed, this predator is 70cm from the prey when the **d⍺/dt** value of 0.90 is first exceeded. 
 
 ## 5. Creating a looming animation from the results 
 
@@ -315,28 +319,20 @@ See the [`loomeR`](https://nicholascarey.github.io/loomeR/) package for creating
 
 
 
-
-<br>
-```{r echo = FALSE, fig.show = "hold", out.height = 140, out.width = NULL, fig.align = "default"}
-knitr::include_graphics("english_grid.png")
-knitr::include_graphics("feldkamp_grid.png")
-```
-<br>
-
 # References
-Dill, L.M., 1974. The escape response of the zebra danio (Brachydanio rerio) I. The stimulus for escape. Animal Behaviour 22, 711–722. https://doi.org/10.1016/S0003-3472(74)80022-9
+Dill L.M., 1974. The escape response of the zebra danio (*Brachydanio rerio*) I. The stimulus for escape. *Animal Behaviour* 22, 711–722. https://doi.org/10.1016/S0003-3472(74)80022-9
 
-Domenici, P., Hale, M.E., 2019. Escape responses of fish: a review of the diversity in motor control, kinematics and behaviour. The Journal of Experimental Biology 222, jeb166009. https://doi.org/10.1242/jeb.166009
+Domenici, P., Hale, M.E., 2019. Escape responses of fish: a review of the diversity in motor control, kinematics and behaviour. *Journal of Experimental Biology* 222, jeb166009. https://doi.org/10.1242/jeb.166009
 
-Temizer I, Donovan JC, Baier H, & Semmelhack JL (2015) A visual pathway for looming-evoked escape in larval zebrafish. Current Biology 25(14):1823-1834.
+Hatsopoulos N., Gabbiani F., & Laurent G., 1995. Elementary computation of object approach by a wide-field visual neuron. *Science* 270(5238):1000-1003.
 
-Paglianti, A., Domenici, P., 2006. The effect of size on the timing of visually mediated escape behaviour in staghorn sculpin Leptocottus armatus. Journal of Fish Biology 68, 1177–1191. https://doi.org/10.1111/j.0022-1112.2006.00991.x
+Paglianti, A., Domenici, P., 2006. The effect of size on the timing of visually mediated escape behaviour in staghorn sculpin *Leptocottus armatus*. *Journal of Fish Biology* 68, 1177–1191. https://doi.org/10.1111/j.0022-1112.2006.00991.x
 
-Hatsopoulos N, Gabbiani F, & Laurent G (1995) Elementary computation of object approach by a wide-field visual neuron. Science 270(5238):1000-1003.
+Preuss T., Osei-Bonsu P.E., Weiss S.A., Wang C., & Faber D.S., 2006. Neural representation of object approach in a decision-making motor circuit. *Journal of Neuroscience* 26(13):3454-3464.
 
-Preuss T, Osei-Bonsu PE, Weiss SA, Wang C, & Faber DS (2006) Neural representation of object approach in a decision-making motor circuit. Journal of Neuroscience 26(13):3454-3464.
+Temizer I., Donovan J.C., Baier H., & Semmelhack J.L., 2015. A visual pathway for looming-evoked escape in larval zebrafish. *Current Biology* 25(14):1823-1834.
 
-David E. Cade, Nicholas Carey, Paolo Domenici, Jean Potvin, and Jeremy A. Goldbogen. 2020. Predator-informed looming stimulus experiments reveal how large filter feeding whales capture highly maneuverable forage fish. Proceedings of the National Academy of Sciences, 117 (1) 472-478. https://doi.org/10.1073/pnas.1911099116
+Cade D.E., Carey N., Domenici P., Potvin J., & Goldbogen J.A., 2020. Predator-informed looming stimulus experiments reveal how large filter feeding whales capture highly maneuverable forage fish. *Proceedings of the National Academy of Sciences*, 117 (1) 472-478. https://doi.org/10.1073/pnas.1911099116
 
 English, A.Wm., 1976. Limb movements and locomotor function in the California sea lion (Zalophus californianus). Journal of Zoology 178, 341–364. https://doi.org/10.1111/j.1469-7998.1976.tb02274.x
 

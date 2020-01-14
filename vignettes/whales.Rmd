@@ -1,0 +1,156 @@
+---
+title: "How `attackR` works with whale attacks"
+output: 
+  rmarkdown::html_vignette:
+  toc: true
+  number_sections: true
+  toc_float: true
+  toc_depth: 3
+vignette: >
+  %\VignetteIndexEntry{How attackR works with whale attacks}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, echo = FALSE}
+library(attackR)
+```
+
+This vignette details how `attackR` specifically takes account of the unique lunge feeding mode of rorqual whales (i.e. its gigantic size, and huge expanding buccal cavity) when determining how much of a prey's visual field is occupied by an attacking whale. 
+
+The [**How `attackR` works`**](https://nicholascarey.github.io/attackR/articles/main.html) vignette details the basics of the package, so it is highly recommended you read that first. 
+
+# Whale Lunge Feeding
+
+Whale lunge feeding differs from other predator attacks in that when approaching the prey the whale expands its jaws, and these rapidly increase in apparent size until they obscure the rest of the whale's body and dominate the prey's visual field. 
+
+`attack_model_whale` is a whale-specific version of the `attack_model` function with specific inputs and behaviour to deal with this. These include morphometric inputs for jaw location and angle, and timings of the mouth opening. 
+
+## **⍺** in whales
+
+As with other predators, the **⍺** of a whale is determined by its maximum width, except at close viewing distances where more anterior parts of the body may project a larger **⍺**. 
+
+<br>
+```{r echo = FALSE, out.height = NULL, out.width = "75%", fig.align = "center"}
+knitr::include_graphics("whale_alpha.png")
+```
+<br>
+
+However, in lunge feeding whales when they open their mouths their jaws rapidly eclipse the **⍺** of the body, and moreover it is not symmetrical, with upper and lower jaws projecting a different **⍺**. 
+
+<br>
+```{r echo = FALSE, out.height = NULL, out.width = "75%", fig.align = "center"}
+knitr::include_graphics("whale_jaw_alpha.png")
+```
+<br>
+
+## Overview of the function
+
+To summarise the function, for each instance of the model: 
+
+- As in [`attack_model`](https://nicholascarey.github.io/attackR/articles/main.html#overview), it determines the **⍺** for the entire whale body using a shape profile
+- It then programatically determines the location of both jaw tips during the mouth opening event, and their distance from the prey
+- It separately calculates the **α** for each jaw and combines these to give a total jaw **α**
+- This is compared to the **α** of the rest of the body to determine the maximum **α**
+
+## Additional inputs
+
+`jaw_length`
+
+The distance of the whale's jaw hinge (i.e. where upper and lower jaws meet) from the rostrum (i.e. snout). Can be an exact value or an allometric formula based on length (see Kahane‐Rapport & Goldbogen, 2018). For example:
+
+``` {r} 
+## set body length 
+hw_bl <- 1057
+  
+## Humpback Whale jaw location in cm 
+jaw_length = (10^(1.205*log10(hw_bl/100) - 0.880))*100
+```
+
+\code{## Blue Whale jaw location in cm (source:)}\cr \code{jaw_length =
+10^(1.36624*log10(bw_bl/100) - 1.21286)*100}
+
+Note the body length values (*\code{hw_bl}*, *\code{bw_bl}*) must exist
+externally; they cannot reference the entered *\code{body_length}* value
+internal to the function, unless this also references the same existing
+value.
+
+`jaw_angle_upper`
+`jaw_angle_lower`
+`a_mouth_open`
+`b_max_gape_start`
+`c_max_gape_end`
+`d_mouth_closed`
+
+
+@section *\code{jaw_length}*: The distance of the whale's jaw 'hinge' (i.e.
+where upper and lower jaws meet) from the rostrum, in the same units as the
+*\code{body_length}*. Can be an exact value or an allometric formula based
+on length. For example:\cr
+
+\code{## Humpback Whale jaw location in cm (source:)}\cr \code{jaw_length =
+(10^(1.205*log10(hw_bl/100) - 0.880))*100}
+
+\code{## Blue Whale jaw location in cm (source:)}\cr \code{jaw_length =
+10^(1.36624*log10(bw_bl/100) - 1.21286)*100}
+
+Note the body length values (*\code{hw_bl}*, *\code{bw_bl}*) must exist
+externally; they cannot reference the entered *\code{body_length}* value
+internal to the function, unless this also references the same existing
+value.
+
+@section *\code{jaw_angle_upper}*: This is the angle in radians off the
+longitudnal axis of the whale of the upper jaw at maximum gape. In both
+humpbacks and blue whales this is 0.5235988 (30°).
+
+@section *\code{jaw_angle_lower}*: This is the angle in radians off the
+longitudnal axis of the whale of the lower jaw at maximum gape. In both
+humpbacks and blue whales this is 0.8726646 (50°).
+
+@section *\code{a_, b_ c_, d_} inputs*: *\code{a_mouth_open}* - when the mouth
+starts to open \cr *\code{b_max_gape_start}* - when maximum gape is reached
+\cr *\code{c_max_gape_end}* - when mouth starts to close, or how long it is
+held at max gape \cr *\code{d_mouth_closed}* - when mouth is completely
+closed \cr \cr
+
+These inputs set the timings (i.e. iteration, row or frame) of these events
+within the model. If *\code{speed}* is a vector, they set the locations
+along the speed vector these events occur. Similarly if *\code{speed}* is a
+single value, they set similarly the timings within the model, but obviously
+this is related to *\code{model_length}*.
+
+The complete mouth opening action does not have to occur during the model.
+The inputs can be used to set, for example timing of max gape to be at the
+last value in the speed vector. Also, if these are left *\code{NULL}*, the
+mouth will not open, and the model is equivalent to one created using
+*\code{\link{attack_model}}*.
+
+@section Application of the mouth opening and morphology inputs: The function
+programatically determines the location of the jaw tips at each iteration of
+the model during the mouth opening event, and their distance from the prey,
+calculates their visual angle **⍺**, and combines these to give a total
+jaw **⍺**. This is then compared to the **⍺** of the rest of the body to
+determine the maximum **⍺**. These calculations are done in the vertical
+plane only, and occur separately from any **⍺** calculations done using
+the body profiles; if the total jaw **⍺** is greater than the **⍺**
+determined from the body widths, it will always be selected as the maximum
+**⍺** regardless of any filtering between vertical and horizontal planes
+using *\code{width_filter}*.
+
+
+## Additional notes
+These calculations are done in the vertical plane only, and occur separately from any **⍺** calculations done using the body profiles; if the total jaw **⍺** is greater than the **⍺** determined from the body widths, it will always be selected as the maximum **⍺** regardless of any filtering between vertical and horizontal planes
+using *\code{width_filter}*.
+
+
+# References
+Kahane-Rapport, S.R., & Goldbogen, J.A., 2018. Allometric scaling of morphology and engulfment capacity in rorqual whales. *Journal of Morphology* 279, 1256–1268. https://doi.org/10.1002/jmor.20846
+
+
