@@ -98,11 +98,11 @@ As a general overview of what the function does:
 - This is the final **⍺**, and is used to calculate **d⍺/dt** 
 
 
-# An Example
+# Example analysis
 
 Here we will show a simple example of how `attackR` determines the **⍺** and **d⍺/dt** for an attack by a California sea-lion (*Zalophus californianus*). 
 
-## Test 2
+## Test 3
 
 ## 1. Shape
 
@@ -239,7 +239,33 @@ The `width_filter` has the following options to select between vertical and hori
 
 It depends on the predator shape which of these you may want to use to represent its true **⍺** when using the model in experiments. 
 
-## 2. Output 
+## 2. Other inputs
+
+The other inputs to the `attack_model` function are fairly self explanatory:
+
+#### `speed`
+The speed need not be a single value, but can be a vector of variable speeds at the input `frequency`. In this case, `model_length` is not required, and it is assumed the predator meets the prey at the last value in the `speed` vector. However, if you want the predator to meet the prey earlier, a `model_length` value less than the length of the `speed` vector can be entered.
+
+#### `body_length`, `body_width_v`,`body_width_h`,  
+It is important that all morphometric inputs are in the same length units, and that `speed` also uses the *same length unit per second*. 
+
+#### `frequency`
+Resolution of the model in Hz. How many **⍺**, **d⍺/dt** etc. calculated per second. If `speed` is a vector should be at same resolution. Equivalent to frame rate or FPS, and any looming animation created by the `loomeR` package will use this as the frame rate. 
+
+#### `max_width_loc_v`, `max_width_loc_h`
+Location of these along the body from the nose as a proportion of the total length. Only required
+if they are not included as part of the shape profiles.
+
+#### `plot`, `plot_from`, `plot_to` 
+Plot the resulting **⍺** and **d⍺/dt**, and specify the X-axis range (in time units). 
+
+#### `alpha_range`, `dadt_range`
+Plot a range of **⍺** and **d⍺/dt**. Each input is a vector of two values. If `simple_output = FALSE` these ranges are also subset into their own elements of the output `list` object. 
+
+#### `simple_output`
+Control the output structure, See next section. 
+
+## 3. Output 
 
 By default (`simple_output = TRUE`), the output of `attack_model` is a `data.frame` with every row representing an instance (or 'frame') of the model at the input `frequency`. The data frame contains columns for frame, speed, time, time reversed, distance of the nose of the predator, **α**, and **dα/dt**. 
 
@@ -249,7 +275,7 @@ maximum apparent width at each frame, etc.). This option greatly increases the t
 
 The output is also plotted by default (`plot = TRUE`), and if **⍺** or **d⍺/dt** ranges are entered these are also plotted.  
 
-## 3. Getting distance and time at particular **⍺** and **d⍺/dt** 
+## 4. Identifying predator distance and time at particular **⍺** and **d⍺/dt** 
 
 The functions [`get_dist`](https://nicholascarey.github.io/attackR/reference/get_dist.html) and [`get_time`](https://nicholascarey.github.io/attackR/reference/get_time.html) will return the distance of the predator and time to reach the prey at the first instance of a particular **⍺** or **d⍺/dt** being exceeded. 
 
@@ -276,18 +302,18 @@ get_dist(mod, dadt = 0.90)
 
 ````
 
-## 4. Creating a looming animation from the results 
+## 5. Creating a looming animation from the results 
 
 See the [`loomeR`](https://nicholascarey.github.io/loomeR/) package for creating a looming animation from the output of `attackR`. For this to work the output must be saved (i.e. assigned) as an object within `R`, and the option `simple_output = FALSE` must be used. This results in a `list` object of class `attack_model` which `loomeR` will recognise. 
 
 (**NOTE** 13-01-2020 - Not implemented just yet. Coming very soon!)
 
-### 5. Additional Notes
+## 6. Additional Notes
 
 - All angle measurements are in ***radians*** and **d⍺/dt** is in ***rad/s***.
 - No part of the predator body anterior to the maximum width can ever project a higher **⍺** than the maximum width, so shape profiles are only really important from the nose to the maximum width. Values more posterior than that can be placeholders and they will not affect the results. However it is important they have values to maintain the evenly-spaced resolution of the profiles. 
-- It is important that all morphometric inputs are in the same distance units, and speed also uses the *same distance unit per second*. 
-- `speed` need not be a single value, but can be a vector of variable speeds at the input `frequency`. In this case, `model_length` is not required, and it is assumed the predator meets the prey at the last value in the `speed` vector. However, if you want the predator to meet the prey earlier a `model_length` value less than the length of the speed vector can be entered.
+
+
 
 
 <br>
@@ -297,7 +323,7 @@ knitr::include_graphics("feldkamp_grid.png")
 ```
 <br>
 
-## References
+# References
 Dill, L.M., 1974. The escape response of the zebra danio (Brachydanio rerio) I. The stimulus for escape. Animal Behaviour 22, 711–722. https://doi.org/10.1016/S0003-3472(74)80022-9
 
 Domenici, P., Hale, M.E., 2019. Escape responses of fish: a review of the diversity in motor control, kinematics and behaviour. The Journal of Experimental Biology 222, jeb166009. https://doi.org/10.1242/jeb.166009

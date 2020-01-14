@@ -128,13 +128,13 @@ Cade et al. 2020
 </li>
 </ul>
 </div>
-<div id="an-example" class="section level1">
+<div id="example-analysis" class="section level1">
 <h1 class="hasAnchor">
-<a href="#an-example" class="anchor"></a>An Example</h1>
+<a href="#example-analysis" class="anchor"></a>Example analysis</h1>
 <p>Here we will show a simple example of how <code>attackR</code> determines the <strong>⍺</strong> and <strong>d⍺/dt</strong> for an attack by a California sea-lion (<em>Zalophus californianus</em>).</p>
-<div id="test-2" class="section level2">
+<div id="test-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#test-2" class="anchor"></a>Test 2</h2>
+<a href="#test-3" class="anchor"></a>Test 3</h2>
 </div>
 <div id="shape" class="section level2">
 <h2 class="hasAnchor">
@@ -232,16 +232,62 @@ Cade et al. 2020
 <p>It depends on the predator shape which of these you may want to use to represent its true <strong>⍺</strong> when using the model in experiments.</p>
 </div>
 </div>
+<div id="other-inputs" class="section level2">
+<h2 class="hasAnchor">
+<a href="#other-inputs" class="anchor"></a>2. Other inputs</h2>
+<p>The other inputs to the <code>attack_model</code> function are fairly self explanatory:</p>
+<div id="speed" class="section level4">
+<h4 class="hasAnchor">
+<a href="#speed" class="anchor"></a><code>speed</code>
+</h4>
+<p>The speed need not be a single value, but can be a vector of variable speeds at the input <code>frequency</code>. In this case, <code>model_length</code> is not required, and it is assumed the predator meets the prey at the last value in the <code>speed</code> vector. However, if you want the predator to meet the prey earlier, a <code>model_length</code> value less than the length of the <code>speed</code> vector can be entered.</p>
+</div>
+<div id="body_length-body_width_vbody_width_h" class="section level4">
+<h4 class="hasAnchor">
+<a href="#body_length-body_width_vbody_width_h" class="anchor"></a><code>body_length</code>, <code>body_width_v</code>,<code>body_width_h</code>,</h4>
+<p>It is important that all morphometric inputs are in the same length units, and that <code>speed</code> also uses the <em>same length unit per second</em>.</p>
+</div>
+<div id="frequency" class="section level4">
+<h4 class="hasAnchor">
+<a href="#frequency" class="anchor"></a><code>frequency</code>
+</h4>
+<p>Resolution of the model in Hz. How many <strong>⍺</strong>, <strong>d⍺/dt</strong> etc. calculated per second. If <code>speed</code> is a vector should be at same resolution. Equivalent to frame rate or FPS, and any looming animation created by the <code>loomeR</code> package will use this as the frame rate.</p>
+</div>
+<div id="max_width_loc_v-max_width_loc_h" class="section level4">
+<h4 class="hasAnchor">
+<a href="#max_width_loc_v-max_width_loc_h" class="anchor"></a><code>max_width_loc_v</code>, <code>max_width_loc_h</code>
+</h4>
+<p>Location of these along the body from the nose as a proportion of the total length. Only required if they are not included as part of the shape profiles.</p>
+</div>
+<div id="plot-plot_from-plot_to" class="section level4">
+<h4 class="hasAnchor">
+<a href="#plot-plot_from-plot_to" class="anchor"></a><code>plot</code>, <code>plot_from</code>, <code>plot_to</code>
+</h4>
+<p>Plot the resulting <strong>⍺</strong> and <strong>d⍺/dt</strong>, and specify the X-axis range (in time units).</p>
+</div>
+<div id="alpha_range-dadt_range" class="section level4">
+<h4 class="hasAnchor">
+<a href="#alpha_range-dadt_range" class="anchor"></a><code>alpha_range</code>, <code>dadt_range</code>
+</h4>
+<p>Plot a range of <strong>⍺</strong> and <strong>d⍺/dt</strong>. Each input is a vector of two values. If <code>simple_output = FALSE</code> these ranges are also subset into their own elements of the output <code>list</code> object.</p>
+</div>
+<div id="simple_output" class="section level4">
+<h4 class="hasAnchor">
+<a href="#simple_output" class="anchor"></a><code>simple_output</code>
+</h4>
+<p>Control the output structure, See next section.</p>
+</div>
+</div>
 <div id="output" class="section level2">
 <h2 class="hasAnchor">
-<a href="#output" class="anchor"></a>2. Output</h2>
+<a href="#output" class="anchor"></a>3. Output</h2>
 <p>By default (<code>simple_output = TRUE</code>), the output of <code>attack_model</code> is a <code>data.frame</code> with every row representing an instance (or ‘frame’) of the model at the input <code>frequency</code>. The data frame contains columns for frame, speed, time, time reversed, distance of the nose of the predator, <strong>α</strong>, and <strong>dα/dt</strong>.</p>
 <p>If <code>simple_output = FALSE</code> the output is a <code>list</code> object given class <code>attack_model</code> containing the above data frame, plus inputs, subset regions (if <strong>⍺</strong> or <strong>d⍺/dt</strong> ranges are entered), and data detailing how <strong>⍺</strong> was calculated (interpolated profiles, locations of maximum apparent width at each frame, etc.). This option greatly increases the time the function takes to run. However, it is required if you intend to create a looming animation from the output in the <a href="https://nicholascarey.github.io/loomeR/"><code>loomeR</code></a> package.</p>
 <p>The output is also plotted by default (<code>plot = TRUE</code>), and if <strong>⍺</strong> or <strong>d⍺/dt</strong> ranges are entered these are also plotted.</p>
 </div>
-<div id="getting-distance-and-time-at-particular-and-ddt" class="section level2">
+<div id="identifying-predator-distance-and-time-at-particular-and-ddt" class="section level2">
 <h2 class="hasAnchor">
-<a href="#getting-distance-and-time-at-particular-and-ddt" class="anchor"></a>3. Getting distance and time at particular <strong>⍺</strong> and <strong>d⍺/dt</strong>
+<a href="#identifying-predator-distance-and-time-at-particular-and-ddt" class="anchor"></a>4. Identifying predator distance and time at particular <strong>⍺</strong> and <strong>d⍺/dt</strong>
 </h2>
 <p>The functions <a href="https://nicholascarey.github.io/attackR/reference/get_dist.html"><code>get_dist</code></a> and <a href="https://nicholascarey.github.io/attackR/reference/get_time.html"><code>get_time</code></a> will return the distance of the predator and time to reach the prey at the first instance of a particular <strong>⍺</strong> or <strong>d⍺/dt</strong> being exceeded.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">mod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/attack_model.html">attack_model</a></span>(<span class="dt">speed =</span> <span class="dv">350</span>,                <span class="co"># speed in cm/s</span></a>
@@ -256,25 +302,23 @@ Cade et al. 2020
 </div>
 <div id="creating-a-looming-animation-from-the-results" class="section level2">
 <h2 class="hasAnchor">
-<a href="#creating-a-looming-animation-from-the-results" class="anchor"></a>4. Creating a looming animation from the results</h2>
+<a href="#creating-a-looming-animation-from-the-results" class="anchor"></a>5. Creating a looming animation from the results</h2>
 <p>See the <a href="https://nicholascarey.github.io/loomeR/"><code>loomeR</code></a> package for creating a looming animation from the output of <code>attackR</code>. For this to work the output must be saved (i.e. assigned) as an object within <code>R</code>, and the option <code>simple_output = FALSE</code> must be used. This results in a <code>list</code> object of class <code>attack_model</code> which <code>loomeR</code> will recognise.</p>
 <p>(<strong>NOTE</strong> 13-01-2020 - Not implemented just yet. Coming very soon!)</p>
-<div id="additional-notes" class="section level3">
-<h3 class="hasAnchor">
-<a href="#additional-notes" class="anchor"></a>5. Additional Notes</h3>
+</div>
+<div id="additional-notes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#additional-notes" class="anchor"></a>6. Additional Notes</h2>
 <ul>
 <li>All angle measurements are in <strong><em>radians</em></strong> and <strong>d⍺/dt</strong> is in <strong><em>rad/s</em></strong>.</li>
 <li>No part of the predator body anterior to the maximum width can ever project a higher <strong>⍺</strong> than the maximum width, so shape profiles are only really important from the nose to the maximum width. Values more posterior than that can be placeholders and they will not affect the results. However it is important they have values to maintain the evenly-spaced resolution of the profiles.</li>
-<li>It is important that all morphometric inputs are in the same distance units, and speed also uses the <em>same distance unit per second</em>.</li>
-<li>
-<code>speed</code> need not be a single value, but can be a vector of variable speeds at the input <code>frequency</code>. In this case, <code>model_length</code> is not required, and it is assumed the predator meets the prey at the last value in the <code>speed</code> vector. However, if you want the predator to meet the prey earlier a <code>model_length</code> value less than the length of the speed vector can be entered.</li>
 </ul>
 <p><br><img src="english_grid.png" height="140"><img src="feldkamp_grid.png" height="140"><br></p>
 </div>
 </div>
-<div id="references" class="section level2">
-<h2 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h2>
+<div id="references" class="section level1">
+<h1 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h1>
 <p>Dill, L.M., 1974. The escape response of the zebra danio (Brachydanio rerio) I. The stimulus for escape. Animal Behaviour 22, 711–722. <a href="https://doi.org/10.1016/S0003-3472(74)80022-9" class="uri">https://doi.org/10.1016/S0003-3472(74)80022-9</a></p>
 <p>Domenici, P., Hale, M.E., 2019. Escape responses of fish: a review of the diversity in motor control, kinematics and behaviour. The Journal of Experimental Biology 222, jeb166009. <a href="https://doi.org/10.1242/jeb.166009" class="uri">https://doi.org/10.1242/jeb.166009</a></p>
 <p>Temizer I, Donovan JC, Baier H, &amp; Semmelhack JL (2015) A visual pathway for looming-evoked escape in larval zebrafish. Current Biology 25(14):1823-1834.</p>
@@ -284,7 +328,6 @@ Cade et al. 2020
 <p>David E. Cade, Nicholas Carey, Paolo Domenici, Jean Potvin, and Jeremy A. Goldbogen. 2020. Predator-informed looming stimulus experiments reveal how large filter feeding whales capture highly maneuverable forage fish. Proceedings of the National Academy of Sciences, 117 (1) 472-478. <a href="https://doi.org/10.1073/pnas.1911099116" class="uri">https://doi.org/10.1073/pnas.1911099116</a></p>
 <p>English, A.Wm., 1976. Limb movements and locomotor function in the California sea lion (Zalophus californianus). Journal of Zoology 178, 341–364. <a href="https://doi.org/10.1111/j.1469-7998.1976.tb02274.x" class="uri">https://doi.org/10.1111/j.1469-7998.1976.tb02274.x</a></p>
 <p>Feldkamp, S.D., 1987. Swimming in the California sea lion: morphometrics, drag and energetics. Journal of Experimental Biology 131, 117–135.</p>
-</div>
 </div>
   </div>
 
@@ -297,15 +340,17 @@ Cade et al. 2020
 <li><a href="#background">Background</a></li>
       <li><a href="#overview">Overview</a></li>
       <li>
-<a href="#an-example">An Example</a><ul class="nav nav-pills nav-stacked">
-<li><a href="#test-2">Test 2</a></li>
+<a href="#example-analysis">Example analysis</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#test-3">Test 3</a></li>
       <li><a href="#shape">1. Shape</a></li>
-      <li><a href="#output">2. Output</a></li>
-      <li><a href="#getting-distance-and-time-at-particular-and-ddt">3. Getting distance and time at particular <strong>⍺</strong> and <strong>d⍺/dt</strong></a></li>
-      <li><a href="#creating-a-looming-animation-from-the-results">4. Creating a looming animation from the results</a></li>
-      <li><a href="#references">References</a></li>
+      <li><a href="#other-inputs">2. Other inputs</a></li>
+      <li><a href="#output">3. Output</a></li>
+      <li><a href="#identifying-predator-distance-and-time-at-particular-and-ddt">4. Identifying predator distance and time at particular <strong>⍺</strong> and <strong>d⍺/dt</strong></a></li>
+      <li><a href="#creating-a-looming-animation-from-the-results">5. Creating a looming animation from the results</a></li>
+      <li><a href="#additional-notes">6. Additional Notes</a></li>
       </ul>
 </li>
+      <li><a href="#references">References</a></li>
       </ul>
 </div>
       </div>
