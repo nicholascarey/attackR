@@ -33,7 +33,7 @@ The code was developed for a study published in PNAS [(Cade et al. 2020)](https:
 knitr::include_graphics("pnascover.jpg")
 ```
 
-## Background
+# Background
 
 When a predator approaches a prey, it occupies space in the prey's visual field. That is, its profile subtends an angle (**⍺**) on the prey's retina, usually determined by its maximum width (Dill 1974):
 
@@ -74,7 +74,7 @@ knitr::include_graphics("response.png")
 **⍺** and **d⍺/dt** are determined by several aspects of the predator; its size, speed and shape. The `attackR` package uses these to calculate **⍺** and **d⍺/dt** for every stage of a hypothetical attack, and given threshold values of **d⍺/dt** for the prey, the distance of the predator at that moment and the time remaining until it is captured, assuming it does not move.
 
 
-## Overview
+# Overview
 
 Here is a typical input for the `attack_model` function which determines **⍺**. 
 
@@ -98,15 +98,15 @@ As a general overview of what the function does:
 - This is the final **⍺**, and is used to calculate **d⍺/dt** 
 
 
-## An Example
+# An Example
 
 Here we will show a simple example of how `attackR` determines the **⍺** and **d⍺/dt** for an attack by a California sea-lion (*Zalophus californianus*). 
 
-### Test 
+## Test 2
 
-### 1. Shape
+## 1. Shape
 
-##### Simple shape profile
+#### Simple shape profile
 
 To determine the **⍺** of a predator, especially how it may change as it gets closer to the prey, `attack_model` requires a shape profile. The shape profile is simply a vector of proportional widths evenly-spaced along the body from nose to tail (or their equivalents). The predator's length and maximum width values are entered separately. There are various ways to construct these profiles, from simple to complex: e.g. measured from photos or other morphometric measurements, or determined digitally. Here, as an example we will use an outline of a sea-lion (Fig. 5, Feldkamp 1987) extracted from underwater photos. This study also tells us a sea-lion's maximum width is situated 40% along the body from the snout (**d** in the Figure). Table 1 also gives us some measurements of a sea-lion (146 cm length, 45 cm maximum diameter). 
 
@@ -145,7 +145,7 @@ knitr::include_graphics("alpha_simple.png")
 
 In this example with the sleek sea-lion, the difference this makes to **⍺** are probably minor, but in predators with different shapes this could cause considerable differences. (See Whale vignette for example). 
 
-##### More accurate shape profile
+#### More accurate shape profile
 
 The higher the resolution of the profile, the better its representation of the predator shape, and better estimate of how **⍺** changes. Therefore, you may want to input a more representative shape profile. 
 
@@ -184,7 +184,7 @@ knitr::include_graphics("feldkamp_complex.png")
 
 It's immediately clear that this interpolated profile is much more representative of the true predator body shape, and so estimates of **⍺** will be more realistic at close distances. 
 
-##### Horizontal and vertical shape profiles
+#### Horizontal and vertical shape profiles
 
 What if the predator has a different shape in the horizontal and vertical profiles of its body? A sea-lion is fairly consistently shaped along its body in both dimensions, so the above example would probably be sufficient to represent the **⍺** of the body as a whole. However, the `attack_model` function allows both horizontal and vertical profiles to be entered, and selection of which **⍺** between them to use. 
 
@@ -239,7 +239,7 @@ The `width_filter` has the following options to select between vertical and hori
 
 It depends on the predator shape which of these you may want to use to represent its true **⍺** when using the model in experiments. 
 
-### 2. Output 
+## 2. Output 
 
 By default (`simple_output = TRUE`), the output of `attack_model` is a `data.frame` with every row representing an instance (or 'frame') of the model at the input `frequency`. The data frame contains columns for frame, speed, time, time reversed, distance of the nose of the predator, **α**, and **dα/dt**. 
 
@@ -249,7 +249,7 @@ maximum apparent width at each frame, etc.). This option greatly increases the t
 
 The output is also plotted by default (`plot = TRUE`), and if **⍺** or **d⍺/dt** ranges are entered these are also plotted.  
 
-### 3. Getting distance and time at particular **⍺** and **d⍺/dt** 
+## 3. Getting distance and time at particular **⍺** and **d⍺/dt** 
 
 The functions [`get_dist`](https://nicholascarey.github.io/attackR/reference/get_dist.html) and [`get_time`](https://nicholascarey.github.io/attackR/reference/get_time.html) will return the distance of the predator and time to reach the prey at the first instance of a particular **⍺** or **d⍺/dt** being exceeded. 
 
@@ -276,7 +276,7 @@ get_dist(mod, dadt = 0.90)
 
 ````
 
-### 4. Creating a looming animation from the results 
+## 4. Creating a looming animation from the results 
 
 See the [`loomeR`](https://nicholascarey.github.io/loomeR/) package for creating a looming animation from the output of `attackR`. For this to work the output must be saved (i.e. assigned) as an object within `R`, and the option `simple_output = FALSE` must be used. This results in a `list` object of class `attack_model` which `loomeR` will recognise. 
 

@@ -90,9 +90,9 @@
 Cade et al. 2020
 </p>
 </div>
-<div id="background" class="section level2">
-<h2 class="hasAnchor">
-<a href="#background" class="anchor"></a>Background</h2>
+<div id="background" class="section level1">
+<h1 class="hasAnchor">
+<a href="#background" class="anchor"></a>Background</h1>
 <p>When a predator approaches a prey, it occupies space in the prey’s visual field. That is, its profile subtends an angle (<strong>⍺</strong>) on the prey’s retina, usually determined by its maximum width (Dill 1974):</p>
 <p><br><img src="schem1.png" width="100%" style="display: block; margin: auto;"><br></p>
 <p>If the predator comes closer, the angle increases. The rate of change in <strong>⍺</strong>, that is <strong>d⍺/dt</strong>, is simply the change in <strong>⍺</strong> divided by the time this took.</p>
@@ -105,9 +105,9 @@ Cade et al. 2020
 <p><br><img src="response.png" width="50%" style="display: block; margin: auto;"><br></p>
 <p><strong>⍺</strong> and <strong>d⍺/dt</strong> are determined by several aspects of the predator; its size, speed and shape. The <code>attackR</code> package uses these to calculate <strong>⍺</strong> and <strong>d⍺/dt</strong> for every stage of a hypothetical attack, and given threshold values of <strong>d⍺/dt</strong> for the prey, the distance of the predator at that moment and the time remaining until it is captured, assuming it does not move.</p>
 </div>
-<div id="overview" class="section level2">
-<h2 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h2>
+<div id="overview" class="section level1">
+<h1 class="hasAnchor">
+<a href="#overview" class="anchor"></a>Overview</h1>
 <p>Here is a typical input for the <code>attack_model</code> function which determines <strong>⍺</strong>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="../reference/attack_model.html">attack_model</a></span>(<span class="dt">speed =</span> <span class="dv">350</span>,                <span class="co"># speed in cm/s</span></a>
 <a class="sourceLine" id="cb1-2" title="2">             <span class="dt">model_length =</span> <span class="dv">500</span>,         <span class="co"># determines how far away predator starts attack from</span></a>
@@ -128,20 +128,20 @@ Cade et al. 2020
 </li>
 </ul>
 </div>
-<div id="an-example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#an-example" class="anchor"></a>An Example</h2>
+<div id="an-example" class="section level1">
+<h1 class="hasAnchor">
+<a href="#an-example" class="anchor"></a>An Example</h1>
 <p>Here we will show a simple example of how <code>attackR</code> determines the <strong>⍺</strong> and <strong>d⍺/dt</strong> for an attack by a California sea-lion (<em>Zalophus californianus</em>).</p>
-<div id="test" class="section level3">
-<h3 class="hasAnchor">
-<a href="#test" class="anchor"></a>Test</h3>
+<div id="test-2" class="section level2">
+<h2 class="hasAnchor">
+<a href="#test-2" class="anchor"></a>Test 2</h2>
 </div>
-<div id="shape" class="section level3">
-<h3 class="hasAnchor">
-<a href="#shape" class="anchor"></a>1. Shape</h3>
-<div id="simple-shape-profile" class="section level5">
-<h5 class="hasAnchor">
-<a href="#simple-shape-profile" class="anchor"></a>Simple shape profile</h5>
+<div id="shape" class="section level2">
+<h2 class="hasAnchor">
+<a href="#shape" class="anchor"></a>1. Shape</h2>
+<div id="simple-shape-profile" class="section level4">
+<h4 class="hasAnchor">
+<a href="#simple-shape-profile" class="anchor"></a>Simple shape profile</h4>
 <p>To determine the <strong>⍺</strong> of a predator, especially how it may change as it gets closer to the prey, <code>attack_model</code> requires a shape profile. The shape profile is simply a vector of proportional widths evenly-spaced along the body from nose to tail (or their equivalents). The predator’s length and maximum width values are entered separately. There are various ways to construct these profiles, from simple to complex: e.g. measured from photos or other morphometric measurements, or determined digitally. Here, as an example we will use an outline of a sea-lion (Fig. 5, Feldkamp 1987) extracted from underwater photos. This study also tells us a sea-lion’s maximum width is situated 40% along the body from the snout (<strong>d</strong> in the Figure). Table 1 also gives us some measurements of a sea-lion (146 cm length, 45 cm maximum diameter).</p>
 <p>We are going to apply these morphometric measurements and our derived profile to calculate the <strong>⍺</strong> of this sea-lion.</p>
 <p><br><img src="feldkamp.png" height="140" style="display: block; margin: auto;"><br></p>
@@ -158,9 +158,9 @@ Cade et al. 2020
 <p><br><img src="alpha_simple.png" height="140" style="display: block; margin: auto;"><br></p>
 <p>In this example with the sleek sea-lion, the difference this makes to <strong>⍺</strong> are probably minor, but in predators with different shapes this could cause considerable differences. (See Whale vignette for example).</p>
 </div>
-<div id="more-accurate-shape-profile" class="section level5">
-<h5 class="hasAnchor">
-<a href="#more-accurate-shape-profile" class="anchor"></a>More accurate shape profile</h5>
+<div id="more-accurate-shape-profile" class="section level4">
+<h4 class="hasAnchor">
+<a href="#more-accurate-shape-profile" class="anchor"></a>More accurate shape profile</h4>
 <p>The higher the resolution of the profile, the better its representation of the predator shape, and better estimate of how <strong>⍺</strong> changes. Therefore, you may want to input a more representative shape profile.</p>
 <p>The shape profiles used by <code>attackR</code> can be at any resolution as long as they are evenly spaced. Here is an example where we determine proportional widths at every 5% along the body. Again, this could be done very quickly with a printout and ruler. Here, the profile image was opened in a simple graphics application, and scaled to a grid so that its length occupied 20 units.</p>
 <p><br><img src="feldkamp_grid.png" height="140" style="display: block; margin: auto;"><br></p>
@@ -182,9 +182,9 @@ Cade et al. 2020
 <p><br><img src="feldkamp_complex.png" height="140" style="display: block; margin: auto;"><br></p>
 <p>It’s immediately clear that this interpolated profile is much more representative of the true predator body shape, and so estimates of <strong>⍺</strong> will be more realistic at close distances.</p>
 </div>
-<div id="horizontal-and-vertical-shape-profiles" class="section level5">
-<h5 class="hasAnchor">
-<a href="#horizontal-and-vertical-shape-profiles" class="anchor"></a>Horizontal and vertical shape profiles</h5>
+<div id="horizontal-and-vertical-shape-profiles" class="section level4">
+<h4 class="hasAnchor">
+<a href="#horizontal-and-vertical-shape-profiles" class="anchor"></a>Horizontal and vertical shape profiles</h4>
 <p>What if the predator has a different shape in the horizontal and vertical profiles of its body? A sea-lion is fairly consistently shaped along its body in both dimensions, so the above example would probably be sufficient to represent the <strong>⍺</strong> of the body as a whole. However, the <code>attack_model</code> function allows both horizontal and vertical profiles to be entered, and selection of which <strong>⍺</strong> between them to use.</p>
 <p>Note how in the above examples inputs are appended by <code>_v</code>. This relates to the vertical profile, and there are similar inputs for the horizontal profile appended with <code>_h</code>.</p>
 <p>Here we construct a horizontal shape profile (image from Fig. 3a, English 1976). We ignore the flippers and approximate the shape of the body in the fin regions because they are thin relative to the body in the frontal view, and so don’t contribute significantly to the <strong>⍺</strong> of the predator as a whole (the overall aim is to approximate the size of the looming predator in the prey’s visual field, not capture every detail).</p>
@@ -232,17 +232,17 @@ Cade et al. 2020
 <p>It depends on the predator shape which of these you may want to use to represent its true <strong>⍺</strong> when using the model in experiments.</p>
 </div>
 </div>
-<div id="output" class="section level3">
-<h3 class="hasAnchor">
-<a href="#output" class="anchor"></a>2. Output</h3>
+<div id="output" class="section level2">
+<h2 class="hasAnchor">
+<a href="#output" class="anchor"></a>2. Output</h2>
 <p>By default (<code>simple_output = TRUE</code>), the output of <code>attack_model</code> is a <code>data.frame</code> with every row representing an instance (or ‘frame’) of the model at the input <code>frequency</code>. The data frame contains columns for frame, speed, time, time reversed, distance of the nose of the predator, <strong>α</strong>, and <strong>dα/dt</strong>.</p>
 <p>If <code>simple_output = FALSE</code> the output is a <code>list</code> object given class <code>attack_model</code> containing the above data frame, plus inputs, subset regions (if <strong>⍺</strong> or <strong>d⍺/dt</strong> ranges are entered), and data detailing how <strong>⍺</strong> was calculated (interpolated profiles, locations of maximum apparent width at each frame, etc.). This option greatly increases the time the function takes to run. However, it is required if you intend to create a looming animation from the output in the <a href="https://nicholascarey.github.io/loomeR/"><code>loomeR</code></a> package.</p>
 <p>The output is also plotted by default (<code>plot = TRUE</code>), and if <strong>⍺</strong> or <strong>d⍺/dt</strong> ranges are entered these are also plotted.</p>
 </div>
-<div id="getting-distance-and-time-at-particular-and-ddt" class="section level3">
-<h3 class="hasAnchor">
+<div id="getting-distance-and-time-at-particular-and-ddt" class="section level2">
+<h2 class="hasAnchor">
 <a href="#getting-distance-and-time-at-particular-and-ddt" class="anchor"></a>3. Getting distance and time at particular <strong>⍺</strong> and <strong>d⍺/dt</strong>
-</h3>
+</h2>
 <p>The functions <a href="https://nicholascarey.github.io/attackR/reference/get_dist.html"><code>get_dist</code></a> and <a href="https://nicholascarey.github.io/attackR/reference/get_time.html"><code>get_time</code></a> will return the distance of the predator and time to reach the prey at the first instance of a particular <strong>⍺</strong> or <strong>d⍺/dt</strong> being exceeded.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">mod &lt;-<span class="st"> </span><span class="kw"><a href="../reference/attack_model.html">attack_model</a></span>(<span class="dt">speed =</span> <span class="dv">350</span>,                <span class="co"># speed in cm/s</span></a>
 <a class="sourceLine" id="cb5-2" title="2">                    <span class="dt">model_length =</span> <span class="dv">500</span>,         <span class="co"># determines how far away predator starts attack from</span></a>
@@ -254,12 +254,11 @@ Cade et al. 2020
 <a class="sourceLine" id="cb6-2" title="2"><span class="co">#&gt; attack_model input - distance is from nose</span></a>
 <a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt; [1] 70</span></a></code></pre></div>
 </div>
-<div id="creating-a-looming-animation-from-the-results" class="section level3">
-<h3 class="hasAnchor">
-<a href="#creating-a-looming-animation-from-the-results" class="anchor"></a>4. Creating a looming animation from the results</h3>
+<div id="creating-a-looming-animation-from-the-results" class="section level2">
+<h2 class="hasAnchor">
+<a href="#creating-a-looming-animation-from-the-results" class="anchor"></a>4. Creating a looming animation from the results</h2>
 <p>See the <a href="https://nicholascarey.github.io/loomeR/"><code>loomeR</code></a> package for creating a looming animation from the output of <code>attackR</code>. For this to work the output must be saved (i.e. assigned) as an object within <code>R</code>, and the option <code>simple_output = FALSE</code> must be used. This results in a <code>list</code> object of class <code>attack_model</code> which <code>loomeR</code> will recognise.</p>
 <p>(<strong>NOTE</strong> 13-01-2020 - Not implemented just yet. Coming very soon!)</p>
-</div>
 <div id="additional-notes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#additional-notes" class="anchor"></a>5. Additional Notes</h3>
@@ -286,6 +285,7 @@ Cade et al. 2020
 <p>English, A.Wm., 1976. Limb movements and locomotor function in the California sea lion (Zalophus californianus). Journal of Zoology 178, 341–364. <a href="https://doi.org/10.1111/j.1469-7998.1976.tb02274.x" class="uri">https://doi.org/10.1111/j.1469-7998.1976.tb02274.x</a></p>
 <p>Feldkamp, S.D., 1987. Swimming in the California sea lion: morphometrics, drag and energetics. Journal of Experimental Biology 131, 117–135.</p>
 </div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -296,8 +296,16 @@ Cade et al. 2020
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#background">Background</a></li>
       <li><a href="#overview">Overview</a></li>
-      <li><a href="#an-example">An Example</a></li>
+      <li>
+<a href="#an-example">An Example</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#test-2">Test 2</a></li>
+      <li><a href="#shape">1. Shape</a></li>
+      <li><a href="#output">2. Output</a></li>
+      <li><a href="#getting-distance-and-time-at-particular-and-ddt">3. Getting distance and time at particular <strong>⍺</strong> and <strong>d⍺/dt</strong></a></li>
+      <li><a href="#creating-a-looming-animation-from-the-results">4. Creating a looming animation from the results</a></li>
       <li><a href="#references">References</a></li>
+      </ul>
+</li>
       </ul>
 </div>
       </div>
