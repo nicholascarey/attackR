@@ -23,7 +23,7 @@ reveal how large filter feeding whales capture highly maneuverable
 forage fish. *Proceedings of the National Academy of Sciences*, 117 (1)
 472-478. <https://doi.org/10.1073/pnas.1911099116>
 
-<img src="images/pnascover.jpg" height="210" /><img src="images/fig1.png" height="210" />
+<img src="images/readme_banner.jpg" width="100%" />
 
 While the code was applied specifically to humpback whales for this
 study, given some simple morphological parameters it can be used to

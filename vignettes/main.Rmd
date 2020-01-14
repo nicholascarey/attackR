@@ -5,7 +5,7 @@ output:
   toc: true
   number_sections: true
   toc_float: true
-  toc_depth: 2
+  toc_depth: 1
 vignette: >
   %\VignetteIndexEntry{How attackR works}
   %\VignetteEngine{knitr::rmarkdown}
@@ -116,7 +116,7 @@ Here we will show a simple example of how `attackR` determines the **⍺** and *
 
 ##### Simple shape profile
 
-To determine the **⍺** of a predator, especially how it may change as it gets closer to the prey, `attack_model` require a shape profile. The shape profile is simply a vector of proportional widths evenly-spaced along the body from nose to tail (or their equivalents). The predator's length and maximum width values are entered separately. There are various ways to construct these profiles, from simple to complex: e.g. measured from photos or other morphometric measurements, or determined digitally. Here, as an example we will use an outline of a sea-lion (Fig. 5, Feldkamp 1987) extracted from underwater photos. This study also tells us a sea-lion's maximum width is situated 40% along the body from the snout (**d** in the Figure). Table 1 also gives us some measurements of a sea-lion (146 cm length, 45 cm maximum diameter). 
+To determine the **⍺** of a predator, especially how it may change as it gets closer to the prey, `attack_model` requires a shape profile. The shape profile is simply a vector of proportional widths evenly-spaced along the body from nose to tail (or their equivalents). The predator's length and maximum width values are entered separately. There are various ways to construct these profiles, from simple to complex: e.g. measured from photos or other morphometric measurements, or determined digitally. Here, as an example we will use an outline of a sea-lion (Fig. 5, Feldkamp 1987) extracted from underwater photos. This study also tells us a sea-lion's maximum width is situated 40% along the body from the snout (**d** in the Figure). Table 1 also gives us some measurements of a sea-lion (146 cm length, 45 cm maximum diameter). 
 
 We are going to apply these morphometric measurements and our derived profile to calculate the **⍺** of this sea-lion. 
 
