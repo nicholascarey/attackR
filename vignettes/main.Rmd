@@ -1,11 +1,11 @@
 ---
-title: "How attackR works"
+title: "How `attackR` works"
 output: 
   rmarkdown::html_vignette:
   toc: true
   number_sections: true
   toc_float: true
-  toc_depth: 1
+  toc_depth: 3
 vignette: >
   %\VignetteIndexEntry{How attackR works}
   %\VignetteEngine{knitr::rmarkdown}
@@ -23,14 +23,6 @@ knitr::opts_chunk$set(
 library(attackR)
 ```
 
-# one
-
-## two
-
-### three
-
-#### four
-
 The `attackR` package for `R` models how much of a prey's visual field is occupied by a predator as it attacks, given information on the predator shape, size and speed. 
 
 Its intended use is in biological studies of prey escape behaviours, where they are known or hypothesised to respond to particular thresholds of angular size of the predator (e.g. Temizer et al. 2015), or rate of change of this angular size (e.g. Paglianti & Domenici 2006) (note, there are other models which incorporate other variables to determine escape response likelihoods such as presence of other prey; see Hatsopoulos 1995, Preuss 2006, Hein et al. 2019). 
@@ -40,8 +32,6 @@ The code was developed for a study published in PNAS [(Cade et al. 2020)](https:
 ```{r, echo=FALSE, fig.cap="Cade et al. 2020", out.width = '40%', fig.align='center'}
 knitr::include_graphics("pnascover.jpg")
 ```
-
-<center><img src="pnascover.jpg" width="300"/></center>
 
 ## Background
 
