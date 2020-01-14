@@ -25,7 +25,7 @@ library(attackR)
 
 The `attackR` package for `R` models how much of a prey's visual field is occupied by a predator as it attacks, given information on the predator shape, size and speed. 
 
-Its intended use is in biological studies of prey escape behaviours, where they are known or hypothesised to respond to particular thresholds of angular size of the predator (e.g. Temizer et al. 2015), or rate of change of this angular size (e.g. Paglianti & Domenici 2006) (note, there are other models which incorporate other variables to determine escape response likelihoods such as presence of other prey; see Hatsopoulos 1995, Preuss 2006, Hein et al. 2019). 
+Its intended use is in biological studies of prey escape behaviours, where they are known or hypothesised to respond to particular thresholds of angular size of the predator (e.g. Temizer et al. 2015), or rate of change of this angular size (e.g. Paglianti & Domenici 2006) (note, other models incorporate other variables to determine escape response likelihoods, such as presence of other prey; see Hatsopoulos 1995, Preuss 2006, Hein et al. 2019). 
 
 The code was developed for a study published in PNAS [(Cade et al. 2020)](https://doi.org/10.1073/pnas.1911099116) on humpback whale foraging on anchovies. In the case of whales it has special functionality for determining how the timing of the whale's mouth opening during a lunge feeding event affects how much of the prey's visual field is occupied. However, it can be used with virtually any predator-prey combination. 
 
