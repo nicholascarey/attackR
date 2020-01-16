@@ -104,8 +104,6 @@ As a general overview of what the function does:
 
 Here we will show a simple example of how `attackR` determines the **⍺** and **d⍺/dt** for an attack by a California sea-lion (*Zalophus californianus*). 
 
-## Test 3
-
 ## 1. Shape
 
 #### Simple shape profile

@@ -166,7 +166,8 @@ first_closest <- function(this, there) { # search for *this* in *there*
 #'
 #' @description Calculates screen diameter for a model based on alpha and a
 #'   viewing distance
-#' @param x numeric. Single value to find first occurence of.
+#' @param x numeric. Output of `attack_model` or `attack_model_whale` function,
+#'   or other object containing `alpha` angles data.
 #' @param alpha_col numeric. The column of alpha values. Automatically detected
 #'   in most models, but can be specified here.
 #' @param screen_distance numeric. distance from screen in same units as those

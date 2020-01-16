@@ -8,7 +8,8 @@ distance}
 add_screen_diam(x, alpha = NULL, screen_distance)
 }
 \arguments{
-\item{x}{numeric. Single value to find first occurence of.}
+\item{x}{numeric. Output of \code{attack_model} or \code{attack_model_whale} function,
+or other object containing \code{alpha} angles data.}
 
 \item{screen_distance}{numeric. distance from screen in same units as those
 used in model}
