@@ -3,15 +3,19 @@ Type: Package
 Title: Models an Attack by a Predator on a Prey
 Version: 0.1.0
 Authors@R: c(
-    person("Nicholas", "Carey", , "nicholascarey@gmail.com", role = c("aut", "cre")
+    person("Nicholas", "Carey", , "nicholascarey@gmail.com", role = c("aut", "cre"),
+    comment = c(ORCID = "0000-0001-6715-8230")
     ),
-    person("Dave", "Cade", , "davecade@stanford.edu", role = "aut"
+    person("Dave", "Cade", , "davecade@stanford.edu", role = "aut",
+    comment = c(ORCID = "0000-0003-3641-1242")
     ),
     person("Paolo", "Domenici", , "paolo.domenici@cnr.it", role = "aut"
     ))
 Description: This package models a predator attack on a prey, giving visual information from the prey perspective.
     Parameters that can be adjusted include speed, size, timing of mouth opening, and more.
 License: GPL-3
+URL: https://nicholascarey.github.io/attackR/, https://github.com/nicholascarey/attackR
+BugReports: https://github.com/nicholascarey/attackR/issues
 Encoding: UTF-8
 LazyData: true
 Suggests: 

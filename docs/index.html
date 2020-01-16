@@ -63,7 +63,14 @@
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/nicholascarey/attackR">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -79,16 +86,32 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#attackr" class="anchor"></a><code>attackR</code>
 </h1></div>
-<p>An <code>R</code> package for modelling the visual aspects of an attack by a predator on a prey.</p>
+<p>An <code>R</code> package for modelling what an attacking predator looks like to a prey.</p>
 <div id="summary" class="section level3">
 <h3 class="hasAnchor">
 <a href="#summary" class="anchor"></a>Summary</h3>
-<p>This package can be used to model how much of a prey’s visual field is taken up by an attacking predator, given its size, speed, and shape. It was used in the following publication in PNAS to determine how much of a prey’s visual field is taken up by an attacking humpback whale. While it can be used for any predator-prey combination, there is specific functionality to determine how apparent size is affected by the timing of a whale’s mouth opening during a lunge, though this can be ignored for other predators.</p>
+<p>This package can be used to model how much of a prey’s visual field is taken up by an attacking predator, given its size, speed, and shape. It was used in the following publication in PNAS to determine how much of a prey’s visual field is occupied by an attacking humpback whale.</p>
+<p>It can be used for virtually any predator-prey combination, but there is also specific functionality to determine how apparent size is affected by the timing of a whale’s mouth opening during a lunge, though this can be ignored for other predators.</p>
+<p><br></p>
+<blockquote>
 <p><strong>David E. Cade, Nicholas Carey, Paolo Domenici, Jean Potvin, and Jeremy A. Goldbogen. 2020.</strong> Predator-informed looming stimulus experiments reveal how large filter feeding whales capture highly maneuverable forage fish. <em>Proceedings of the National Academy of Sciences</em>, 117 (1) 472-478. <a href="https://doi.org/10.1073/pnas.1911099116" class="uri">https://doi.org/10.1073/pnas.1911099116</a></p>
+</blockquote>
 <p><img src="images/readme_banner.jpg" width="100%"></p>
-<p>While the code was applied specifically to humpback whales for this study, given some simple morphological parameters it can be used to model how <em>any</em> attacking predator appears to a prey. It can also be applied to other filter-feeding whales which engulf large volumes of water, such as blue whales, given some inputs regarding mouth morphology and lunge timings. The package takes full account of the predator’s three-dimensional shape when determining its perceived size in the prey’s visual field. This is because at close distances, the maximum girth of the predator will not necessarily make up the widest apparent visual angle. Instead more anterior segments will appear to the prey to be wider, and have a higher apparent size.</p>
-<p>From the prey’s perspective the package calculates the visual angle of the attacker (<strong>α</strong>) in radians, and the rate of change of this angle (<strong>dα/dt</strong> in radians/s), as well as distance and time to capture.</p>
-<p>See the <a href="https://nicholascarey.github.io/attackR/reference/index.html">Reference</a> page to view the detailed Help file for each function.</p>
+<p><br><br></p>
+<p>While the code was applied specifically to humpback whales for this study, given some simple morphological parameters it can be used to model how <em>any</em> attacking predator appears to a prey. It can also be applied to other filter-feeding whales which engulf large volumes of water, such as blue whales, given some inputs regarding mouth morphology and lunge timings. The package takes full account of the predator’s three-dimensional shape when determining its perceived size in the prey’s visual field. This is because at close distances, the maximum width of the predator will not necessarily make up the widest apparent visual angle, and more anterior parts of the body will appear to the prey to be wider, and have a larger apparent size.</p>
+<p>From the prey’s perspective the package calculates the visual angle of the attacker (<strong>α</strong>, in radians), and the rate of change of this angle (<strong>dα/dt</strong>, in radians/s), as well as distance and time to capture.</p>
+</div>
+<div id="vignettes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#vignettes" class="anchor"></a>Vignettes</h3>
+<p>There are two vignettes (see <em>Articles</em> above) describing the functionality of the package and how it was used in the above study:</p>
+<blockquote>
+<p><a href="https://nicholascarey.github.io/attackR/articles/main.html"><strong>Overview of attackR</strong></a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://nicholascarey.github.io/attackR/articles/whales.html"><strong>attackR and whale attacks</strong></a></p>
+</blockquote>
+<p>See also the <a href="https://nicholascarey.github.io/attackR/reference/index.html"><strong>Reference</strong></a> page to view the detailed Help file for each function.</p>
 </div>
 <div id="installation" class="section level3">
 <h3 class="hasAnchor">
@@ -96,13 +119,26 @@
 <p><code>attackR</code> is not yet published on CRAN, but can be installed using the <code>devtools</code> package:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"devtools"</span>)</a>
 <a class="sourceLine" id="cb1-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"nicholascarey/attackR"</span>)</a></code></pre></div>
-<p>Stay tuned for a vignette showing how to use the package to model attacks by both whales and other predators, and how to turn these into looming animations.</p>
+</div>
+<div id="feedback" class="section level3">
+<h3 class="hasAnchor">
+<a href="#feedback" class="anchor"></a>Feedback</h3>
+<p>If you encounter any bugs or issues, or have feedback, send an <a href="mailto:nicholascarey@gmail.com">email</a>, or <a href="https://github.com/nicholascarey/attackR/issues">open an issue</a>.</p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div class="license">
+    <div class="links">
+<h2>Links</h2>
+<ul class="list-unstyled">
+<li>Browse source code at <br><a href="https://github.com/nicholascarey/attackR">https://​github.com/​nicholascarey/​attackR</a>
+</li>
+<li>Report a bug at <br><a href="https://github.com/nicholascarey/attackR/issues">https://​github.com/​nicholascarey/​attackR/​issues</a>
+</li>
+</ul>
+</div>
+<div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
 <li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
@@ -111,8 +147,8 @@
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Nicholas Carey <br><small class="roles"> Author, maintainer </small>  </li>
-<li>Dave Cade <br><small class="roles"> Author </small>  </li>
+<li>Nicholas Carey <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-6715-8230" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
+<li>Dave Cade <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-3641-1242" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
 <li>Paolo Domenici <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>

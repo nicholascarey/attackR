@@ -6,6 +6,7 @@ output:
   number_sections: true
   toc_float: true
   toc_depth: 3
+
 vignette: >
   %\VignetteIndexEntry{attackR and whale attacks}
   %\VignetteEngine{knitr::rmarkdown}
@@ -189,11 +190,13 @@ af_socal_model <- attack_model_whale(
 ```
 
 This shows just how extreme a whale's mouth opening is in terms of how it alters **⍺** and **d⍺/dt**. The entire experimental **d⍺/dt** range anchovies react to is exceeded virtually the moment the mouth starts to open, and 
-is compressed into only a few milliseconds, Only now, when the whale is extremely close and already rapidly opening its jaws, will the fish react, and we found that for many of them in a school it is too late. This is how a giant whale can sneak up on a school of anchovies, and the timing of the mouth opening is the critical aspect of a whale attack: only a few milliseconds too early and they all escape, too late and the whale risks overshooting its target. 
+is compressed into only a few milliseconds. Only now, when the whale is extremely close and already rapidly opening its jaws, will the fish react, and we found that for many of them in a school it is too late. 
+
+This is how a giant whale can sneak up on a school of anchovies, and the timing of the mouth opening is the critical aspect of a whale attack: only a few milliseconds too early and they all escape, too late and the whale risks overshooting its target. 
 
 
 ## Other whales
-The online SI for the [PNAS publication](https://www.pnas.org/content/117/1/472) also contains examples of this package being used to detemine **⍺**for blue whales. Other lunge-feeding whale species can also be examined. All that is required is small alterations to some of the inputs, for example jaw length and angle, and the morphological inputs. 
+The online SI for the [PNAS publication](https://www.pnas.org/content/117/1/472) also contains examples of this package being used to detemine **⍺** for blue whales. Other lunge-feeding whale species can also be examined. All that is required is small alterations to some of the inputs, for example jaw length and angle, and the morphological inputs. 
 
 
 ## Additional notes
