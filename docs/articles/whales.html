@@ -158,6 +158,9 @@ Illustrations by <a href="https://www.alexboersma.com">Alex Boersma</a>
 <p>We use the mouth opening inputs to determine the opening of the mouth, first to not open at all, secondly to have the whale reach maximum gape cooincident with reaching the prey.</p>
 <p>We filter widths to use the midpoint value between vertical and horizontal planes (although both will be far exceeded by the mouth opening). We also enter the <code>dadt_range</code> from that we experimentally determined anchovies react to (<a href="https://www.pnas.org/content/117/1/472">link to study</a>).</p>
 <p>All of these inputs can be varied to examine other scenarios.</p>
+<div id="mouth-not-opening" class="section level2">
+<h2 class="hasAnchor">
+<a href="#mouth-not-opening" class="anchor"></a>1. Mouth not opening</h2>
 <p>First, we will look at what happens if the whale does not open its mouth.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"></a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="co">## Mouth NOT opening</span></a>
@@ -209,49 +212,42 @@ Illustrations by <a href="https://www.alexboersma.com">Alex Boersma</a>
 <a class="sourceLine" id="cb3-5" title="5"><span class="kw"><a href="../reference/get_time.html">get_time</a></span>(af_socal_model, <span class="dt">dadt =</span> <span class="fl">0.89</span>)</a>
 <a class="sourceLine" id="cb3-6" title="6"><span class="co">#&gt; attack_model_whale input - time is from low jaw tip</span></a>
 <a class="sourceLine" id="cb3-7" title="7"><span class="co">#&gt; [1] 0.25</span></a></code></pre></div>
-<p>Here, we see the light green region is the <strong>d⍺/dt</strong> anchovies react to. Even at the lowest <strong>d⍺/dt</strong> value of 0.89, we can see the whale gets to as close as 87 cm and only 0.25 s from the prey. It is somewhat counter-intuitive, but the whale’s sheer bulk and size, its tapered shape, and the <strong>d⍺/dt</strong> this projects at these attack speeds means that if it does not open its mouth, it can get extremely close to an anchovy school before the first fish start to react. This finding was supported by footage taken from cameras attached to humpback whales which shows anchovy schools maintaining cohesion when the whale approaches without lunging (<a href="https://purl.stanford.edu/mt574ws5287">Vid. S4</a>).</p>
-<p>Now we will look at what happens when it does open its mouth.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"></a>
-<a class="sourceLine" id="cb4-2" title="2"></a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="co">## Run model</span></a>
-<a class="sourceLine" id="cb4-4" title="4">af_socal_model &lt;-<span class="st"> </span><span class="kw"><a href="../reference/attack_model_whale.html">attack_model_whale</a></span>(</a>
-<a class="sourceLine" id="cb4-5" title="5">  <span class="dt">speed =</span> af_speeds_socal.rd,</a>
-<a class="sourceLine" id="cb4-6" title="6">  <span class="dt">model_length =</span> <span class="dv">651</span>,</a>
-<a class="sourceLine" id="cb4-7" title="7">  <span class="dt">frequency =</span> <span class="dv">60</span>,</a>
-<a class="sourceLine" id="cb4-8" title="8">  <span class="dt">body_length =</span> hw_length,</a>
-<a class="sourceLine" id="cb4-9" title="9">  <span class="dt">body_width_v =</span> ((hw_length<span class="op">*</span><span class="fl">0.75</span>)<span class="op">/</span>pi),</a>
-<a class="sourceLine" id="cb4-10" title="10">  <span class="dt">body_width_h =</span> ((hw_length<span class="op">*</span><span class="fl">0.75</span>)<span class="op">/</span>pi),</a>
-<a class="sourceLine" id="cb4-11" title="11">  <span class="dt">profile_v =</span> hw_prof_v,</a>
-<a class="sourceLine" id="cb4-12" title="12">  <span class="dt">profile_h =</span> hw_prof_h,</a>
-<a class="sourceLine" id="cb4-13" title="13">  <span class="dt">max_width_loc_v =</span> <span class="fl">0.42</span>,</a>
-<a class="sourceLine" id="cb4-14" title="14">  <span class="dt">max_width_loc_h =</span> <span class="fl">0.42</span>,</a>
-<a class="sourceLine" id="cb4-15" title="15">  <span class="dt">width_filter =</span> <span class="st">"mid"</span>,</a>
-<a class="sourceLine" id="cb4-16" title="16">  <span class="dt">jaw_length =</span> (<span class="dv">10</span><span class="op">^</span>(<span class="fl">1.205</span><span class="op">*</span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">log10</a></span>(hw_length<span class="op">/</span><span class="dv">100</span>) <span class="op">-</span><span class="st"> </span><span class="fl">0.880</span>))<span class="op">*</span><span class="dv">100</span>,</a>
-<a class="sourceLine" id="cb4-17" title="17">  <span class="dt">jaw_angle_upper =</span> <span class="fl">0.5235988</span>,</a>
-<a class="sourceLine" id="cb4-18" title="18">  <span class="dt">jaw_angle_lower =</span> <span class="fl">0.8726646</span>,</a>
-<a class="sourceLine" id="cb4-19" title="19">  <span class="dt">a_mouth_open =</span> <span class="dv">613</span>,</a>
-<a class="sourceLine" id="cb4-20" title="20">  <span class="dt">b_max_gape_start =</span> <span class="dv">651</span>,</a>
-<a class="sourceLine" id="cb4-21" title="21">  <span class="dt">c_max_gape_end =</span> <span class="dv">663</span>,</a>
-<a class="sourceLine" id="cb4-22" title="22">  <span class="dt">d_mouth_closed =</span> <span class="dv">709</span>,</a>
-<a class="sourceLine" id="cb4-23" title="23">  <span class="dt">simple_output =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb4-24" title="24">  <span class="dt">plot =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb4-25" title="25">  <span class="dt">plot_from =</span> <span class="dv">9</span>,</a>
-<a class="sourceLine" id="cb4-26" title="26">  <span class="dt">plot_to =</span> <span class="fl">11.5</span>,</a>
-<a class="sourceLine" id="cb4-27" title="27">  <span class="dt">alpha_range =</span> <span class="ot">NULL</span>,</a>
-<a class="sourceLine" id="cb4-28" title="28">  <span class="dt">dadt_range =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.89</span>, <span class="fl">2.06</span>))</a>
-<a class="sourceLine" id="cb4-29" title="29"><span class="co">#&gt; Whale model with mouth opening...</span></a></code></pre></div>
+<p>Here, we see the light green region is the <strong>d⍺/dt</strong> anchovies react to. Even at the lowest <strong>d⍺/dt</strong> value of 0.89, we can see the whale gets to as close as 87 cm and 0.25 s from the prey. It is somewhat counter-intuitive, but the whale’s sheer bulk and size, its tapered shape, and the <strong>d⍺/dt</strong> this projects at these attack speeds means that if it does not open its mouth, it can get extremely close to an anchovy school before the first fish start to react. This finding was supported by footage taken from cameras attached to humpback whales which shows anchovy schools maintaining cohesion when the whale approaches without lunging (<a href="https://purl.stanford.edu/mt574ws5287">Vid. S4</a>).</p>
+</div>
+<div id="mouth-opening" class="section level2">
+<h2 class="hasAnchor">
+<a href="#mouth-opening" class="anchor"></a>2. Mouth opening</h2>
+<p>Now we will look at what happens when the whale does open its mouth:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co">## Run model</span></a>
+<a class="sourceLine" id="cb4-2" title="2">af_socal_model &lt;-<span class="st"> </span><span class="kw"><a href="../reference/attack_model_whale.html">attack_model_whale</a></span>(</a>
+<a class="sourceLine" id="cb4-3" title="3">  <span class="dt">speed =</span> af_speeds_socal.rd,</a>
+<a class="sourceLine" id="cb4-4" title="4">  <span class="dt">model_length =</span> <span class="dv">651</span>,</a>
+<a class="sourceLine" id="cb4-5" title="5">  <span class="dt">frequency =</span> <span class="dv">60</span>,</a>
+<a class="sourceLine" id="cb4-6" title="6">  <span class="dt">body_length =</span> hw_length,</a>
+<a class="sourceLine" id="cb4-7" title="7">  <span class="dt">body_width_v =</span> ((hw_length<span class="op">*</span><span class="fl">0.75</span>)<span class="op">/</span>pi),</a>
+<a class="sourceLine" id="cb4-8" title="8">  <span class="dt">body_width_h =</span> ((hw_length<span class="op">*</span><span class="fl">0.75</span>)<span class="op">/</span>pi),</a>
+<a class="sourceLine" id="cb4-9" title="9">  <span class="dt">profile_v =</span> hw_prof_v,</a>
+<a class="sourceLine" id="cb4-10" title="10">  <span class="dt">profile_h =</span> hw_prof_h,</a>
+<a class="sourceLine" id="cb4-11" title="11">  <span class="dt">max_width_loc_v =</span> <span class="fl">0.42</span>,</a>
+<a class="sourceLine" id="cb4-12" title="12">  <span class="dt">max_width_loc_h =</span> <span class="fl">0.42</span>,</a>
+<a class="sourceLine" id="cb4-13" title="13">  <span class="dt">width_filter =</span> <span class="st">"mid"</span>,</a>
+<a class="sourceLine" id="cb4-14" title="14">  <span class="dt">jaw_length =</span> (<span class="dv">10</span><span class="op">^</span>(<span class="fl">1.205</span><span class="op">*</span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">log10</a></span>(hw_length<span class="op">/</span><span class="dv">100</span>) <span class="op">-</span><span class="st"> </span><span class="fl">0.880</span>))<span class="op">*</span><span class="dv">100</span>,</a>
+<a class="sourceLine" id="cb4-15" title="15">  <span class="dt">jaw_angle_upper =</span> <span class="fl">0.5235988</span>,</a>
+<a class="sourceLine" id="cb4-16" title="16">  <span class="dt">jaw_angle_lower =</span> <span class="fl">0.8726646</span>,</a>
+<a class="sourceLine" id="cb4-17" title="17">  <span class="dt">a_mouth_open =</span> <span class="dv">613</span>,</a>
+<a class="sourceLine" id="cb4-18" title="18">  <span class="dt">b_max_gape_start =</span> <span class="dv">651</span>,</a>
+<a class="sourceLine" id="cb4-19" title="19">  <span class="dt">c_max_gape_end =</span> <span class="dv">663</span>,</a>
+<a class="sourceLine" id="cb4-20" title="20">  <span class="dt">d_mouth_closed =</span> <span class="dv">709</span>,</a>
+<a class="sourceLine" id="cb4-21" title="21">  <span class="dt">simple_output =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb4-22" title="22">  <span class="dt">plot =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb4-23" title="23">  <span class="dt">plot_from =</span> <span class="dv">9</span>,</a>
+<a class="sourceLine" id="cb4-24" title="24">  <span class="dt">plot_to =</span> <span class="fl">11.5</span>,</a>
+<a class="sourceLine" id="cb4-25" title="25">  <span class="dt">alpha_range =</span> <span class="ot">NULL</span>,</a>
+<a class="sourceLine" id="cb4-26" title="26">  <span class="dt">dadt_range =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.89</span>, <span class="fl">2.06</span>))</a>
+<a class="sourceLine" id="cb4-27" title="27"><span class="co">#&gt; Whale model with mouth opening...</span></a></code></pre></div>
 <p><img src="whales_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
-<div id="for-any-of-the-models-the-screen-diameters-for-a-given-viewing-distance" class="section level2">
-<h2 class="hasAnchor">
-<a href="#for-any-of-the-models-the-screen-diameters-for-a-given-viewing-distance" class="anchor"></a>For any of the models, the screen diameters for a given viewing distance</h2>
-</div>
-<div id="both-must-be-in-same-units-as-morphometric-inputs-to-model-can-be" class="section level2">
-<h2 class="hasAnchor">
-<a href="#both-must-be-in-same-units-as-morphometric-inputs-to-model-can-be" class="anchor"></a>(both must be in same units as morphometric inputs to model) can be</h2>
-</div>
-<div id="calculated-and-added-to-the-model-with-this-function-" class="section level2">
-<h2 class="hasAnchor">
-<a href="#calculated-and-added-to-the-model-with-this-function-" class="anchor"></a>calculated and added to the model with this function.</h2>
+<p>This shows just how extreme a whale’s mouth opening is in terms of how it alters <strong>⍺</strong> and <strong>d⍺/dt</strong>.</p>
+<p>For any of the models, the screen diameters for a given viewing distance (both must be in same units as morphometric inputs to model) can be calculated and added to the model with this function.</p>
 <p>af_mont_model &lt;- add_screen_diam(af_mont_model, screen_distance = 16)</p>
 </div>
 <div id="other-whales" class="section level2">
@@ -291,9 +287,8 @@ Illustrations by <a href="https://www.alexboersma.com">Alex Boersma</a>
 </li>
       <li>
 <a href="#example-analysis">Example analysis</a><ul class="nav nav-pills nav-stacked">
-<li><a href="#for-any-of-the-models-the-screen-diameters-for-a-given-viewing-distance">For any of the models, the screen diameters for a given viewing distance</a></li>
-      <li><a href="#both-must-be-in-same-units-as-morphometric-inputs-to-model-can-be">(both must be in same units as morphometric inputs to model) can be</a></li>
-      <li><a href="#calculated-and-added-to-the-model-with-this-function-">calculated and added to the model with this function.</a></li>
+<li><a href="#mouth-not-opening">1. Mouth not opening</a></li>
+      <li><a href="#mouth-opening">2. Mouth opening</a></li>
       <li><a href="#other-whales">Other whales</a></li>
       <li><a href="#additional-notes">Additional notes</a></li>
       </ul>
@@ -308,7 +303,7 @@ Illustrations by <a href="https://www.alexboersma.com">Alex Boersma</a>
 
 
       <footer><div class="copyright">
-  <p>Developed by Nicholas Carey.</p>
+  <p>Developed by Nicholas Carey, Dave Cade, Paolo Domenici.</p>
 </div>
 
 <div class="pkgdown">

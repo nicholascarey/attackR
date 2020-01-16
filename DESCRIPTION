@@ -2,8 +2,13 @@ Package: attackR
 Type: Package
 Title: Models an Attack by a Predator on a Prey
 Version: 0.1.0
-Author: Nicholas Carey, Dave Cade, Paolo Domenici
-Maintainer: Nicholas Carey <nicholascarey@gmail.com>
+Authors@R: c(
+    person("Nicholas", "Carey", , "nicholascarey@gmail.com", role = c("aut", "cre")
+    ),
+    person("Dave", "Cade", , "davecade@stanford.edu", role = "aut"
+    ),
+    person("Paolo", "Domenici", , "paolo.domenici@cnr.it", role = "aut"
+    ))
 Description: This package models a predator attack on a prey, giving visual information from the prey perspective.
     Parameters that can be adjusted include speed, size, timing of mouth opening, and more.
 License: GPL-3

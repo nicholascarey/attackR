@@ -100,6 +100,8 @@ We filter widths to use the midpoint value between vertical and horizontal plane
 
 All of these inputs can be varied to examine other scenarios. 
 
+## 1. Mouth not opening
+
 First, we will look at what happens if the whale does not open its mouth. 
 
 ```{r fig.width = 7, fig.asp = .6}
@@ -149,13 +151,13 @@ get_dist(af_socal_model, dadt = 0.89)
 get_time(af_socal_model, dadt = 0.89)
 ```
 
-Here, we see the light green region is the **d⍺/dt** anchovies react to. Even at the lowest **d⍺/dt** value of 0.89, we can see the whale gets to as close as 87 cm and only 0.25 s from the prey. It is somewhat counter-intuitive, but the whale's sheer bulk and size, its tapered shape, and the **d⍺/dt** this projects at these attack speeds means that if it does not open its mouth, it can get extremely close to an anchovy school before the first fish start to react. This finding was supported by footage taken from cameras attached to humpback whales which shows anchovy schools maintaining cohesion when the whale approaches without lunging ([Vid. S4](https://purl.stanford.edu/mt574ws5287)).
+Here, we see the light green region is the **d⍺/dt** anchovies react to. Even at the lowest **d⍺/dt** value of 0.89, we can see the whale gets to as close as 87 cm and 0.25 s from the prey. It is somewhat counter-intuitive, but the whale's sheer bulk and size, its tapered shape, and the **d⍺/dt** this projects at these attack speeds means that if it does not open its mouth, it can get extremely close to an anchovy school before the first fish start to react. This finding was supported by footage taken from cameras attached to humpback whales which shows anchovy schools maintaining cohesion when the whale approaches without lunging ([Vid. S4](https://purl.stanford.edu/mt574ws5287)).
 
-Now we will look at what happens when it does open its mouth. 
+## 2. Mouth opening
+
+Now we will look at what happens when the whale does open its mouth:
 
 ```{r fig.width = 7, fig.asp = .6}
-
-
 ## Run model
 af_socal_model <- attack_model_whale(
   speed = af_speeds_socal.rd,
@@ -186,11 +188,11 @@ af_socal_model <- attack_model_whale(
 
 ```
 
+This shows just how extreme a whale's mouth opening is in terms of how it alters **⍺** and **d⍺/dt**. 
 
-
-## For any of the models, the screen diameters for a given viewing distance
-## (both must be in same units as morphometric inputs to model) can be
-## calculated and added to the model with this function.
+For any of the models, the screen diameters for a given viewing distance
+(both must be in same units as morphometric inputs to model) can be
+calculated and added to the model with this function.
 
 af_mont_model <- add_screen_diam(af_mont_model,
                                  screen_distance = 16)

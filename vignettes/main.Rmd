@@ -118,7 +118,7 @@ knitr::include_graphics("feldkamp.png")
 ```
 <br>
 
-The simplest shape profile consists of only three points: proportional widths at the nose, tail and midpoint of the body (there can be any number of widths in a profile, but they must be *evenly spaced along the body*, which in this case measn the midpoint). The location of the maximum width along the body is also required, if it doesn't happen to occur at the midpoint. This is expressed as a location along the length as a proportion of the total length from the nose. It can be anterior or posterior of the midpoint. In this case it is *40%* along the body, so entered as *0.40*. The nose and tail will typically be zero, but don't have to be. 
+The simplest shape profile consists of only three points: proportional widths at the nose, tail and midpoint of the body (there can be any number of widths in a profile, but they must be *evenly spaced along the body*, which in this case means the midpoint). The location of the maximum width along the body is also required, if it doesn't happen to occur at the midpoint. This is expressed as a location along the length as a proportion of the total length from the nose. It can be anterior or posterior of the midpoint. In this case it is *40%* along the body, so entered as *0.40*. The nose and tail will typically be zero, but don't have to be. 
 
 Only three measurements are required here. We will use [ImageJ](https://imagej.net/Welcome) (more specifically [Fiji](https://imagej.net/Fiji)), but they could be done with a print out and a ruler since only proportional relationships are required. 
 
