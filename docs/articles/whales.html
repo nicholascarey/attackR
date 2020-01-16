@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>How `attackR` works with whale attacks • attackR</title>
+<title>`attackR` and whale attacks • attackR</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="How `attackR` works with whale attacks">
+<script src="../pkgdown.js"></script><meta property="og:title" content="`attackR` and whale attacks">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -54,10 +54,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/main.html">How `attackR` works</a>
+      <a href="../articles/main.html">Overview of `attackR`</a>
     </li>
     <li>
-      <a href="../articles/whales.html">How `attackR` works with whale attacks</a>
+      <a href="../articles/whales.html">`attackR` and whale attacks</a>
     </li>
   </ul>
 </li>
@@ -75,7 +75,8 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>How <code>attackR</code> works with whale attacks</h1>
+      <h1>
+<code>attackR</code> and whale attacks</h1>
 
 
 
@@ -86,7 +87,7 @@
 
 
 <p>This vignette details how <code>attackR</code> specifically takes account of the unique lunge feeding mode of rorqual whales (i.e. its gigantic size, and huge expanding buccal cavity) when determining how much of a prey’s visual field is occupied by an attacking whale.</p>
-<p>The <a href="https://nicholascarey.github.io/attackR/articles/main.html"><strong>How attackR works</strong></a> vignette details the basics of the package, so it is highly recommended you read that first.</p>
+<p>The <a href="https://nicholascarey.github.io/attackR/articles/main.html"><strong>Overview of attackR</strong></a> vignette details the basics of the package, so it is highly recommended you read that first.</p>
 <div id="whale-lunge-feeding" class="section level1">
 <h1 class="hasAnchor">
 <a href="#whale-lunge-feeding" class="anchor"></a>Whale Lunge Feeding</h1>
@@ -152,16 +153,16 @@ Illustrations by <a href="https://www.alexboersma.com">Alex Boersma</a>
 <div id="example-analysis" class="section level1">
 <h1 class="hasAnchor">
 <a href="#example-analysis" class="anchor"></a>Example analysis</h1>
-<p>Here we will show an example of how <strong>⍺</strong> and <strong>d⍺/dt</strong> change during an attack by a humpback whale. As with the example in the <code>attack_model</code> <a href="https://nicholascarey.github.io/attackR/articles/main.html#overview">vignette</a> the function requires a shape profile. As with that example, these were obtained from side and overhead images on a humpback. Maximum width location as measured from several whales was found to be at 42% along the body in both planes, that is not part of the profiles and so entered separately. Note, only the widths of the body anterior of the maximum were measured, and profiles contain approximate placeholder values posterior of the maximum width. No part of the body posterior of the maximum width can ever produce a larger <strong>⍺</strong> (see <a href="https://nicholascarey.github.io/attackR/articles/whales.html#additional-notes">note here</a>).</p>
+<p>Here we will show an example of how <strong>⍺</strong> and <strong>d⍺/dt</strong> change during an attack by a humpback whale. As with the examples in the <a href="https://nicholascarey.github.io/attackR/articles/main.html"><strong>Overview of attackR</strong></a> the function requires a shape profile. These were obtained from side and overhead images of humpback whales. Maximum width location as measured from several whales was found to be at 42% along the body in both planes, which is not part of the profiles at 5% resolution and so entered separately. Note, only the widths of the body anterior of the maximum were measured, and profiles contain approximate placeholder values posterior of the maximum width. No part of the body posterior of the maximum width can ever produce a larger <strong>⍺</strong> (see <a href="https://nicholascarey.github.io/attackR/articles/whales.html#additional-notes">note here</a>).</p>
 <p>In this example we also streamline some of the inputs. Body width in both planes and jaw length are entered via formulae of known allometric relationships with body length (source: Kahane‐Rapport &amp; Goldbogen, 2018).</p>
 <p>For speed, we use data from humpback whales feeding on anchovies in Southern California captured via biologging tags, and included as a data file in the package (<code><a href="../reference/af_speeds_socal.rd.html">attackR::af_speeds_socal.rd</a></code>). This is 1500 records long at 60 Hz, and contains both the approach, feeding event, and aftermath of the foraging bout. We use the <code>model_length</code> input to place the prey at position <code>651</code> which is approximately 1s after the maximum speed of the whale. That is, this times the whale reaching the prey at that moment. This comes from field observations where humpbacks have been seen to slow down close to a school.</p>
-<p>We use the mouth opening inputs to determine the opening of the mouth, first to not open at all, secondly to have the whale reach maximum gape cooincident with reaching the prey.</p>
-<p>We filter widths to use the midpoint value between vertical and horizontal planes (although both will be far exceeded by the mouth opening). We also enter the <code>dadt_range</code> from that we experimentally determined anchovies react to (<a href="https://www.pnas.org/content/117/1/472">link to study</a>).</p>
+<p>We use the mouth opening inputs to determine the opening of the mouth, in the first example to not open at all, in the second to have the whale reach maximum gape cooincident with reaching the prey.</p>
+<p>We filter widths to use the midpoint value between vertical and horizontal planes (although both will be far exceeded by that of the mouth). We also enter the experimentally determined <code>dadt_range</code> that anchovies react to (<a href="https://www.pnas.org/content/117/1/472">link to study</a>).</p>
 <p>All of these inputs can be varied to examine other scenarios.</p>
 <div id="mouth-not-opening" class="section level2">
 <h2 class="hasAnchor">
 <a href="#mouth-not-opening" class="anchor"></a>1. Mouth not opening</h2>
-<p>First, we will look at what happens if the whale does not open its mouth.</p>
+<p>First, we will look at what happens if the whale does not open its mouth:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"></a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="co">## Mouth NOT opening</span></a>
 <a class="sourceLine" id="cb2-3" title="3"></a>
@@ -212,12 +213,12 @@ Illustrations by <a href="https://www.alexboersma.com">Alex Boersma</a>
 <a class="sourceLine" id="cb3-5" title="5"><span class="kw"><a href="../reference/get_time.html">get_time</a></span>(af_socal_model, <span class="dt">dadt =</span> <span class="fl">0.89</span>)</a>
 <a class="sourceLine" id="cb3-6" title="6"><span class="co">#&gt; attack_model_whale input - time is from low jaw tip</span></a>
 <a class="sourceLine" id="cb3-7" title="7"><span class="co">#&gt; [1] 0.25</span></a></code></pre></div>
-<p>Here, we see the light green region is the <strong>d⍺/dt</strong> anchovies react to. Even at the lowest <strong>d⍺/dt</strong> value of 0.89, we can see the whale gets to as close as 87 cm and 0.25 s from the prey. It is somewhat counter-intuitive, but the whale’s sheer bulk and size, its tapered shape, and the <strong>d⍺/dt</strong> this projects at these attack speeds means that if it does not open its mouth, it can get extremely close to an anchovy school before the first fish start to react. This finding was supported by footage taken from cameras attached to humpback whales which shows anchovy schools maintaining cohesion when the whale approaches without lunging (<a href="https://purl.stanford.edu/mt574ws5287">Vid. S4</a>).</p>
+<p>In the plot, the light green region is the <strong>d⍺/dt</strong> anchovies react to. Even at the lowest <strong>d⍺/dt</strong> value of 0.89, we can see the whale gets to as close as 87 cm and 0.25 s from the prey. It is somewhat counter-intuitive, but the whale’s sheer bulk and size, its tapered shape, and the <strong>d⍺/dt</strong> this projects at these speeds means that if it does not open its mouth, it can get extremely close to an anchovy school before the first fish start to react. This finding was supported by footage taken from cameras attached to humpback whales which shows anchovy schools maintaining cohesion when the whale approaches without lunging (<a href="https://purl.stanford.edu/mt574ws5287">Vid. S4</a>).</p>
 </div>
 <div id="mouth-opening" class="section level2">
 <h2 class="hasAnchor">
 <a href="#mouth-opening" class="anchor"></a>2. Mouth opening</h2>
-<p>Now we will look at what happens when the whale does open its mouth:</p>
+<p>Now we will look at what happens when the whale opens its mouth and times maximum gape as it reaches the prey:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co">## Run model</span></a>
 <a class="sourceLine" id="cb4-2" title="2">af_socal_model &lt;-<span class="st"> </span><span class="kw"><a href="../reference/attack_model_whale.html">attack_model_whale</a></span>(</a>
 <a class="sourceLine" id="cb4-3" title="3">  <span class="dt">speed =</span> af_speeds_socal.rd,</a>
@@ -246,28 +247,27 @@ Illustrations by <a href="https://www.alexboersma.com">Alex Boersma</a>
 <a class="sourceLine" id="cb4-26" title="26">  <span class="dt">dadt_range =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.89</span>, <span class="fl">2.06</span>))</a>
 <a class="sourceLine" id="cb4-27" title="27"><span class="co">#&gt; Whale model with mouth opening...</span></a></code></pre></div>
 <p><img src="whales_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
-<p>This shows just how extreme a whale’s mouth opening is in terms of how it alters <strong>⍺</strong> and <strong>d⍺/dt</strong>.</p>
-<p>For any of the models, the screen diameters for a given viewing distance (both must be in same units as morphometric inputs to model) can be calculated and added to the model with this function.</p>
-<p>af_mont_model &lt;- add_screen_diam(af_mont_model, screen_distance = 16)</p>
+<p>This shows just how extreme a whale’s mouth opening is in terms of how it alters <strong>⍺</strong> and <strong>d⍺/dt</strong>. The entire experimental <strong>d⍺/dt</strong> range anchovies react to is exceeded virtually the moment the mouth starts to open, and is compressed into only a few milliseconds, Only now, when the whale is extremely close and already rapidly opening its jaws, will the fish react, and we found that for many of them in a school it is too late. This is how a giant whale can sneak up on a school of anchovies, and the timing of the mouth opening is the critical aspect of a whale attack: only a few milliseconds too early and they all escape, too late and the whale risks overshooting its target.</p>
 </div>
 <div id="other-whales" class="section level2">
 <h2 class="hasAnchor">
 <a href="#other-whales" class="anchor"></a>Other whales</h2>
-<p>The online SI for the PNAS paper also contains examples of this package being used to detemine <strong>⍺</strong>for blue whales, but other whale species could be examined. All that is required is small alterations to some of the inputs. Namely, jaw length and angle.</p>
+<p>The online SI for the <a href="https://www.pnas.org/content/117/1/472">PNAS publication</a> also contains examples of this package being used to detemine <strong>⍺</strong>for blue whales. Other lunge-feeding whale species can also be examined. All that is required is small alterations to some of the inputs, for example jaw length and angle, and the morphological inputs.</p>
 </div>
 <div id="additional-notes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#additional-notes" class="anchor"></a>Additional notes</h2>
 <ul>
-<li><p>Mouth opening <strong>⍺</strong> calculations are done in the vertical plane only, and occur separately from any <strong>⍺</strong> calculations done using the body profiles; if the total jaw <strong>⍺</strong> is greater than the <strong>⍺</strong> determined from the body widths, it will always be selected as the maximum <strong>⍺</strong> regardless of any filtering between vertical and horizontal planes using <em></em>.</p></li>
-<li><p>All angle measurements are in <strong><em>radians</em></strong> and <strong>d⍺/dt</strong> is in <strong><em>rad/s</em></strong>.</p></li>
-<li><p>No part of the predator body anterior to the maximum width can ever project a higher <strong>⍺</strong> than the maximum width, so shape profiles are only really important from the nose to the maximum width. Values more posterior than that can be placeholders and they will not affect the results. However it is important they have values to maintain the evenly-spaced resolution of the profiles.</p></li>
+<li>Mouth opening <strong>⍺</strong> calculations are done in the vertical plane only, and occur separately from any <strong>⍺</strong> calculations done using the body profiles; if the total jaw <strong>⍺</strong> is greater than the <strong>⍺</strong> determined from the body widths, it will always be selected as the maximum <strong>⍺</strong> regardless of any filtering between vertical and horizontal planes</li>
+<li>All angle measurements are in <strong><em>radians</em></strong> and <strong>d⍺/dt</strong> is in <strong><em>rad/s</em></strong>.</li>
+<li>No part of the predator body anterior to the maximum width can ever project a higher <strong>⍺</strong> than the maximum width, so shape profiles are only really important from the nose to the maximum width. Values more posterior than that can be placeholders and they will not affect the results. However it is important they have values to maintain the evenly-spaced resolution of the profiles.</li>
 </ul>
 </div>
 </div>
 <div id="references" class="section level1">
 <h1 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h1>
+<p>Cade D.E., Carey N., Domenici P., Potvin J., &amp; Goldbogen J.A., 2020. Predator-informed looming stimulus experiments reveal how large filter feeding whales capture highly maneuverable forage fish. <em>Proceedings of the National Academy of Sciences</em>, 117 (1) 472-478. <a href="https://doi.org/10.1073/pnas.1911099116" class="uri">https://doi.org/10.1073/pnas.1911099116</a></p>
 <p>Kahane-Rapport, S.R., &amp; Goldbogen, J.A., 2018. Allometric scaling of morphology and engulfment capacity in rorqual whales. <em>Journal of Morphology</em> 279, 1256–1268. <a href="https://doi.org/10.1002/jmor.20846" class="uri">https://doi.org/10.1002/jmor.20846</a></p>
 </div>
   </div>

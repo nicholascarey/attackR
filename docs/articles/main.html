@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>How `attackR` works • attackR</title>
+<title>Overview of `attackR` • attackR</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="How `attackR` works">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Overview of `attackR`">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -54,10 +54,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/main.html">How `attackR` works</a>
+      <a href="../articles/main.html">Overview of `attackR`</a>
     </li>
     <li>
-      <a href="../articles/whales.html">How `attackR` works with whale attacks</a>
+      <a href="../articles/whales.html">`attackR` and whale attacks</a>
     </li>
   </ul>
 </li>
@@ -75,7 +75,8 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>How <code>attackR</code> works</h1>
+      <h1>Overview of <code>attackR</code>
+</h1>
 
 
 
@@ -139,12 +140,12 @@ Cade et al. 2020
 <div id="shape" class="section level2">
 <h2 class="hasAnchor">
 <a href="#shape" class="anchor"></a>1. Shape</h2>
-<div id="simple-shape-profile" class="section level4">
-<h4 class="hasAnchor">
-<a href="#simple-shape-profile" class="anchor"></a>Simple shape profile</h4>
 <p>To determine the <strong>⍺</strong> of a predator, especially how it may change as it gets closer to the prey, <code>attack_model</code> requires a shape profile. The shape profile is simply a vector of proportional widths evenly-spaced along the body from nose to tail (or their equivalents). The predator’s length and maximum width values are entered separately. There are various ways to construct these profiles, from simple to complex: e.g. measured from photos or other morphometric measurements, or determined digitally. Here, as an example we will use an outline of a sea-lion (Fig. 5, Feldkamp 1987) extracted from underwater photos. This study also tells us a sea-lion’s maximum width is situated 40% along the body from the snout (<strong>d</strong> in the Figure). Table 1 also gives us some measurements of a sea-lion (146 cm length, 45 cm maximum diameter).</p>
 <p>We are going to apply these morphometric measurements and our derived profile to calculate the <strong>⍺</strong> of this sea-lion.</p>
 <p><br><img src="feldkamp.png" height="140" style="display: block; margin: auto;"><br></p>
+<div id="simple-shape-profile" class="section level4">
+<h4 class="hasAnchor">
+<a href="#simple-shape-profile" class="anchor"></a>Simple shape profile</h4>
 <p>The simplest shape profile consists of only three points: proportional widths at the nose, tail and midpoint of the body (there can be any number of widths in a profile, but they must be <em>evenly spaced along the body</em>, which in this case means the midpoint). The location of the maximum width along the body is also required, if it doesn’t happen to occur at the midpoint. This is expressed as a location along the length as a proportion of the total length from the nose. It can be anterior or posterior of the midpoint. In this case it is <em>40%</em> along the body, so entered as <em>0.40</em>. The nose and tail will typically be zero, but don’t have to be.</p>
 <p>Only three measurements are required here. We will use <a href="https://imagej.net/Welcome">ImageJ</a> (more specifically <a href="https://imagej.net/Fiji">Fiji</a>), but they could be done with a print out and a ruler since only proportional relationships are required.</p>
 <ul>
@@ -156,7 +157,7 @@ Cade et al. 2020
 <p><br><img src="feldkamp_simple.png" height="140" style="display: block; margin: auto;"><br> The function interpolates between these measurements to approximate the shape of the predator at the resolution of the units used, which in this case would be every cm. For every stage of the attack, it will calculate <strong>⍺</strong> at every cm along the body and determine which is greatest at any particular viewing distance.</p>
 <p>This interpolated profile is obviously a very simplistic representation of the animal. In this representation, because the body anterior of the maximum width is perfectly triangular, at all viewing distances the maximum width will project the maximum <strong>⍺</strong>. However in reality, more anterior parts of the body may project a larger <strong>⍺</strong>:</p>
 <p><br><img src="alpha_simple.png" height="140" style="display: block; margin: auto;"><br></p>
-<p>In this example with the sleek sea-lion, the difference this makes to <strong>⍺</strong> are probably minor, but in predators with different shapes this could cause considerable differences. (See Whale vignette for example).</p>
+<p>In this example with the sleek sea-lion, the difference this makes to <strong>⍺</strong> are probably minor, but in predators with different shapes this could cause considerable differences. (See the <a href="https://nicholascarey.github.io/attackR/articles/whales.html">whale vignette</a> for an example).</p>
 </div>
 <div id="more-accurate-shape-profile" class="section level4">
 <h4 class="hasAnchor">
@@ -202,7 +203,7 @@ Cade et al. 2020
 <a class="sourceLine" id="cb3-11" title="11"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(sl_profile_h, <span class="dv">2</span>))</a>
 <a class="sourceLine" id="cb3-12" title="12"><span class="co">#&gt;  [1] 0.00 0.26 0.44 0.59 0.65 0.75 0.81 0.92 0.98 1.00 0.99 0.92 0.92 0.83 0.72</span></a>
 <a class="sourceLine" id="cb3-13" title="13"><span class="co">#&gt; [16] 0.67 0.59 0.52 0.61 0.73 0.00</span></a></code></pre></div>
-<p>Now we can input both profiles and use <code>width_filter</code> to select which <strong>⍺</strong> between horizontal and vertical planes to use for every instance of the model. We can also have one plane a different width than the other at the maximum width for preators that are more ellipsoid in shape.</p>
+<p>Now we can input both profiles and use <code>width_filter</code> to select which <strong>⍺</strong> between horizontal and vertical planes to use for every instance of the model. We can also have one plane a different width than the other at the maximum width for predators that are more ellipsoid in shape.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="../reference/attack_model.html">attack_model</a></span>(<span class="dt">speed =</span> <span class="dv">350</span>,               <span class="co"># speed in cm/s</span></a>
 <a class="sourceLine" id="cb4-2" title="2">             <span class="dt">model_length =</span> <span class="dv">500</span>,        <span class="co"># determines how far away predator starts attack from</span></a>
 <a class="sourceLine" id="cb4-3" title="3">             <span class="dt">frequency =</span> <span class="dv">60</span>,            <span class="co"># resolution/frame rate in Hz</span></a>
@@ -316,18 +317,23 @@ Cade et al. 2020
 </ul>
 </div>
 </div>
+<div id="more-advanced-example" class="section level1">
+<h1 class="hasAnchor">
+<a href="#more-advanced-example" class="anchor"></a>More advanced example</h1>
+<p>See <a href="https://nicholascarey.github.io/attackR/articles/whales.html">here</a> for the much more complicated case of how this approach was applied to attacks by lunge-feeding whales.</p>
+</div>
 <div id="references" class="section level1">
 <h1 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h1>
+<p>Cade D.E., Carey N., Domenici P., Potvin J., &amp; Goldbogen J.A., 2020. Predator-informed looming stimulus experiments reveal how large filter feeding whales capture highly maneuverable forage fish. <em>Proceedings of the National Academy of Sciences</em>, 117 (1) 472-478. <a href="https://doi.org/10.1073/pnas.1911099116" class="uri">https://doi.org/10.1073/pnas.1911099116</a></p>
 <p>Dill L.M., 1974. The escape response of the zebra danio (<em>Brachydanio rerio</em>) I. The stimulus for escape. <em>Animal Behaviour</em> 22, 711–722. <a href="https://doi.org/10.1016/S0003-3472(74)80022-9" class="uri">https://doi.org/10.1016/S0003-3472(74)80022-9</a></p>
 <p>Domenici, P., Hale, M.E., 2019. Escape responses of fish: a review of the diversity in motor control, kinematics and behaviour. <em>Journal of Experimental Biology</em> 222, jeb166009. <a href="https://doi.org/10.1242/jeb.166009" class="uri">https://doi.org/10.1242/jeb.166009</a></p>
+<p>English, A.Wm., 1976. Limb movements and locomotor function in the California sea lion (Zalophus californianus). Journal of Zoology 178, 341–364. <a href="https://doi.org/10.1111/j.1469-7998.1976.tb02274.x" class="uri">https://doi.org/10.1111/j.1469-7998.1976.tb02274.x</a></p>
+<p>Feldkamp, S.D., 1987. Swimming in the California sea lion: morphometrics, drag and energetics. Journal of Experimental Biology 131, 117–135.</p>
 <p>Hatsopoulos N., Gabbiani F., &amp; Laurent G., 1995. Elementary computation of object approach by a wide-field visual neuron. <em>Science</em> 270(5238):1000-1003.</p>
 <p>Paglianti, A., Domenici, P., 2006. The effect of size on the timing of visually mediated escape behaviour in staghorn sculpin <em>Leptocottus armatus</em>. <em>Journal of Fish Biology</em> 68, 1177–1191. <a href="https://doi.org/10.1111/j.0022-1112.2006.00991.x" class="uri">https://doi.org/10.1111/j.0022-1112.2006.00991.x</a></p>
 <p>Preuss T., Osei-Bonsu P.E., Weiss S.A., Wang C., &amp; Faber D.S., 2006. Neural representation of object approach in a decision-making motor circuit. <em>Journal of Neuroscience</em> 26(13):3454-3464.</p>
 <p>Temizer I., Donovan J.C., Baier H., &amp; Semmelhack J.L., 2015. A visual pathway for looming-evoked escape in larval zebrafish. <em>Current Biology</em> 25(14):1823-1834.</p>
-<p>Cade D.E., Carey N., Domenici P., Potvin J., &amp; Goldbogen J.A., 2020. Predator-informed looming stimulus experiments reveal how large filter feeding whales capture highly maneuverable forage fish. <em>Proceedings of the National Academy of Sciences</em>, 117 (1) 472-478. <a href="https://doi.org/10.1073/pnas.1911099116" class="uri">https://doi.org/10.1073/pnas.1911099116</a></p>
-<p>English, A.Wm., 1976. Limb movements and locomotor function in the California sea lion (Zalophus californianus). Journal of Zoology 178, 341–364. <a href="https://doi.org/10.1111/j.1469-7998.1976.tb02274.x" class="uri">https://doi.org/10.1111/j.1469-7998.1976.tb02274.x</a></p>
-<p>Feldkamp, S.D., 1987. Swimming in the California sea lion: morphometrics, drag and energetics. Journal of Experimental Biology 131, 117–135.</p>
 </div>
   </div>
 
@@ -349,6 +355,7 @@ Cade et al. 2020
       <li><a href="#additional-notes">6. Additional Notes</a></li>
       </ul>
 </li>
+      <li><a href="#more-advanced-example">More advanced example</a></li>
       <li><a href="#references">References</a></li>
       </ul>
 </div>

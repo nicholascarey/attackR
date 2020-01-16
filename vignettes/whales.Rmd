@@ -1,5 +1,5 @@
 ---
-title: "How `attackR` works with whale attacks"
+title: "`attackR` and whale attacks"
 output: 
   rmarkdown::html_vignette:
   toc: true
@@ -7,7 +7,7 @@ output:
   toc_float: true
   toc_depth: 3
 vignette: >
-  %\VignetteIndexEntry{How attackR works with whale attacks}
+  %\VignetteIndexEntry{attackR and whale attacks}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -25,7 +25,7 @@ library(attackR)
 
 This vignette details how `attackR` specifically takes account of the unique lunge feeding mode of rorqual whales (i.e. its gigantic size, and huge expanding buccal cavity) when determining how much of a prey's visual field is occupied by an attacking whale. 
 
-The [**How attackR works**](https://nicholascarey.github.io/attackR/articles/main.html) vignette details the basics of the package, so it is highly recommended you read that first. 
+The [**Overview of attackR**](https://nicholascarey.github.io/attackR/articles/main.html) vignette details the basics of the package, so it is highly recommended you read that first. 
 
 # Whale Lunge Feeding
 
@@ -88,21 +88,21 @@ These determine when and how rapidly the mouth is opened and closed. Each is an 
 
 # Example analysis
 
-Here we will show an example of how **⍺** and **d⍺/dt** change during an attack by a humpback whale. As with the example in the `attack_model` [vignette](https://nicholascarey.github.io/attackR/articles/main.html#overview) the function requires a shape profile. As with that example, these were obtained from side and overhead images on a humpback. Maximum width location as measured from several whales was found to be at 42% along the body in both planes, that is not part of the profiles and so entered separately. Note, only the widths of the body anterior of the maximum were measured, and profiles contain approximate placeholder values posterior of the maximum width. No part of the body posterior of the maximum width can ever produce a larger **⍺** (see [note here](https://nicholascarey.github.io/attackR/articles/whales.html#additional-notes)).
+Here we will show an example of how **⍺** and **d⍺/dt** change during an attack by a humpback whale. As with the examples in the [**Overview of attackR**](https://nicholascarey.github.io/attackR/articles/main.html) the function requires a shape profile. These were obtained from side and overhead images of humpback whales. Maximum width location as measured from several whales was found to be at 42% along the body in both planes, which is not part of the profiles at 5% resolution and so entered separately. Note, only the widths of the body anterior of the maximum were measured, and profiles contain approximate placeholder values posterior of the maximum width. No part of the body posterior of the maximum width can ever produce a larger **⍺** (see [note here](https://nicholascarey.github.io/attackR/articles/whales.html#additional-notes)).
 
 In this example we also streamline some of the inputs. Body width in both planes and jaw length are entered via formulae of known allometric relationships with body length (source: Kahane‐Rapport & Goldbogen, 2018). 
 
 For speed, we use data from humpback whales feeding on anchovies in Southern California captured via biologging tags, and included as a data file in the package (`attackR::af_speeds_socal.rd`). This is 1500 records long at 60 Hz, and contains both the approach, feeding event, and aftermath of the foraging bout. We use the `model_length` input to place the prey at position `651` which is approximately 1s after the maximum speed of the whale. That is, this times the whale reaching the prey at that moment. This comes from field observations where humpbacks have been seen to slow down close to a school. 
 
-We use the mouth opening inputs to determine the opening of the mouth, first to not open at all, secondly to have the whale reach maximum gape cooincident with reaching the prey. 
+We use the mouth opening inputs to determine the opening of the mouth, in the first example to not open at all, in the second to have the whale reach maximum gape cooincident with reaching the prey. 
 
-We filter widths to use the midpoint value between vertical and horizontal planes (although both will be far exceeded by the mouth opening). We also enter the `dadt_range` from that we experimentally determined anchovies react to ([link to study](https://www.pnas.org/content/117/1/472)). 
+We filter widths to use the midpoint value between vertical and horizontal planes (although both will be far exceeded by that of the mouth). We also enter the experimentally determined `dadt_range` that anchovies react to ([link to study](https://www.pnas.org/content/117/1/472)). 
 
 All of these inputs can be varied to examine other scenarios. 
 
 ## 1. Mouth not opening
 
-First, we will look at what happens if the whale does not open its mouth. 
+First, we will look at what happens if the whale does not open its mouth:
 
 ```{r fig.width = 7, fig.asp = .6}
 
@@ -151,11 +151,11 @@ get_dist(af_socal_model, dadt = 0.89)
 get_time(af_socal_model, dadt = 0.89)
 ```
 
-Here, we see the light green region is the **d⍺/dt** anchovies react to. Even at the lowest **d⍺/dt** value of 0.89, we can see the whale gets to as close as 87 cm and 0.25 s from the prey. It is somewhat counter-intuitive, but the whale's sheer bulk and size, its tapered shape, and the **d⍺/dt** this projects at these attack speeds means that if it does not open its mouth, it can get extremely close to an anchovy school before the first fish start to react. This finding was supported by footage taken from cameras attached to humpback whales which shows anchovy schools maintaining cohesion when the whale approaches without lunging ([Vid. S4](https://purl.stanford.edu/mt574ws5287)).
+In the plot, the light green region is the **d⍺/dt** anchovies react to. Even at the lowest **d⍺/dt** value of 0.89, we can see the whale gets to as close as 87 cm and 0.25 s from the prey. It is somewhat counter-intuitive, but the whale's sheer bulk and size, its tapered shape, and the **d⍺/dt** this projects at these speeds means that if it does not open its mouth, it can get extremely close to an anchovy school before the first fish start to react. This finding was supported by footage taken from cameras attached to humpback whales which shows anchovy schools maintaining cohesion when the whale approaches without lunging ([Vid. S4](https://purl.stanford.edu/mt574ws5287)).
 
 ## 2. Mouth opening
 
-Now we will look at what happens when the whale does open its mouth:
+Now we will look at what happens when the whale opens its mouth and times maximum gape as it reaches the prey:
 
 ```{r fig.width = 7, fig.asp = .6}
 ## Run model
@@ -188,31 +188,23 @@ af_socal_model <- attack_model_whale(
 
 ```
 
-This shows just how extreme a whale's mouth opening is in terms of how it alters **⍺** and **d⍺/dt**. 
-
-For any of the models, the screen diameters for a given viewing distance
-(both must be in same units as morphometric inputs to model) can be
-calculated and added to the model with this function.
-
-af_mont_model <- add_screen_diam(af_mont_model,
-                                 screen_distance = 16)
-
-
+This shows just how extreme a whale's mouth opening is in terms of how it alters **⍺** and **d⍺/dt**. The entire experimental **d⍺/dt** range anchovies react to is exceeded virtually the moment the mouth starts to open, and 
+is compressed into only a few milliseconds, Only now, when the whale is extremely close and already rapidly opening its jaws, will the fish react, and we found that for many of them in a school it is too late. This is how a giant whale can sneak up on a school of anchovies, and the timing of the mouth opening is the critical aspect of a whale attack: only a few milliseconds too early and they all escape, too late and the whale risks overshooting its target. 
 
 
 ## Other whales
-The online SI for the PNAS paper also contains examples of this package being used to detemine **⍺**for blue whales, but other whale species could be examined. All that is required is small alterations to some of the inputs. Namely, jaw length and angle. 
+The online SI for the [PNAS publication](https://www.pnas.org/content/117/1/472) also contains examples of this package being used to detemine **⍺**for blue whales. Other lunge-feeding whale species can also be examined. All that is required is small alterations to some of the inputs, for example jaw length and angle, and the morphological inputs. 
 
 
 ## Additional notes
 - Mouth opening **⍺** calculations are done in the vertical plane only, and occur separately from any **⍺** calculations done using the body profiles; if the total jaw **⍺** is greater than the **⍺** determined from the body widths, it will always be selected as the maximum **⍺** regardless of any filtering between vertical and horizontal planes
-using *\code{width_filter}*.
-
 - All angle measurements are in ***radians*** and **d⍺/dt** is in ***rad/s***.
 - No part of the predator body anterior to the maximum width can ever project a higher **⍺** than the maximum width, so shape profiles are only really important from the nose to the maximum width. Values more posterior than that can be placeholders and they will not affect the results. However it is important they have values to maintain the evenly-spaced resolution of the profiles. 
 
 
 # References
-Kahane-Rapport, S.R., & Goldbogen, J.A., 2018. Allometric scaling of morphology and engulfment capacity in rorqual whales. *Journal of Morphology* 279, 1256–1268. https://doi.org/10.1002/jmor.20846
 
+Cade D.E., Carey N., Domenici P., Potvin J., & Goldbogen J.A., 2020. Predator-informed looming stimulus experiments reveal how large filter feeding whales capture highly maneuverable forage fish. *Proceedings of the National Academy of Sciences*, 117 (1) 472-478. https://doi.org/10.1073/pnas.1911099116
+
+Kahane-Rapport, S.R., & Goldbogen, J.A., 2018. Allometric scaling of morphology and engulfment capacity in rorqual whales. *Journal of Morphology* 279, 1256–1268. https://doi.org/10.1002/jmor.20846
 

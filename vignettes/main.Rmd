@@ -1,5 +1,5 @@
 ---
-title: "How `attackR` works"
+title: "Overview of `attackR`"
 output: 
   rmarkdown::html_vignette:
   toc: true
@@ -7,7 +7,7 @@ output:
   toc_float: true
   toc_depth: 3
 vignette: >
-  %\VignetteIndexEntry{How attackR works}
+  %\VignetteIndexEntry{Overview of `attackR`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -106,7 +106,6 @@ Here we will show a simple example of how `attackR` determines the **⍺** and *
 
 ## 1. Shape
 
-#### Simple shape profile
 
 To determine the **⍺** of a predator, especially how it may change as it gets closer to the prey, `attack_model` requires a shape profile. The shape profile is simply a vector of proportional widths evenly-spaced along the body from nose to tail (or their equivalents). The predator's length and maximum width values are entered separately. There are various ways to construct these profiles, from simple to complex: e.g. measured from photos or other morphometric measurements, or determined digitally. Here, as an example we will use an outline of a sea-lion (Fig. 5, Feldkamp 1987) extracted from underwater photos. This study also tells us a sea-lion's maximum width is situated 40% along the body from the snout (**d** in the Figure). Table 1 also gives us some measurements of a sea-lion (146 cm length, 45 cm maximum diameter). 
 
@@ -117,6 +116,8 @@ We are going to apply these morphometric measurements and our derived profile to
 knitr::include_graphics("feldkamp.png")
 ```
 <br>
+
+#### Simple shape profile
 
 The simplest shape profile consists of only three points: proportional widths at the nose, tail and midpoint of the body (there can be any number of widths in a profile, but they must be *evenly spaced along the body*, which in this case means the midpoint). The location of the maximum width along the body is also required, if it doesn't happen to occur at the midpoint. This is expressed as a location along the length as a proportion of the total length from the nose. It can be anterior or posterior of the midpoint. In this case it is *40%* along the body, so entered as *0.40*. The nose and tail will typically be zero, but don't have to be. 
 
@@ -143,7 +144,7 @@ knitr::include_graphics("alpha_simple.png")
 ```
 <br>
 
-In this example with the sleek sea-lion, the difference this makes to **⍺** are probably minor, but in predators with different shapes this could cause considerable differences. (See Whale vignette for example). 
+In this example with the sleek sea-lion, the difference this makes to **⍺** are probably minor, but in predators with different shapes this could cause considerable differences. (See the [whale vignette](https://nicholascarey.github.io/attackR/articles/whales.html) for an example). 
 
 #### More accurate shape profile
 
@@ -213,7 +214,7 @@ print(round(sl_profile_h, 2))
 
 ```
 
-Now we can input both profiles and use `width_filter` to select which **⍺** between horizontal and vertical planes to use for every instance of the model. We can also have one plane a different width than the other at the maximum width for preators that are more ellipsoid in shape. 
+Now we can input both profiles and use `width_filter` to select which **⍺** between horizontal and vertical planes to use for every instance of the model. We can also have one plane a different width than the other at the maximum width for predators that are more ellipsoid in shape. 
 
 ```{r eval = FALSE}
 attack_model(speed = 350,               # speed in cm/s
@@ -316,11 +317,21 @@ See the [`loomeR`](https://nicholascarey.github.io/loomeR/) package for creating
 - No part of the predator body anterior to the maximum width can ever project a higher **⍺** than the maximum width, so shape profiles are only really important from the nose to the maximum width. Values more posterior than that can be placeholders and they will not affect the results. However it is important they have values to maintain the evenly-spaced resolution of the profiles. 
 
 
+# More advanced example
+
+See [here](https://nicholascarey.github.io/attackR/articles/whales.html) for the much more complicated case of how this approach was applied to attacks by lunge-feeding whales.  
 
 # References
+
+Cade D.E., Carey N., Domenici P., Potvin J., & Goldbogen J.A., 2020. Predator-informed looming stimulus experiments reveal how large filter feeding whales capture highly maneuverable forage fish. *Proceedings of the National Academy of Sciences*, 117 (1) 472-478. https://doi.org/10.1073/pnas.1911099116
+
 Dill L.M., 1974. The escape response of the zebra danio (*Brachydanio rerio*) I. The stimulus for escape. *Animal Behaviour* 22, 711–722. https://doi.org/10.1016/S0003-3472(74)80022-9
 
 Domenici, P., Hale, M.E., 2019. Escape responses of fish: a review of the diversity in motor control, kinematics and behaviour. *Journal of Experimental Biology* 222, jeb166009. https://doi.org/10.1242/jeb.166009
+
+English, A.Wm., 1976. Limb movements and locomotor function in the California sea lion (Zalophus californianus). Journal of Zoology 178, 341–364. https://doi.org/10.1111/j.1469-7998.1976.tb02274.x
+
+Feldkamp, S.D., 1987. Swimming in the California sea lion: morphometrics, drag and energetics. Journal of Experimental Biology 131, 117–135.
 
 Hatsopoulos N., Gabbiani F., & Laurent G., 1995. Elementary computation of object approach by a wide-field visual neuron. *Science* 270(5238):1000-1003.
 
@@ -329,9 +340,3 @@ Paglianti, A., Domenici, P., 2006. The effect of size on the timing of visually 
 Preuss T., Osei-Bonsu P.E., Weiss S.A., Wang C., & Faber D.S., 2006. Neural representation of object approach in a decision-making motor circuit. *Journal of Neuroscience* 26(13):3454-3464.
 
 Temizer I., Donovan J.C., Baier H., & Semmelhack J.L., 2015. A visual pathway for looming-evoked escape in larval zebrafish. *Current Biology* 25(14):1823-1834.
-
-Cade D.E., Carey N., Domenici P., Potvin J., & Goldbogen J.A., 2020. Predator-informed looming stimulus experiments reveal how large filter feeding whales capture highly maneuverable forage fish. *Proceedings of the National Academy of Sciences*, 117 (1) 472-478. https://doi.org/10.1073/pnas.1911099116
-
-English, A.Wm., 1976. Limb movements and locomotor function in the California sea lion (Zalophus californianus). Journal of Zoology 178, 341–364. https://doi.org/10.1111/j.1469-7998.1976.tb02274.x
-
-Feldkamp, S.D., 1987. Swimming in the California sea lion: morphometrics, drag and energetics. Journal of Experimental Biology 131, 117–135.
