@@ -3,8 +3,11 @@
 
 # `attackR`
 
-An `R` package for modelling what an attacking predator looks like to a
-prey.
+An `R` package for modelling the visual aspects of predator-prey
+interactions.
+
+Visit this site for vignettes detaling the package:
+[**https://nicholascarey.github.io/attackR/articles/main.html**](https://nicholascarey.github.io/attackR/articles/main.html)
 
 ### Summary
 

@@ -14,7 +14,9 @@ knitr::opts_chunk$set(
 ```
 
 # `attackR`
-An `R` package for modelling what an attacking predator looks like to a prey.
+An `R` package for modelling the visual aspects of predator-prey interactions.
+
+Visit this site for vignettes detaling the package: [**https://nicholascarey.github.io/attackR/articles/main.html**](https://nicholascarey.github.io/attackR/articles/main.html)
 
 ### Summary
 This package can be used to model how much of a prey's visual field is taken up by an attacking predator, given its size, speed, and shape. It was used in the following publication in PNAS to determine how much of a prey's visual field is occupied by an attacking humpback whale. 
