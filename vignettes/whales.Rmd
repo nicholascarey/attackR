@@ -8,7 +8,7 @@ output:
   toc_depth: 3
 
 vignette: >
-  %\VignetteIndexEntry{attackR and whale attacks}
+  %\VignetteIndexEntry{`attackR` and whale attacks}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
