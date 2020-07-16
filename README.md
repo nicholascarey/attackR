@@ -7,7 +7,7 @@ An `R` package for modelling the visual aspects of predator-prey
 interactions.
 
 Visit this site for vignettes detaling the package:
-[**https://nicholascarey.github.io/attackR/articles/main.html**](https://nicholascarey.github.io/attackR/articles/main.html)
+[**https://nicholascarey.github.io/attackR/index.html**](https://nicholascarey.github.io/attackR/index.html)
 
 ### Summary
 
